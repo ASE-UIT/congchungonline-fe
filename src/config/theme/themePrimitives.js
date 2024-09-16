@@ -4,216 +4,242 @@ const defaultTheme = createTheme();
 
 const customShadows = [...defaultTheme.shadows];
 
-export const brand = {
-  50: "hsl(210, 100%, 95%)",
-  100: "hsl(210, 100%, 92%)",
-  200: "hsl(210, 100%, 80%)",
-  300: "hsl(210, 100%, 65%)",
-  400: "hsl(210, 98%, 48%)",
-  500: "hsl(210, 98%, 42%)",
-  600: "hsl(210, 98%, 55%)",
-  700: "hsl(210, 100%, 35%)",
-  800: "hsl(210, 100%, 16%)",
-  900: "hsl(210, 100%, 21%)",
+export const primary = {
+	50: "#FFF0F5",
+	100: "#EED3D9",
+	200: "#DDA6B1",
+	300: "#CB7689",
+	400: "#BA4A60",
+	500: "#AA1D39",
+	600: "#87172D",
+	700: "#641123",
+	800: "#450C18",
+	900: "#23060C",
+};
+
+export const dark = {
+	50: "#ebedef",
+	100: "#d6d9dd",
+	200: "#adb3bb",
+	300: "#848d99",
+	400: "#5b6777",
+	500: "#324155",
+	600: "#283444",
+	700: "#1e2733",
+	800: "#141a22",
+	900: "#0a0d11",
 };
 
 export const gray = {
-  50: "hsl(220, 35%, 97%)",
-  100: "hsl(220, 30%, 94%)",
-  200: "hsl(220, 20%, 88%)",
-  300: "hsl(220, 20%, 80%)",
-  400: "hsl(220, 20%, 65%)",
-  500: "hsl(220, 20%, 42%)",
-  600: "hsl(220, 20%, 35%)",
-  700: "hsl(220, 20%, 25%)",
-  800: "hsl(220, 30%, 6%)",
-  900: "hsl(220, 35%, 3%)",
+	50: "#F9FAFB",
+	100: "#F3F4F6",
+	200: "#E5E7EA",
+	300: "#D2D5DB",
+	400: "#9EA2AE",
+	500: "#6D717F",
+	600: "#4D5461",
+	700: "#394050",
+	800: "#212936",
+	900: "#131927",
 };
 
 export const green = {
-  50: "hsl(120, 80%, 98%)",
-  100: "hsl(120, 75%, 94%)",
-  200: "hsl(120, 75%, 87%)",
-  300: "hsl(120, 61%, 77%)",
-  400: "hsl(120, 44%, 53%)",
-  500: "hsl(120, 59%, 30%)",
-  600: "hsl(120, 70%, 25%)",
-  700: "hsl(120, 75%, 16%)",
-  800: "hsl(120, 84%, 10%)",
-  900: "hsl(120, 87%, 6%)",
-};
-
-export const orange = {
-  50: "hsl(45, 100%, 97%)",
-  100: "hsl(45, 92%, 90%)",
-  200: "hsl(45, 94%, 80%)",
-  300: "hsl(45, 90%, 65%)",
-  400: "hsl(45, 90%, 40%)",
-  500: "hsl(45, 90%, 35%)",
-  600: "hsl(45, 91%, 25%)",
-  700: "hsl(45, 94%, 20%)",
-  800: "hsl(45, 95%, 16%)",
-  900: "hsl(45, 93%, 12%)",
+	50: "#ECF8EF",
+	100: "#C5E9CD",
+	200: "#A9DEB4",
+	300: "#81CF92",
+	400: "#69C57D",
+	500: "#43B75D",
+	600: "#3DA755",
+	700: "#308242",
+	800: "#256533",
+	900: "#1C4D27",
 };
 
 export const red = {
-  50: "hsl(0, 100%, 97%)",
-  100: "hsl(0, 92%, 90%)",
-  200: "hsl(0, 94%, 80%)",
-  300: "hsl(0, 90%, 65%)",
-  400: "hsl(0, 90%, 40%)",
-  500: "hsl(0, 90%, 30%)",
-  600: "hsl(0, 91%, 25%)",
-  700: "hsl(0, 94%, 18%)",
-  800: "hsl(0, 95%, 12%)",
-  900: "hsl(0, 93%, 6%)",
+	50: "#FDECEC",
+	100: "#FAC5C3",
+	200: "#F7A9A7",
+	300: "#F4827E",
+	400: "#F16965",
+	500: "#EE443F",
+	600: "#D93E39",
+	700: "#A9302D",
+	800: "#832523",
+	900: "#641D1A",
+};
+
+export const yellow = {
+	50: "#FFF7E6",
+	100: "#FFE5B0",
+	200: "#FFD88A",
+	300: "#FFC654",
+	400: "#FFBB33",
+	500: "#FFAA00",
+	600: "#E89B00",
+	700: "#B57900",
+	800: "#8C5E00",
+	900: "#6B4700",
+};
+
+export const blue = {
+	50: "#E6F4FF",
+	100: "#B0DEFF",
+	200: "#8ACEFF",
+	300: "#54B8FF",
+	400: "#33AAFF",
+	500: "#0095FF",
+	600: "#0088E8",
+	700: "#006AB5",
+	800: "#00528C",
+	900: "#003F6B",
+};
+
+export const black = {
+	50: "#e0e0e0",
+	100: "#c0c0c0",
+	200: "#9e9e9e",
+	300: "#7d7d7d",
+	400: "#5c5c5c",
+	500: "#3b3b3b",
+	600: "#2b2b2b",
+	700: "#1c1c1c",
+	800: "#0d0d0d",
+	900: "#000000",
+};
+
+export const white = {
+	50: "#ffffff",
+	100: "#f2f2f2",
+	200: "#e6e6e6",
+	300: "#cccccc",
+	400: "#b3b3b3",
+	500: "#999999",
+	600: "#808080",
+	700: "#666666",
+	800: "#4d4d4d",
+	900: "#333333",
 };
 
 export const getDesignTokens = (mode) => {
-  customShadows[1] =
-    mode === "dark"
-      ? "hsla(220, 30%, 5%, 0.7) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.8) 0px 8px 16px -5px"
-      : "hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px";
+	customShadows[1] =
+		"hsla(220, 30%, 5%, 0.07) 0px 4px 16px 0px, hsla(220, 25%, 10%, 0.07) 0px 8px 16px -5px";
 
-  return {
-    palette: {
-      mode,
-      primary: {
-        light: brand[200],
-        main: brand[400],
-        dark: brand[700],
-        contrastText: brand[50],
-        ...(mode === "dark" && {
-          contrastText: brand[50],
-          light: brand[300],
-          main: brand[400],
-          dark: brand[700],
-        }),
-      },
-      info: {
-        light: brand[100],
-        main: brand[300],
-        dark: brand[600],
-        contrastText: gray[50],
-        ...(mode === "dark" && {
-          contrastText: brand[300],
-          light: brand[500],
-          main: brand[700],
-          dark: brand[900],
-        }),
-      },
-      warning: {
-        light: orange[300],
-        main: orange[400],
-        dark: orange[800],
-        ...(mode === "dark" && {
-          light: orange[400],
-          main: orange[500],
-          dark: orange[700],
-        }),
-      },
-      error: {
-        light: red[300],
-        main: red[400],
-        dark: red[800],
-        ...(mode === "dark" && {
-          light: red[400],
-          main: red[500],
-          dark: red[700],
-        }),
-      },
-      success: {
-        light: green[300],
-        main: green[400],
-        dark: green[800],
-        ...(mode === "dark" && {
-          light: green[400],
-          main: green[500],
-          dark: green[700],
-        }),
-      },
-      grey: {
-        ...gray,
-      },
-      divider: mode === "dark" ? alpha(gray[700], 0.6) : alpha(gray[300], 0.4),
-      background: {
-        default: "hsl(0, 0%, 99%)",
-        paper: "hsl(220, 35%, 97%)",
-        ...(mode === "dark" && {
-          default: gray[900],
-          paper: "hsl(220, 30%, 7%)",
-        }),
-      },
-      text: {
-        primary: gray[800],
-        secondary: gray[600],
-        warning: orange[400],
-        ...(mode === "dark" && {
-          primary: "hsl(0, 0%, 100%)",
-          secondary: gray[400],
-        }),
-      },
-      action: {
-        hover: alpha(gray[200], 0.2),
-        selected: `${alpha(gray[200], 0.3)}`,
-        ...(mode === "dark" && {
-          hover: alpha(gray[600], 0.2),
-          selected: alpha(gray[600], 0.3),
-        }),
-      },
-    },
-    typography: {
-      fontFamily: "'Be Vietnam Pro', sans-serif",
-      h1: {
-        fontSize: defaultTheme.typography.pxToRem(48),
-        fontWeight: 600,
-        lineHeight: 1.2,
-        letterSpacing: -0.5,
-      },
-      h2: {
-        fontSize: defaultTheme.typography.pxToRem(36),
-        fontWeight: 600,
-        lineHeight: 1.2,
-      },
-      h3: {
-        fontSize: defaultTheme.typography.pxToRem(30),
-        lineHeight: 1.2,
-      },
-      h4: {
-        fontSize: defaultTheme.typography.pxToRem(24),
-        fontWeight: 600,
-        lineHeight: 1.5,
-      },
-      h5: {
-        fontSize: defaultTheme.typography.pxToRem(20),
-        fontWeight: 600,
-      },
-      h6: {
-        fontSize: defaultTheme.typography.pxToRem(18),
-        fontWeight: 600,
-      },
-      subtitle1: {
-        fontSize: defaultTheme.typography.pxToRem(18),
-      },
-      subtitle2: {
-        fontSize: defaultTheme.typography.pxToRem(14),
-        fontWeight: 500,
-      },
-      body1: {
-        fontSize: defaultTheme.typography.pxToRem(14),
-      },
-      body2: {
-        fontSize: defaultTheme.typography.pxToRem(14),
-        fontWeight: 400,
-      },
-      caption: {
-        fontSize: defaultTheme.typography.pxToRem(12),
-        fontWeight: 400,
-      },
-    },
-    shape: {
-      borderRadius: 8,
-    },
-    shadows: customShadows,
-  };
+	return {
+		palette: {
+			mode,
+			primary: {
+				light: primary[200],
+				main: primary[400],
+				dark: primary[700],
+				contrastText: primary[50],
+			},
+			info: {
+				light: primary[100],
+				main: primary[300],
+				dark: primary[600],
+				contrastText: gray[50],
+			},
+			warning: {
+				light: yellow[300],
+				main: yellow[400],
+				dark: yellow[800],
+			},
+			error: {
+				light: red[300],
+				main: red[400],
+				dark: red[800],
+			},
+			success: {
+				light: green[300],
+				main: green[400],
+				dark: green[800],
+			},
+			grey: {
+				...gray,
+			},
+			divider: alpha(gray[300], 0.4),
+			background: {
+				default: "hsl(0, 0%, 99%)",
+				paper: "hsl(220, 35%, 97%)",
+			},
+			text: {
+				primary: gray[800],
+				secondary: gray[600],
+				warning: yellow[400],
+			},
+			action: {
+				hover: alpha(gray[200], 0.2),
+				selected: `${alpha(gray[200], 0.3)}`,
+			},
+		},
+		typography: {
+			fontFamily: "'Be Vietnam Pro', sans-serif",
+			h1: {
+				fontSize: defaultTheme.typography.pxToRem(48),
+				fontWeight: 600,
+			},
+			h2: {
+				fontSize: defaultTheme.typography.pxToRem(40),
+				fontWeight: 600,
+			},
+			h3: {
+				fontSize: defaultTheme.typography.pxToRem(32),
+			},
+			h4: {
+				fontSize: defaultTheme.typography.pxToRem(28),
+				fontWeight: 600,
+			},
+			h5: {
+				fontSize: defaultTheme.typography.pxToRem(24),
+				fontWeight: 600,
+			},
+			h6: {
+				fontSize: defaultTheme.typography.pxToRem(20),
+				fontWeight: 600,
+			},
+			subtitle1: {
+				fontSize: defaultTheme.typography.pxToRem(18),
+				fontWeight: 600,
+			},
+			subtitle2: {
+				fontSize: defaultTheme.typography.pxToRem(16),
+				fontWeight: 600,
+			},
+			body1: {
+				fontSize: defaultTheme.typography.pxToRem(16),
+			},
+			body2: {
+				fontSize: defaultTheme.typography.pxToRem(16),
+				fontWeight: 500,
+			},
+			body3: {
+				fontSize: defaultTheme.typography.pxToRem(14),
+			},
+			body4: {
+				fontSize: defaultTheme.typography.pxToRem(14),
+				fontWeight: 500,
+			},
+			caption1: {
+				fontSize: defaultTheme.typography.pxToRem(12),
+				fontWeight: 400,
+			},
+			caption2: {
+				fontSize: defaultTheme.typography.pxToRem(12),
+				fontWeight: 500,
+			},
+			caption3: {
+				fontSize: defaultTheme.typography.pxToRem(10),
+				fontWeight: 500,
+			},
+			label: {
+				fontSize: defaultTheme.typography.pxToRem(12),
+				fontWeight: 500,
+			},
+		},
+		shape: {
+			borderRadius: 8,
+		},
+		shadows: customShadows,
+	};
 };
