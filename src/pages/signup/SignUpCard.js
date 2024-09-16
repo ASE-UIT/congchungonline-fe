@@ -2,19 +2,15 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import MuiCard from "@mui/material/Card";
-import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-
-import ForgotPassword from "./ForgotPassword";
+import Link from "@mui/material/Link";
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from "./CustomIcons";
-import { red } from "@mui/material/colors";
+
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: "flex",
@@ -34,85 +30,26 @@ const Card = styled(MuiCard)(({ theme }) => ({
     }),
 }));
 
-export default function SignInCard() {
+export default function SignUpCard() {
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
     const [passwordError, setPasswordError] = React.useState(false);
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
-    const [open, setOpen] = React.useState(false);
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-
-    const signInWithGoogle = () => {
-        window.open("http://localhost:3100/v1/auth/google", "_self");
-    };
-
-    const signInWithEmailAndPassword = async (email, password) => {
-        try {
-            const response = await fetch(
-                "http://localhost:3100/v1/auth/login",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email, password }),
-                }
-            );
-            const data = await response.json();
-            console.log(data);
-        } catch (error) {
-            console.error(error);
-        }
-        return null;
-    };
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const [nameError, setNameError] = React.useState(false);
+    const [nameErrorMessage, setNameErrorMessage] = React.useState("");
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
+            name: data.get("name"),
             email: data.get("email"),
             password: data.get("password"),
         });
     };
 
-    const validateInputs = () => {
-        let isValid = true;
-
-        if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-            setEmailError(true);
-            setEmailErrorMessage("Please enter a valid email address.");
-            isValid = false;
-        } else {
-            setEmailError(false);
-            setEmailErrorMessage("");
-        }
-
-        if (!password.value || password.value.length < 6) {
-            setPasswordError(true);
-            setPasswordErrorMessage(
-                "Password must be at least 6 characters long."
-            );
-            isValid = false;
-        } else {
-            setPasswordError(false);
-            setPasswordErrorMessage("");
-        }
-
-        return isValid;
-    };
-
     return (
         <Card variant="outlined">
-            <Box sx={{ display: { xs: "flex", md: "none" } }}></Box>
             <Typography
                 component="h1"
                 variant="h4"
@@ -123,7 +60,7 @@ export default function SignInCard() {
                     display: "flex",
                 }}
             >
-                Đăng nhập
+                Đăng ký
             </Typography>
             <Box
                 component="form"
@@ -137,6 +74,24 @@ export default function SignInCard() {
                 }}
             >
                 <FormControl>
+                    <FormLabel htmlFor="name">Họ và tên</FormLabel>
+                    <TextField
+                        error={nameError}
+                        helperText={nameErrorMessage}
+                        id="name"
+                        type="text"
+                        name="name"
+                        placeholder="Nguyễn Văn A"
+                        autoComplete="name"
+                        autoFocus
+                        required
+                        fullWidth
+                        variant="outlined"
+                        color={nameError ? "error" : "primary"}
+                        onChange={(e) => setNameErrorMessage("")}
+                    />
+                </FormControl>
+                <FormControl>
                     <FormLabel htmlFor="email">Email</FormLabel>
                     <TextField
                         error={emailError}
@@ -146,24 +101,15 @@ export default function SignInCard() {
                         name="email"
                         placeholder="your@email.com"
                         autoComplete="email"
-                        autoFocus
                         required
                         fullWidth
                         variant="outlined"
                         color={emailError ? "error" : "primary"}
-                        sx={{ ariaLabel: "email" }}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => setEmailErrorMessage("")}
                     />
                 </FormControl>
                 <FormControl>
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <FormLabel htmlFor="password">Mật khẩu</FormLabel>
-                    </Box>
+                    <FormLabel htmlFor="password">Mật khẩu</FormLabel>
                     <TextField
                         error={passwordError}
                         helperText={passwordErrorMessage}
@@ -171,55 +117,30 @@ export default function SignInCard() {
                         placeholder="••••••"
                         type="password"
                         id="password"
-                        autoComplete="current-password"
-                        autoFocus
+                        autoComplete="new-password"
                         required
                         fullWidth
                         variant="outlined"
                         color={passwordError ? "error" : "primary"}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => setPasswordErrorMessage("")}
                     />
                 </FormControl>
-                <Box
-                    sx={{
-                        justifyContent: "space-between",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                >
-                    <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
-                        label="Ghi nhớ tôi"
-                    />
-                    <Link
-                        onClick={handleClickOpen}
-                        variant="body2"
-                        role="link"
-                        sx={{ cursor: "pointer" }}
-                    >
-                        Quên mật khẩu?
-                    </Link>
-                </Box>
-                <ForgotPassword open={open} handleClose={handleClose} />
                 <Button
                     type="submit"
                     fullWidth
                     variant="contained"
-                    onClick={() => {
-                        signInWithEmailAndPassword(email, password);
-                    }}
                 >
-                    Đăng nhập
+                    Đăng ký
                 </Button>
                 <Typography sx={{ textAlign: "center" }}>
-                    Chưa có tài khoản?{" "}
+                    Đã có tài khoản?{" "}
                     <span>
                         <Link
-                            href="/signup/"
+                            href="/signin/"
                             variant="body2"
                             sx={{ alignSelf: "center" }}
                         >
-                            Đăng ký
+                            Đăng nhập
                         </Link>
                     </span>
                 </Typography>
@@ -230,13 +151,10 @@ export default function SignInCard() {
                     type="submit"
                     fullWidth
                     variant="outlined"
-                    onClick={() => signInWithGoogle()}
                     startIcon={<GoogleIcon />}
                 >
-                    Đăng nhập với Google
+                    Đăng ký với Google
                 </Button>
-
-
             </Box>
         </Card>
     );
