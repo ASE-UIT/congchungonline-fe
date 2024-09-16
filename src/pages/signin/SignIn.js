@@ -1,11 +1,13 @@
 import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import getAuthTheme from "../../config/theme/getAuthTheme";
 import SignInCard from "./SignInCard";
 import Content from "./Content";
 import TemplateFrame from "./TemplateFrame";
+import map from "../../assets/Images/map.png";
 
 export default function SignInSide() {
     const [mode, setMode] = React.useState("light");
@@ -63,15 +65,35 @@ export default function SignInSide() {
                     direction={{ xs: "column-reverse", md: "row" }}
                     sx={{
                         justifyContent: "center",
-                        gap: { xs: 6, sm: 12 },
+                        gap: { xs: 12, sm: 20 },
                         p: 2,
                         m: "auto",
                     }}
                 >
-                    <Content />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: { xs: 'auto', md: '100%' },
+                            maxWidth: '300px',
+                            width: '100%',
+                        }}
+                    >
+                        <img
+                            src={map}
+                            alt="map"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                            }}
+                        />
+                    </Box>
                     <SignInCard />
                 </Stack>
             </Stack>
         </ThemeProvider>
     );
 }
+
