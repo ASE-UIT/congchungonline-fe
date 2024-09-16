@@ -1,6 +1,6 @@
 import {
     ArrowBackIosNewRounded,
-    ArrowBackRounded,
+    ArrowForwardRounded,
     ArrowCircleLeftRounded,
     ArrowCircleRightRounded,
     StarHalfRounded,
@@ -16,16 +16,24 @@ import {
     Container,
     Divider,
     Grid,
+    Icon,
     IconButton,
     List,
     ListItem,
     ListItemText,
+    Tooltip,
     Typography,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 import Header from "../../components/Header";
 import getAuthTheme from "../../config/theme/getAuthTheme";
+import AssistantIcon from '@mui/icons-material/Assistant';
+import PhoneIcon from '@mui/icons-material/Phone';
+import { white, dark, primary } from '../../config/theme/themePrimitives';
+import Frame1 from "../../assets/vectors/Frame-1.svg"
+import Frame2 from "../../assets/vectors/Frame-2.svg"
+
 
 const Home = () => {
     const [mode, setMode] = React.useState("light");
@@ -36,29 +44,32 @@ const Home = () => {
     return (
         <ThemeProvider theme={showCustomTheme ? HomeTheme : defaultTheme}>
             <Header />
+
             <Box
                 sx={{
                     position: "absolute",
-                    width: 500,
-                    height: 500,
-                    top: 195,
-                    left: 470,
+                    width: "50vw",
+                    height: "50vw",
+                    top: "70%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
                     borderRadius: "50%",
                     filter: "blur(200px)",
                     background:
-                        "linear-gradient(180deg, rgb(255,255,255) 0%, rgb(208,0,43) 100%)",
+                        "linear-gradient(180deg, rgb(255,255,255) 0%, rgb(255,255,255) 30%, rgb(208,0,43) 100%)",
+                    zIndex: -1,
                 }}
             />
 
-            <Container sx={{ pt: 10, pb: 5 }}>
-                <Box textAlign="center">
+            <Container sx={{ pt: 10, pb: 5, height: "100vh", width: '100%' }}>
+                <Box textAlign="center" sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
                     <Typography variant="h6">CÔNG CHỨNG QUỐC GIA</Typography>
-                    <Typography variant="h2" fontWeight="bold">
+                    <Typography variant="h1" fontWeight="bold">
                         Công chứng trực tuyến
                     </Typography>
                 </Box>
                 <Box textAlign="center" mt={3}>
-                    <Typography variant="body1">
+                    <Typography variant="subtitle1" width="100%">
                         Công chứng trực tuyến nhanh chóng - an toàn - bảo mật.
                         <br />
                         Chúng tôi sẵn sàng phục vụ cho dù bạn đang ở đâu.
@@ -66,14 +77,24 @@ const Home = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        sx={{ mt: 3, borderRadius: 8 }}
+                        sx={{
+                            mt: 8,
+                            borderRadius: 1,
+                            px: 4,
+                            py: 1,
+                            textTransform: "inherit",
+                            fontSize: 20,
+                            fontWeight: 600,
+                        }}
                     >
                         Tạo hồ sơ công chứng
                     </Button>
                 </Box>
             </Container>
-            <Container sx={{ py: 5 }}>
-                <Box textAlign="center">
+
+
+            <Container sx={{ flex: 1, justifyContent: "center", alignItems: "center", py: 5, width: '100%' }}>
+                <Box textAlign="center" sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
                     <Typography variant="h6">LỢI ÍCH NHẬN ĐƯỢC</Typography>
                     <Typography variant="h3" fontWeight="bold">
                         Tại sao bạn nên sử dụng dịch vụ
@@ -84,7 +105,7 @@ const Home = () => {
                 <Typography
                     variant="body1"
                     textAlign="center"
-                    sx={{ maxWidth: 900, mx: "auto", mt: 3 }}
+                    sx={{ maxWidth: 900, mx: "auto", mt: 3, width: '100%' }}
                 >
                     Lorem ipsum dolor sit amet consectetur. Ultricies sit diam
                     arcu a ac commodo pellentesque nisl. Nec vestibulum ut
@@ -93,9 +114,9 @@ const Home = () => {
                     pellentesque sed ornare hendrerit lobortis.Elementum lorem
                     urna vel vulputate blandit lacinia bibendum.
                 </Typography>
-                <Grid container spacing={2} sx={{ mt: 5 }}>
+                <Grid container spacing={2} sx={{ mt: 5, justifyContent: 'center' }}>
                     <Grid item xs={4} sx={{ opacity: 0.5 }}>
-                        <Card>
+                        <Card sx={{ width: '100%' }}>
                             <CardMedia
                                 component="img"
                                 height="300"
@@ -113,7 +134,7 @@ const Home = () => {
                         </Card>
                     </Grid>
                     <Grid item xs={4}>
-                        <Card>
+                        <Card sx={{ width: '100%' }}>
                             <CardMedia
                                 component="img"
                                 height="300"
@@ -131,7 +152,7 @@ const Home = () => {
                         </Card>
                     </Grid>
                     <Grid item xs={4} sx={{ opacity: 0.5 }}>
-                        <Card>
+                        <Card sx={{ width: '100%' }}>
                             <CardMedia
                                 component="img"
                                 height="300"
@@ -158,8 +179,9 @@ const Home = () => {
                     </IconButton>
                 </Box>
             </Container>
-            <Container sx={{ py: 5 }}>
-                <Box textAlign="center">
+
+            <Container sx={{ flex: 1, justifyContent: "center", alignItems: "center", pt: 10, pb: 15, width: '100%' }}>
+                <Box textAlign="center" sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
                     <Typography variant="h3" fontWeight="bold">
                         Hỗ trợ các loại văn bản
                     </Typography>
@@ -167,7 +189,7 @@ const Home = () => {
                 <Typography
                     variant="body1"
                     textAlign="center"
-                    sx={{ maxWidth: 900, mx: "auto", mt: 3 }}
+                    sx={{ maxWidth: 900, mx: "auto", mt: 3, width: '100%' }}
                 >
                     Lorem ipsum dolor sit amet consectetur. Ut scelerisque
                     tellus elementum ultrices augue enim eu. Aliquet sed
@@ -176,7 +198,7 @@ const Home = () => {
                     senectus libero massa. Vitae placerat cursus nisi id amet
                     interdum.
                 </Typography>
-                <Grid container spacing={2} sx={{ mt: 5 }}>
+                <Grid container spacing={2} sx={{ mt: 5, justifyContent: 'center' }}>
                     {[
                         "Giấy tờ nhà - đất",
                         "Giấy tờ nhà - đất",
@@ -188,19 +210,20 @@ const Home = () => {
                                 display="flex"
                                 alignItems="center"
                                 justifyContent="center"
+                                sx={{ gap: 2 }}
                             >
                                 <Typography variant="h6">{text}</Typography>
-                                <ArrowBackRounded />
+                                <ArrowForwardRounded />
                             </Box>
                         </Grid>
                     ))}
                 </Grid>
             </Container>
-            <Container sx={{ py: 5, backgroundColor: "grey.100" }}>
+            <Box sx={{ backgroundColor: "grey.100", py: 5, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Grid container spacing={5}>
-                    <Grid item xs={6}>
-                        <Box>
-                            <Typography variant="h3" fontWeight="bold">
+                    <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Box sx={{ mx: '20%' }}>
+                            <Typography variant="h2" fontWeight="bold">
                                 Dành cho cá nhân
                             </Typography>
                             <Typography variant="body1" sx={{ mt: 2 }}>
@@ -215,33 +238,33 @@ const Home = () => {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                sx={{ mt: 3, borderRadius: 2 }}
+                                sx={{ mt: 3, borderRadius: 1, textTransform: "inherit", fontSize: 18, px: 3, py: 1, fontWeight: "600" }}
                             >
                                 Tìm hiểu ngay
                             </Button>
                         </Box>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img
-                            src="frame-134.svg"
+                            src={Frame1}
                             alt="Frame"
-                            style={{ width: "100%" }}
+                            style={{ width: "70%" }}
                         />
                     </Grid>
                 </Grid>
-            </Container>
-            <Container sx={{ py: 5, backgroundColor: "grey.100" }}>
+            </Box>
+            <Box sx={{ backgroundColor: "grey.100", width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', py: 5 }}>
                 <Grid container spacing={5}>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <img
-                            src="frame-133.svg"
+                            src={Frame2}
                             alt="Frame"
-                            style={{ width: "100%" }}
+                            style={{ width: "70%" }}
                         />
                     </Grid>
-                    <Grid item xs={6}>
-                        <Box>
-                            <Typography variant="h3" fontWeight="bold">
+                    <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Box sx={{ mx: '20%' }}>
+                            <Typography variant="h2" fontWeight="bold">
                                 Dành cho VPCC
                             </Typography>
                             <Typography variant="body1" sx={{ mt: 2 }}>
@@ -256,15 +279,15 @@ const Home = () => {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                sx={{ mt: 3, borderRadius: 2 }}
+                                sx={{ mt: 3, borderRadius: 1, textTransform: "inherit", fontSize: 18, px: 3, py: 1, fontWeight: "600" }}
                             >
                                 Tìm hiểu ngay
                             </Button>
                         </Box>
                     </Grid>
                 </Grid>
-            </Container>
-            <Container sx={{ py: 5 }}>
+            </Box>
+            <Container sx={{ py: 5, width: '100%' }}>
                 <Box textAlign="center">
                     <Typography variant="h3" fontWeight="bold">
                         Công chức trực tuyến số 1 tại Việt Nam
@@ -273,7 +296,7 @@ const Home = () => {
                 <Typography
                     variant="body1"
                     textAlign="center"
-                    sx={{ maxWidth: 1000, mx: "auto", mt: 3 }}
+                    sx={{ maxWidth: 1000, mx: "auto", mt: 3, width: '100%' }}
                 >
                     Lorem ipsum dolor sit amet consectetur. Ut scelerisque
                     tellus elementum ultrices augue enim eu. Aliquet sed
@@ -282,13 +305,13 @@ const Home = () => {
                     senectus libero massa. Vitae placerat cursus nisi id amet
                     interdum.
                 </Typography>
-                <Grid container spacing={5} sx={{ mt: 5 }}>
+                <Grid container spacing={5} sx={{ mt: 5, justifyContent: 'center' }}>
                     <Grid item xs={3}>
-                        <Box textAlign="center">
+                        <Box textAlign="left">
                             <Typography variant="h4" fontWeight="bold">
                                 Tuyệt vời
                             </Typography>
-                            <Box display="flex" justifyContent="center" mt={1}>
+                            <Box display="flex" justifyContent="left" mt={2}>
                                 <StarRounded />
                                 <StarRounded />
                                 <StarRounded />
@@ -303,16 +326,17 @@ const Home = () => {
                             </Typography>
                         </Box>
                     </Grid>
+
                     {[
                         "Dễ dàng sử dụng.",
                         "Dễ dàng sử dụng.",
                         "Dễ dàng sử dụng.",
                     ].map((text, index) => (
                         <Grid item xs={3} key={index}>
-                            <Box textAlign="center">
+                            <Box textAlign="left">
                                 <Box
                                     display="flex"
-                                    justifyContent="center"
+                                    justifyContent="left"
                                     mt={1}
                                 >
                                     <StarRounded />
@@ -324,7 +348,7 @@ const Home = () => {
                                 <Typography
                                     variant="h6"
                                     fontWeight="bold"
-                                    mt={1}
+                                    mt={2}
                                 >
                                     {text}
                                 </Typography>
@@ -356,14 +380,15 @@ const Home = () => {
                         <ArrowCircleRightRounded />
                     </IconButton>
                 </Box>
-                <Box textAlign="center" mt={3}>
+                <Box textAlign="left" mt={3}>
                     <VerifiedRounded />
                     <Typography variant="body1" mt={1}>
                         Verified
                     </Typography>
                 </Box>
             </Container>
-            <Container sx={{ py: 5 }}>
+
+            <Container sx={{ py: 5, width: '100%' }}>
                 <Typography variant="h3" fontWeight="bold" textAlign="center">
                     Những câu hỏi thường gặp.
                 </Typography>
@@ -386,7 +411,8 @@ const Home = () => {
                     ))}
                 </List>
             </Container>
-            <Box sx={{ backgroundColor: "#a91d3a", py: 5 }}>
+
+            <Box sx={{ backgroundColor: "#a91d3a", py: 5, width: '100%' }}>
                 <Container>
                     <Grid container spacing={5}>
                         <Grid item xs={4}>
@@ -541,17 +567,72 @@ const Home = () => {
                     </Grid>
                 </Container>
             </Box>
-            <img
-                src="chatbox.png"
-                alt="Chatbox"
-                style={{
-                    position: "fixed",
-                    width: 54,
-                    height: 50,
-                    top: 824,
-                    left: 1340,
+
+            <Tooltip
+                title="Trợ lý ảo"
+                placement="left"
+                componentsProps={{
+                    tooltip: {
+                        sx: {
+                            bgcolor: 'transparent',
+                            color: (theme) => theme.palette.primary.main,
+                            fontSize: '16px',
+                            fontWeight: 600,
+                            '& .MuiTooltip-arrow': {
+                                color: 'transparent',
+                            },
+                        },
+                    },
                 }}
-            />
+            >
+                <AssistantIcon
+                    sx={{
+                        position: "fixed",
+                        width: "3vw",
+                        height: "3vw",
+                        bottom: "5%",
+                        right: "2%",
+                        color: (theme) => theme.palette.primary.main,
+                        cursor: "pointer",
+                        '&:hover': {
+                            opacity: 0.8,
+                        },
+                    }}
+                />
+            </Tooltip>
+
+            <Tooltip
+                title="Liên hệ tổng đài"
+                placement="left"
+                componentsProps={{
+                    tooltip: {
+                        sx: {
+                            bgcolor: 'transparent',
+                            color: (theme) => theme.palette.primary.main,
+                            fontSize: '16px',
+                            fontWeight: 600,
+                            '& .MuiTooltip-arrow': {
+                                color: 'transparent',
+                            },
+                        },
+                    },
+                }}
+            >
+                <PhoneIcon
+                    sx={{
+                        position: "fixed",
+                        width: "3vw",
+                        height: "3vw",
+                        bottom: "12%",
+                        right: "2%",
+                        color: (theme) => theme.palette.primary.main,
+                        cursor: "pointer",
+                        '&:hover': {
+                            opacity: 0.8,
+                        },
+                    }}
+                />
+            </Tooltip>
         </ThemeProvider>
     );
 };

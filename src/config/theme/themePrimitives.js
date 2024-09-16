@@ -130,7 +130,7 @@ export const getDesignTokens = (mode) => {
             mode,
             primary: {
                 light: primary[200],
-                main: primary[400],
+                main: primary[500],
                 dark: primary[700],
                 contrastText: primary[50],
             },
@@ -176,7 +176,7 @@ export const getDesignTokens = (mode) => {
         typography: {
             fontFamily: "'Be Vietnam Pro', sans-serif",
             h1: {
-                fontSize: defaultTheme.typography.pxToRem(48),
+                fontSize: defaultTheme.typography.pxToRem(64),
                 fontWeight: 600,
             },
             h2: {
@@ -199,8 +199,8 @@ export const getDesignTokens = (mode) => {
                 fontWeight: 600,
             },
             subtitle1: {
-                fontSize: defaultTheme.typography.pxToRem(18),
-                fontWeight: 600,
+                fontSize: defaultTheme.typography.pxToRem(20),
+                fontWeight: 400,
             },
             subtitle2: {
                 fontSize: defaultTheme.typography.pxToRem(16),
@@ -241,6 +241,20 @@ export const getDesignTokens = (mode) => {
             borderRadius: 8,
         },
         shadows: customShadows,
+        components: {
+            MuiMenuItem: {
+                styleOverrides: {
+                    root: {
+                        '&:hover': {
+                            backgroundColor: alpha(primary[200], 0.2),
+                        },
+                        '&:active': {
+                            backgroundColor: alpha(primary[600], 0.3),
+                        },
+                    },
+                },
+            },
+        },
     };
 };
 
