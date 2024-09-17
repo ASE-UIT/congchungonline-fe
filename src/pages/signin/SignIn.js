@@ -7,7 +7,7 @@ import getAuthTheme from "../../config/theme/getAuthTheme";
 import SignInCard from "./SignInCard";
 import Content from "./Content";
 import TemplateFrame from "./TemplateFrame";
-import map from "../../assets/Images/map.png";
+import map from "../../assets/images/map.png";
 
 export default function SignInSide() {
     const [mode, setMode] = React.useState("light");
@@ -72,21 +72,21 @@ export default function SignInSide() {
                 >
                     <Box
                         sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: { xs: 'auto', md: '100%' },
-                            maxWidth: '300px',
-                            width: '100%',
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            height: { xs: "auto", md: "100%" },
+                            maxWidth: "300px",
+                            width: "100%",
                         }}
                     >
                         <img
                             src={map}
                             alt="map"
                             style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
+                                width: "100%",
+                                height: "100%",
+                                objectFit: "cover",
                             }}
                         />
                     </Box>
@@ -96,4 +96,3 @@ export default function SignInSide() {
         </ThemeProvider>
     );
 }
-
