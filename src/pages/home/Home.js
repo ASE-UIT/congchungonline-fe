@@ -1,11 +1,7 @@
 import {
-    ArrowBackIosNewRounded,
     ArrowForwardRounded,
     ArrowCircleLeftRounded,
     ArrowCircleRightRounded,
-    StarHalfRounded,
-    StarRounded,
-    VerifiedRounded,
 } from "@mui/icons-material";
 import {
     Box,
@@ -14,15 +10,10 @@ import {
     CardContent,
     CardMedia,
     Container,
-    Divider,
     Grid,
-    Icon,
     IconButton,
-    List,
-    ListItem,
-    ListItemText,
-    Tooltip,
     Typography,
+    Tooltip
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useState } from "react";
@@ -30,11 +21,12 @@ import Header from "../../components/Header";
 import getAuthTheme from "../../config/theme/getAuthTheme";
 import AssistantIcon from "@mui/icons-material/Assistant";
 import PhoneIcon from "@mui/icons-material/Phone";
-import { white, dark, primary } from "../../config/theme/themePrimitives";
 import Frame1 from "../../assets/vectors/Frame-1.svg";
 import Frame2 from "../../assets/vectors/Frame-2.svg";
-
 import Chatbox from "../../components/Chatbox";
+import FAQSection from "../../components/home/FAQ";
+import Footer from "../../components/Footer";
+import Reviews from "../../components/home/Reviews";
 
 const Home = () => {
     const [mode, setMode] = React.useState("light");
@@ -42,6 +34,11 @@ const Home = () => {
     const [showChatbox, setShowChatbox] = useState(false);
     const defaultTheme = createTheme({ palette: { mode } });
     const HomeTheme = createTheme(getAuthTheme(mode));
+    const [expandedIndex, setExpandedIndex] = useState(null);
+
+    const toggleExpand = (index) => {
+        setExpandedIndex(expandedIndex === index ? null : index);
+    };
 
     const handleChatboxClick = () => {
         setShowChatbox(true);
@@ -207,7 +204,7 @@ const Home = () => {
                     <IconButton>
                         <ArrowCircleLeftRounded />
                     </IconButton>
-                    <IconButton>
+                    <IconButton >
                         <ArrowCircleRightRounded />
                     </IconButton>
                 </Box>
@@ -407,293 +404,13 @@ const Home = () => {
                     </Grid>
                 </Grid>
             </Box>
-            <Container sx={{ py: 5, width: "100%" }}>
-                <Box textAlign="center">
-                    <Typography variant="h3" fontWeight="bold">
-                        Công chức trực tuyến số 1 tại Việt Nam
-                    </Typography>
-                </Box>
-                <Typography
-                    variant="body1"
-                    textAlign="center"
-                    sx={{ maxWidth: 1000, mx: "auto", mt: 3, width: "100%" }}
-                >
-                    Lorem ipsum dolor sit amet consectetur. Ut scelerisque
-                    tellus elementum ultrices augue enim eu. Aliquet sed
-                    pellentesque hac convallis congue. Hendrerit adipiscing
-                    tempor et cras commodo tortor. Sem aliquet orci nullam
-                    senectus libero massa. Vitae placerat cursus nisi id amet
-                    interdum.
-                </Typography>
-                <Grid
-                    container
-                    spacing={5}
-                    sx={{ mt: 5, justifyContent: "center" }}
-                >
-                    <Grid item xs={3}>
-                        <Box textAlign="left">
-                            <Typography variant="h4" fontWeight="bold">
-                                Tuyệt vời
-                            </Typography>
-                            <Box display="flex" justifyContent="left" mt={2}>
-                                <StarRounded />
-                                <StarRounded />
-                                <StarRounded />
-                                <StarRounded />
-                                <StarHalfRounded />
-                            </Box>
-                            <Typography variant="body2" mt={1}>
-                                Dựa trên{" "}
-                                <span style={{ textDecoration: "underline" }}>
-                                    100.000 đánh giá
-                                </span>
-                            </Typography>
-                        </Box>
-                    </Grid>
 
-                    {[
-                        "Dễ dàng sử dụng.",
-                        "Dễ dàng sử dụng.",
-                        "Dễ dàng sử dụng.",
-                    ].map((text, index) => (
-                        <Grid item xs={3} key={index}>
-                            <Box textAlign="left">
-                                <Box
-                                    display="flex"
-                                    justifyContent="left"
-                                    mt={1}
-                                >
-                                    <StarRounded />
-                                    <StarRounded />
-                                    <StarRounded />
-                                    <StarRounded />
-                                    <StarHalfRounded />
-                                </Box>
-                                <Typography
-                                    variant="h6"
-                                    fontWeight="bold"
-                                    mt={2}
-                                >
-                                    {text}
-                                </Typography>
-                                <Typography variant="body2" mt={1}>
-                                    <span
-                                        style={{
-                                            fontWeight: "bold",
-                                            color: "#8791a5",
-                                        }}
-                                    >
-                                        Nguyễn Thành Tài,
-                                    </span>
-                                    <span style={{ color: "#324155" }}>
-                                        &nbsp;
-                                    </span>
-                                    <span style={{ color: "#8791a5" }}>
-                                        1 ngày trước
-                                    </span>
-                                </Typography>
-                            </Box>
-                        </Grid>
-                    ))}
-                </Grid>
-                <Box textAlign="center" mt={3}>
-                    <IconButton>
-                        <ArrowCircleLeftRounded />
-                    </IconButton>
-                    <IconButton>
-                        <ArrowCircleRightRounded />
-                    </IconButton>
-                </Box>
-                <Box textAlign="left" mt={3}>
-                    <VerifiedRounded />
-                    <Typography variant="body1" mt={1}>
-                        Verified
-                    </Typography>
-                </Box>
-            </Container>
-
-            <Container sx={{ py: 5, width: "100%" }}>
-                <Typography variant="h3" fontWeight="bold" textAlign="center">
-                    Những câu hỏi thường gặp.
-                </Typography>
-                <List>
-                    {[
-                        "Công chứng là gì?",
-                        "Công chứng trực tuyến ở đâu hợp pháp và có giá trị?",
-                        "Hai hoặc nhiều người ký có thể được công chứng chữ ký của họ trong một cuộc họp không?",
-                        "Công chứng trực tuyến có giá trị và có hiệu lực thi hành ở đâu?",
-                        "Tôi là một công chứng viên. Làm cách nào để đăng ký làm việc trên Công chứng?",
-                        "Bằng chứng đảm bảo tính bảo mật và riêng tư của thông tin cá nhân trên văn bản công chứng như thế nào?",
-                    ].map((question, index) => (
-                        <React.Fragment key={index}>
-                            <ListItem button>
-                                <ListItemText primary={question} />
-                                <ArrowBackIosNewRounded />
-                            </ListItem>
-                            {index < 5 && <Divider />}
-                        </React.Fragment>
-                    ))}
-                </List>
-            </Container>
-
-            <Box sx={{ backgroundColor: "#a91d3a", py: 5, width: "100%" }}>
-                <Container>
-                    <Grid container spacing={5}>
-                        <Grid item xs={4}>
-                            <Box>
-                                <Box
-                                    sx={{
-                                        width: 100,
-                                        height: 100,
-                                        backgroundColor: "grey.300",
-                                        borderRadius: "50%",
-                                    }}
-                                />
-                                <Typography
-                                    variant="h4"
-                                    fontWeight="bold"
-                                    color="white"
-                                    mt={3}
-                                >
-                                    Hiện đại bậc nhất.
-                                </Typography>
-                                <Typography
-                                    variant="body1"
-                                    color="white"
-                                    mt={3}
-                                >
-                                    Kết nối với chúng tôi thông qua:
-                                </Typography>
-                                <IconButton
-                                    sx={{ color: "white", mt: 2 }}
-                                    size="large"
-                                >
-                                    <img
-                                        src="facebook.png"
-                                        alt="Facebook"
-                                        style={{ width: 24, height: 24 }}
-                                    />
-                                </IconButton>
-                                <IconButton
-                                    sx={{ color: "white", mt: 2 }}
-                                    size="large"
-                                >
-                                    <img
-                                        src="linkedin.png"
-                                        alt="LinkedIn"
-                                        style={{ width: 24, height: 24 }}
-                                    />
-                                </IconButton>
-                                <IconButton
-                                    sx={{ color: "white", mt: 2 }}
-                                    size="large"
-                                >
-                                    <img
-                                        src="google-plus.png"
-                                        alt="Google Plus"
-                                        style={{ width: 24, height: 24 }}
-                                    />
-                                </IconButton>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Grid container spacing={5}>
-                                <Grid item xs={4}>
-                                    <Typography
-                                        variant="h6"
-                                        fontWeight="bold"
-                                        color="white"
-                                    >
-                                        Trang chủ
-                                    </Typography>
-                                    <List>
-                                        {[
-                                            "Chính sách bảo mật",
-                                            "Bảo mật thanh toán",
-                                            "Điều khoản sử dụng",
-                                            "Hướng dẫn sử dụng",
-                                            "Quy chế hoạt động",
-                                            "Cơ chế giải quyết khiếu nại",
-                                        ].map((text, index) => (
-                                            <ListItem
-                                                key={index}
-                                                disableGutters
-                                            >
-                                                <ListItemText
-                                                    primary={text}
-                                                    primaryTypographyProps={{
-                                                        color: "white",
-                                                    }}
-                                                />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Typography
-                                        variant="h6"
-                                        fontWeight="bold"
-                                        color="white"
-                                    >
-                                        Sản phẩm
-                                    </Typography>
-                                    <List>
-                                        {[
-                                            "Giá",
-                                            "Dành cho cá nhân",
-                                            "Dành cho VPCC",
-                                        ].map((text, index) => (
-                                            <ListItem
-                                                key={index}
-                                                disableGutters
-                                            >
-                                                <ListItemText
-                                                    primary={text}
-                                                    primaryTypographyProps={{
-                                                        color: "white",
-                                                    }}
-                                                />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Typography
-                                        variant="h6"
-                                        fontWeight="bold"
-                                        color="white"
-                                    >
-                                        Về chúng tôi
-                                    </Typography>
-                                    <List>
-                                        {[
-                                            "Trụ sở chính:",
-                                            "...",
-                                            "Email:",
-                                            "Số điện thoại:",
-                                        ].map((text, index) => (
-                                            <ListItem
-                                                key={index}
-                                                disableGutters
-                                            >
-                                                <ListItemText
-                                                    primary={text}
-                                                    primaryTypographyProps={{
-                                                        color: "white",
-                                                    }}
-                                                />
-                                            </ListItem>
-                                        ))}
-                                    </List>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Box>
+            <Reviews />
+            <FAQSection />
+            <Footer />
 
             <Tooltip
-                title="Trợ lý ảo"
+                title="Liên hệ tổng đài"
                 placement="left"
                 componentsProps={{
                     tooltip: {
@@ -708,23 +425,22 @@ const Home = () => {
                         },
                     },
                 }}
+                onClick={handleChatboxClick}
             >
-                <IconButton onClick={handleChatboxClick}>
-                    <AssistantIcon
-                        sx={{
-                            position: "fixed",
-                            width: "3vw",
-                            height: "3vw",
-                            bottom: "5%",
-                            right: "2%",
-                            color: (theme) => theme.palette.primary.main,
-                            cursor: "pointer",
-                            "&:hover": {
-                                opacity: 0.8,
-                            },
-                        }}
-                    />
-                </IconButton>
+                <AssistantIcon
+                    sx={{
+                        position: "fixed",
+                        width: "3vw",
+                        height: "3vw",
+                        bottom: "5%",
+                        right: "2%",
+                        color: (theme) => theme.palette.primary.main,
+                        cursor: "pointer",
+                        "&:hover": {
+                            opacity: 0.8,
+                        },
+                    }}
+                />
             </Tooltip>
 
             <Tooltip
@@ -759,7 +475,7 @@ const Home = () => {
                     }}
                 />
             </Tooltip>
-            {showChatbox ? <Chatbox /> : <Chatbox />}
+            {showChatbox && <Chatbox showChatbox={showChatbox} setShowChatbox={setShowChatbox} />}
         </ThemeProvider>
     );
 };

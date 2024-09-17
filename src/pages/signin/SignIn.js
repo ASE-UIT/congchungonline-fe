@@ -7,7 +7,7 @@ import getAuthTheme from "../../config/theme/getAuthTheme";
 import SignInCard from "./SignInCard";
 import Content from "./Content";
 import TemplateFrame from "./TemplateFrame";
-import map from "../../assets/Images/map.png";
+import map from "../../assets/images/map.png";
 
 export default function SignInSide() {
     const [mode, setMode] = React.useState("light");

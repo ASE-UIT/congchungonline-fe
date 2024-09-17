@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import getAuthTheme from "../../config/theme/getAuthTheme";
 import SignUpCard from "./SignUpCard";
-import map from "../../assets/Images/map.png";
+import map from "../../assets/images/map.png";
 
 export default function SignUp() {
     const [mode, setMode] = React.useState("light");

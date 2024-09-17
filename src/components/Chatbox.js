@@ -3,10 +3,9 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { sendMessageToGemini } from "../services/chatService";
 
-const Chatbox = () => {
+const Chatbox = ({ showChatbox, setShowChatbox }) => { // Accept props
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
-    const [showChatbox, setShowChatbox] = useState(false);
 
     const handleInputChange = (event) => {
         setNewMessage(event.target.value);
@@ -31,10 +30,6 @@ const Chatbox = () => {
         setShowChatbox(false);
     };
 
-    const handleOpen = () => {
-        setShowChatbox(true);
-    };
-
     return (
         <>
             <Button
@@ -49,20 +44,20 @@ const Chatbox = () => {
                         backgroundColor: "transparent",
                     },
                 }}
-                onClick={handleOpen}
+                onClick={() => setShowChatbox(true)}
             ></Button>
             {showChatbox && (
                 <Box
                     sx={{
                         position: "fixed",
-                        bottom: 16,
-                        right: 16,
+                        width: "25vw",
+                        height: "60vh",
+                        bottom: "5%",
+                        right: "2%",
                         backgroundColor: "white",
                         borderRadius: 2,
-                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                        boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.3)",
                         padding: 2,
-                        width: "300px",
-                        height: "400px",
                         display: "flex",
                         flexDirection: "column",
                     }}
@@ -70,17 +65,20 @@ const Chatbox = () => {
                     <Box
                         sx={{
                             display: "flex",
-                            justifyContent: "flex-end",
+                            justifyContent: "space-between",
+                            alignItems: "center",
                             mb: 1,
+                            pl: 6,
                         }}
                     >
-                        <Button onClick={handleClose} sx={{ p: 0 }}>
+                        <Typography variant="h6" sx={{ textAlign: "center", flexGrow: 1 }}>
+                            Trợ lý ảo
+                        </Typography>
+                        <Button onClick={handleClose}>
                             <CloseIcon />
                         </Button>
                     </Box>
-                    <Typography variant="h6" align="center" mb={2}>
-                        Chatbot
-                    </Typography>
+
                     <Box
                         sx={{
                             flexGrow: 1,
@@ -124,7 +122,7 @@ const Chatbox = () => {
                             Gửi
                         </Button>
                     </Box>
-                </Box>
+                </Box >
             )}
         </>
     );
