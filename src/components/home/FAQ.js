@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import ExpandMoreRounded from "@mui/icons-material/ExpandMoreRounded";
 import ExpandLessRounded from "@mui/icons-material/ExpandLessRounded";
+import { dark } from "../../config/theme/themePrimitives"; // Thêm import dark
 
 const FAQSection = () => {
     const [expandedIndex, setExpandedIndex] = useState(null);
@@ -38,21 +39,21 @@ const FAQSection = () => {
     ];
 
     return (
-        <Container sx={{ py: 5, width: "100%" }}>
-            <Typography variant="h3" fontWeight="bold" textAlign="center">
+        <Container sx={{ pb: 10, width: "100%" }}>
+            <Typography variant="h3" fontWeight="bold" textAlign="center" color={dark[500]}>
                 Những câu hỏi thường gặp.
             </Typography>
             <List>
                 {questions.map((question, index) => (
                     <React.Fragment key={index}>
                         <ListItem button onClick={() => toggleExpand(index)} sx={{ "&:hover": { backgroundColor: "transparent" } }}>
-                            <ListItemText primary={question} primaryTypographyProps={{ fontSize: 18, fontWeight: 600 }} />
+                            <ListItemText primary={question} primaryTypographyProps={{ fontSize: 18, fontWeight: 600, color: dark[500] }} sx={{ cursor: "default" }} />
                             <IconButton>
-                                {expandedIndex === index ? <ExpandLessRounded /> : <ExpandMoreRounded />}
+                                {expandedIndex === index ? <ExpandLessRounded sx={{ color: dark[500] }} /> : <ExpandMoreRounded sx={{ color: dark[500] }} />}
                             </IconButton>
                         </ListItem>
                         <Collapse in={expandedIndex === index}>
-                            <Typography variant="body1" sx={{ mx: 2, my: 2, fontSize: 18 }}>
+                            <Typography variant="body1" sx={{ mx: 2, my: 2, fontSize: 18, color: dark[500], cursor: "default" }}>
                                 {answers[index]}
                             </Typography>
                         </Collapse>

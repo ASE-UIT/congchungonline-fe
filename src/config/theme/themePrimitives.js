@@ -207,7 +207,7 @@ export const getDesignTokens = (mode) => {
                 fontWeight: 600,
             },
             body1: {
-                fontSize: defaultTheme.typography.pxToRem(16),
+                fontSize: defaultTheme.typography.pxToRem(18),
             },
             body2: {
                 fontSize: defaultTheme.typography.pxToRem(16),

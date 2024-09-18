@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem, IconButton, useMediaQuery } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu'; // Import icon for the dropdown button
+import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from "@mui/system";
-import { white } from "../config/theme/themePrimitives";
+import { Link } from "react-router-dom"; // Import Link for navigation
+import { dark, white } from "../config/theme/themePrimitives";
 
 const Logo = styled(Box)(({ theme }) => ({
     width: theme.spacing(5),
@@ -39,6 +40,13 @@ const Header = () => {
         setAnchorEl(null);
     };
 
+    const services = [
+        { name: "Dịch vụ công chứng", path: "/" },
+        { name: "Tra cứu hồ sơ công chứng", path: "/" },
+        { name: "Văn phòng công chứng", path: "/" },
+        { name: "Đăng ký VPCC", path: "/" }
+    ];
+
     return (
         <AppBar
             position="sticky"
@@ -52,19 +60,17 @@ const Header = () => {
             }}
         >
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-                {/* Left side: Logo and organization name */}
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Logo />
                     <Typography
                         variant="h6"
-                        color="textPrimary"
+                        color={dark[500]}
                         sx={{ ml: 2 }}
                     >
                         ratonity
                     </Typography>
                 </Box>
 
-                {/* Right side: Services and Buttons */}
                 {isMobile ? (
                     <>
                         <IconButton
@@ -80,43 +86,20 @@ const Header = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                         >
-                            {/* Dropdown menu items */}
-                            <MenuItem
-                                onClick={handleMenuClose}
-                                sx={{
-                                    fontSize: 14,
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Dịch vụ công chứng
-                            </MenuItem>
-                            <MenuItem
-                                onClick={handleMenuClose}
-                                sx={{
-                                    fontSize: 14,
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Tra cứu hồ sơ công chứng
-                            </MenuItem>
-                            <MenuItem
-                                onClick={handleMenuClose}
-                                sx={{
-                                    fontSize: 14,
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Văn phòng công chứng
-                            </MenuItem>
-                            <MenuItem
-                                onClick={handleMenuClose}
-                                sx={{
-                                    fontSize: 14,
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Đăng ký VPCC
-                            </MenuItem>
+                            {services.map((service) => (
+                                <MenuItem
+                                    key={service.name}
+                                    onClick={handleMenuClose}
+                                    component={Link}
+                                    to={service.path}
+                                    sx={{
+                                        fontSize: 14,
+                                        fontWeight: "600",
+                                    }}
+                                >
+                                    {service.name}
+                                </MenuItem>
+                            ))}
                             <MenuItem
                                 onClick={handleMenuClose}
                                 sx={{
@@ -154,24 +137,44 @@ const Header = () => {
                     </>
                 ) : (
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                        {/* Services */}
-                        <Typography variant="body4" color="textPrimary" sx={{ mx: 1, fontWeight: "600" }}>
-                            Dịch vụ công chứng
-                        </Typography>
-                        <Typography variant="body4" color="textPrimary" sx={{ mx: 1, fontWeight: "600" }}>
-                            Tra cứu hồ sơ công chứng
-                        </Typography>
-                        <Typography variant="body4" color="textPrimary" sx={{ mx: 1, fontWeight: "600" }}>
-                            Văn phòng công chứng
-                        </Typography>
-                        <Typography variant="body4" color="textPrimary" sx={{ mx: 1, fontWeight: "600" }}>
-                            Đăng ký VPCC
-                        </Typography>
-                        <Typography variant="body4" color="primary" sx={{ ml: 1, mr: 4, fontWeight: "600" }}>
+                        {services.map((service) => (
+                            <Typography
+                                key={service.name}
+                                variant="body4"
+                                component={Link}
+                                to={service.path}
+                                color={dark[500]}
+                                sx={{
+                                    mx: 1,
+                                    fontWeight: "600",
+                                    textDecoration: "none",
+                                    '&:hover': {
+                                        fontWeight: 'bold',
+                                        color: 'primary.main',
+                                    },
+                                    transition: 'all 0.3s',
+                                }}
+                            >
+                                {service.name}
+                            </Typography>
+                        ))}
+                        <Typography
+                            variant="body4"
+                            color="primary"
+                            sx={{
+                                ml: 1,
+                                mr: 4,
+                                fontWeight: "600",
+                                '&:hover': {
+                                    fontWeight: 'bold',
+                                    color: 'primary.main',
+                                },
+                                transition: 'all 0.3s',
+                            }}
+                        >
                             Hướng dẫn
                         </Typography>
 
-                        {/* Buttons */}
                         <Box sx={{ display: "flex", gap: 0.2 }}>
                             <Button
                                 variant="contained"

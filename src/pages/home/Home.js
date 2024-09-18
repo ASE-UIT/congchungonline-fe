@@ -1,17 +1,7 @@
 import {
-    ArrowForwardRounded,
-    ArrowCircleLeftRounded,
-    ArrowCircleRightRounded,
-} from "@mui/icons-material";
-import {
     Box,
     Button,
-    Card,
-    CardContent,
-    CardMedia,
     Container,
-    Grid,
-    IconButton,
     Typography,
     Tooltip
 } from "@mui/material";
@@ -27,6 +17,9 @@ import Chatbox from "../../components/Chatbox";
 import FAQSection from "../../components/home/FAQ";
 import Footer from "../../components/Footer";
 import Reviews from "../../components/home/Reviews";
+import Usages from "../../components/home/Usages";
+import DocumentSupport from "../../components/home/DocumentSupport";
+import { dark } from "../../config/theme/themePrimitives";
 
 const Home = () => {
     const [mode, setMode] = React.useState("light");
@@ -47,7 +40,6 @@ const Home = () => {
     return (
         <ThemeProvider theme={showCustomTheme ? HomeTheme : defaultTheme}>
             <Header />
-
             <Box
                 sx={{
                     position: "absolute",
@@ -74,13 +66,13 @@ const Home = () => {
                         width: "100%",
                     }}
                 >
-                    <Typography variant="h6">CÔNG CHỨNG QUỐC GIA</Typography>
-                    <Typography variant="h1" fontWeight="bold">
+                    <Typography variant="h6" color={dark[500]}>CÔNG CHỨNG QUỐC GIA</Typography>
+                    <Typography variant="h1" fontWeight="bold" color={dark[500]}>
                         Công chứng trực tuyến
                     </Typography>
                 </Box>
                 <Box textAlign="center" mt={3}>
-                    <Typography variant="subtitle1" width="100%">
+                    <Typography variant="subtitle1" width="100%" color={dark[500]}>
                         Công chứng trực tuyến nhanh chóng - an toàn - bảo mật.
                         <br />
                         Chúng tôi sẵn sàng phục vụ cho dù bạn đang ở đâu.
@@ -121,8 +113,8 @@ const Home = () => {
                         width: "100%",
                     }}
                 >
-                    <Typography variant="h6">LỢI ÍCH NHẬN ĐƯỢC</Typography>
-                    <Typography variant="h3" fontWeight="bold">
+                    <Typography variant="h6" color={dark[500]}>LỢI ÍCH NHẬN ĐƯỢC</Typography>
+                    <Typography variant="h3" fontWeight="bold" color={dark[500]}>
                         Tại sao bạn nên sử dụng dịch vụ
                         <br />
                         Công chứng trực tuyến?
@@ -131,278 +123,144 @@ const Home = () => {
                 <Typography
                     variant="body1"
                     textAlign="center"
+                    color={dark[500]}
                     sx={{ maxWidth: 900, mx: "auto", mt: 3, width: "100%" }}
                 >
-                    Lorem ipsum dolor sit amet consectetur. Ultricies sit diam
-                    arcu a ac commodo pellentesque nisl. Nec vestibulum ut
-                    tristique arcu. Elementum lorem urna vel vulputate blandit
-                    lacinia bibendum. Ac donec porttitor consectetur
-                    pellentesque sed ornare hendrerit lobortis.Elementum lorem
-                    urna vel vulputate blandit lacinia bibendum.
+                    Sử dụng dịch vụ công chứng trực tuyến giúp bạn tiết kiệm thời gian và tránh thủ tục phức tạp. Mọi giao dịch đều được thực hiện an toàn và minh bạch, không cần đến trực tiếp cơ quan. Đội ngũ hỗ trợ chuyên nghiệp luôn sẵn sàng giải đáp, giúp bạn hoàn tất công việc nhanh chóng.
                 </Typography>
-                <Grid
-                    container
-                    spacing={2}
-                    sx={{ mt: 5, justifyContent: "center" }}
-                >
-                    <Grid item xs={4} sx={{ opacity: 0.5 }}>
-                        <Card sx={{ width: "100%" }}>
-                            <CardMedia
-                                component="img"
-                                height="300"
-                                image="rectangle-42.png"
-                                alt="Rectangle"
-                            />
-                            <CardContent>
-                                <Typography variant="body1" textAlign="center">
-                                    Lorem ipsum dolor sit amet consectetur.
-                                    Ultricies sit diam arcu a ac commodo
-                                    pellentesque nisl. Nec vestibulum ut
-                                    tristique arcu.
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <Card sx={{ width: "100%" }}>
-                            <CardMedia
-                                component="img"
-                                height="300"
-                                image="rectangle-42.png"
-                                alt="Rectangle"
-                            />
-                            <CardContent>
-                                <Typography variant="body1" textAlign="center">
-                                    Lorem ipsum dolor sit amet consectetur.
-                                    Ultricies sit diam arcu a ac commodo
-                                    pellentesque nisl. Nec vestibulum ut
-                                    tristique arcu.
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={4} sx={{ opacity: 0.5 }}>
-                        <Card sx={{ width: "100%" }}>
-                            <CardMedia
-                                component="img"
-                                height="300"
-                                image="rectangle-42.png"
-                                alt="Rectangle"
-                            />
-                            <CardContent>
-                                <Typography variant="body1" textAlign="center">
-                                    Lorem ipsum dolor sit amet consectetur.
-                                    Ultricies sit diam arcu a ac commodo
-                                    pellentesque nisl. Nec vestibulum ut
-                                    tristique arcu.
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
-                <Box textAlign="center" mt={3}>
-                    <IconButton>
-                        <ArrowCircleLeftRounded />
-                    </IconButton>
-                    <IconButton >
-                        <ArrowCircleRightRounded />
-                    </IconButton>
-                </Box>
+                <Usages />
             </Container>
 
-            <Container
-                sx={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    pt: 10,
-                    pb: 15,
-                    width: "100%",
-                }}
-            >
-                <Box
-                    textAlign="center"
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                        width: "100%",
-                    }}
-                >
-                    <Typography variant="h3" fontWeight="bold">
-                        Hỗ trợ các loại văn bản
-                    </Typography>
-                </Box>
-                <Typography
-                    variant="body1"
-                    textAlign="center"
-                    sx={{ maxWidth: 900, mx: "auto", mt: 3, width: "100%" }}
-                >
-                    Lorem ipsum dolor sit amet consectetur. Ut scelerisque
-                    tellus elementum ultrices augue enim eu. Aliquet sed
-                    pellentesque hac convallis congue. Hendrerit adipiscing
-                    tempor et cras commodo tortor. Sem aliquet orci nullam
-                    senectus libero massa. Vitae placerat cursus nisi id amet
-                    interdum.
-                </Typography>
-                <Grid
-                    container
-                    spacing={2}
-                    sx={{ mt: 5, justifyContent: "center" }}
-                >
-                    {[
-                        "Giấy tờ nhà - đất",
-                        "Giấy tờ nhà - đất",
-                        "Giấy tờ nhà - đất",
-                        "Giấy tờ nhà - đất",
-                    ].map((text, index) => (
-                        <Grid item xs={3} key={index}>
-                            <Box
-                                display="flex"
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{ gap: 2 }}
-                            >
-                                <Typography variant="h6">{text}</Typography>
-                                <ArrowForwardRounded />
-                            </Box>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Container>
+            <DocumentSupport />
+
             <Box
                 sx={{
-                    backgroundColor: "grey.100",
-                    py: 5,
+                    backgroundColor: "#FEEBF1",
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                 }}
             >
-                <Grid container spacing={5}>
-                    <Grid
-                        item
-                        xs={6}
+                <Box
+                    display="flex"
+                    spacing={5}
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{ width: "90%" }}
+                >
+                    <Box
                         sx={{
                             display: "flex",
+                            flexDirection: "column",
                             justifyContent: "center",
-                            alignItems: "center",
+                            alignItems: "flex-start",
+                            width: "50%",
+                            mr: 5
                         }}
                     >
-                        <Box sx={{ mx: "20%" }}>
-                            <Typography variant="h2" fontWeight="bold">
-                                Dành cho cá nhân
-                            </Typography>
-                            <Typography variant="body1" sx={{ mt: 2 }}>
-                                Lorem ipsum dolor sit amet consectetur. Ut
-                                scelerisque tellus elementum ultrices augue enim
-                                eu. Aliquet sed pellentesque hac convallis
-                                congue. Hendrerit adipiscing tempor et cras
-                                commodo tortor. Sem aliquet orci nullam senectus
-                                libero massa. Vitae placerat cursus nisi id amet
-                                interdum.
-                            </Typography>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{
-                                    mt: 3,
-                                    borderRadius: 1,
-                                    textTransform: "inherit",
-                                    fontSize: 18,
-                                    px: 3,
-                                    py: 1,
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Tìm hiểu ngay
-                            </Button>
-                        </Box>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={6}
+                        <Typography variant="h2" fontWeight="bold" color="#343D48">
+                            Dành cho cá nhân
+                        </Typography>
+                        <Typography variant="body1" color="#343D48" sx={{ mt: 2 }}>
+                            Bạn đang tìm kiếm một giải pháp tiện ích, nhanh chóng và an toàn để quản lý các nhu cầu cá nhân?<br />
+                            Với dịch vụ của chúng tôi, bạn sẽ có thể tận dụng các tính năng tiên tiến để tối ưu hóa thời gian và nâng cao trải nghiệm cá nhân.
+                            Đăng ký ngay hôm nay để bắt đầu hành trình đơn giản hóa cuộc sống của bạn!
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{
+                                mt: 3,
+                                borderRadius: 1,
+                                px: 4,
+                                py: 1,
+                                textTransform: "inherit",
+                                fontSize: 20,
+                                fontWeight: 600,
+                            }}
+                        >
+                            Tìm hiểu ngay
+                        </Button>
+                    </Box>
+                    <Box
                         sx={{
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
+                            width: "50%"
                         }}
                     >
                         <img
                             src={Frame1}
                             alt="Frame"
-                            style={{ width: "70%" }}
                         />
-                    </Grid>
-                </Grid>
+                    </Box>
+                </Box>
             </Box>
+
             <Box
                 sx={{
-                    backgroundColor: "grey.100",
+                    backgroundColor: "#FEEBF1",
                     width: "100%",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    py: 5,
                 }}
             >
-                <Grid container spacing={5}>
-                    <Grid
-                        item
-                        xs={6}
+                <Box
+                    display="flex"
+                    spacing={5}
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{ width: "90%" }}
+                >
+                    <Box
                         sx={{
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
+                            width: "50%"
                         }}
                     >
                         <img
                             src={Frame2}
                             alt="Frame"
-                            style={{ width: "70%" }}
                         />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={6}
+                    </Box>
+                    <Box
                         sx={{
                             display: "flex",
+                            flexDirection: "column",
                             justifyContent: "center",
-                            alignItems: "center",
+                            alignItems: "flex-start",
+                            width: "50%",
+                            ml: 5
                         }}
                     >
-                        <Box sx={{ mx: "20%" }}>
-                            <Typography variant="h2" fontWeight="bold">
-                                Dành cho VPCC
-                            </Typography>
-                            <Typography variant="body1" sx={{ mt: 2 }}>
-                                Lorem ipsum dolor sit amet consectetur. Ut
-                                scelerisque tellus elementum ultrices augue enim
-                                eu. Aliquet sed pellentesque hac convallis
-                                congue. Hendrerit adipiscing tempor et cras
-                                commodo tortor. Sem aliquet orci nullam senectus
-                                libero massa. Vitae placerat cursus nisi id amet
-                                interdum.
-                            </Typography>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{
-                                    mt: 3,
-                                    borderRadius: 1,
-                                    textTransform: "inherit",
-                                    fontSize: 18,
-                                    px: 3,
-                                    py: 1,
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Tìm hiểu ngay
-                            </Button>
-                        </Box>
-                    </Grid>
-                </Grid>
+                        <Typography variant="h2" fontWeight="bold" color="#343D48">
+                            Dành cho VPCC
+                        </Typography>
+                        <Typography variant="body1" color="#343D48" sx={{ mt: 2 }}>
+                            Chúng tôi hiểu rằng công việc công chứng đòi hỏi sự chính xác, nhanh chóng và hiệu quả. Trở thành đối tác với chúng tôi, văn phòng của bạn sẽ được hỗ trợ các giải pháp công nghệ tiên tiến để tăng cường hiệu suất làm việc, giảm thiểu thời gian xử lý, và cung cấp dịch vụ tốt hơn cho khách hàng. Hợp tác với chúng tôi hôm nay để tạo nên sự khác biệt trong công việc của bạn.
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            sx={{
+                                mt: 3,
+                                borderRadius: 1,
+                                px: 4,
+                                py: 1,
+                                textTransform: "inherit",
+                                fontSize: 20,
+                                fontWeight: 600,
+                            }}
+                        >
+                            Tìm hiểu ngay
+                        </Button>
+                    </Box>
+                </Box>
             </Box>
 
             <Reviews />
@@ -410,7 +268,7 @@ const Home = () => {
             <Footer />
 
             <Tooltip
-                title="Liên hệ tổng đài"
+                title="Trợ lý ảo"
                 placement="left"
                 componentsProps={{
                     tooltip: {
