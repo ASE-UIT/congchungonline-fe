@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
 import { ArrowCircleLeftRounded, ArrowCircleRightRounded } from '@mui/icons-material';
 import { primary } from '../../config/theme/themePrimitives';
+import { dark } from '../../config/theme/themePrimitives';
 const Usages = () => {
     const [currentCard, setCurrentCard] = useState(1);
 
@@ -67,7 +68,7 @@ const Usages = () => {
                                 alt="Rectangle"
                             />
                             <CardContent>
-                                <Typography gutterBottom variant="h5" component="div">
+                                <Typography gutterBottom variant="h5" component="div" color={dark[500]}>
                                     {use.title}
                                 </Typography>
                                 <Typography variant="body1" sx={{ color: 'text.secondary' }}>

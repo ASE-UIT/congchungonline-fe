@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem, IconButton, useMediaQuery } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from "@mui/system";
-import { Link } from "react-router-dom"; // Import Link for navigation
 import { dark, white } from "../config/theme/themePrimitives";
+import Link from '@mui/material/Link';
 
 const Logo = styled(Box)(({ theme }) => ({
     width: theme.spacing(5),
@@ -87,28 +87,31 @@ const Header = () => {
                             onClose={handleMenuClose}
                         >
                             {services.map((service) => (
+                                <Link href={service.path} underline="none" color={dark[500]}>
+                                    <MenuItem
+                                        key={service.name}
+                                        onClick={handleMenuClose}
+                                        sx={{
+                                            fontSize: 14,
+                                            fontWeight: "600",
+                                        }}
+                                    >
+                                        {service.name}
+                                    </MenuItem>
+                                </Link>
+                            ))}
+                            <Link href="/" underline="none" color={dark[500]}>
                                 <MenuItem
-                                    key={service.name}
                                     onClick={handleMenuClose}
-                                    component={Link}
-                                    to={service.path}
                                     sx={{
                                         fontSize: 14,
                                         fontWeight: "600",
                                     }}
                                 >
-                                    {service.name}
+                                    Hướng dẫn
                                 </MenuItem>
-                            ))}
-                            <MenuItem
-                                onClick={handleMenuClose}
-                                sx={{
-                                    fontSize: 14,
-                                    fontWeight: "600",
-                                }}
-                            >
-                                Hướng dẫn
-                            </MenuItem>
+                            </Link>
+
                             <MenuItem
                                 onClick={() => {
                                     window.location.href = '/signin';
@@ -138,43 +141,40 @@ const Header = () => {
                 ) : (
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                         {services.map((service) => (
+                            <Link href={service.path} underline="none">
+                                <Typography
+                                    key={service.name}
+                                    variant="body4"
+                                    color={dark[500]}
+                                    sx={{
+                                        mx: 1,
+                                        fontWeight: "bold",
+                                        textDecoration: "none",
+                                        '&:hover': {
+                                            color: 'primary.main',
+                                        },
+                                    }}
+                                >
+                                    {service.name}
+                                </Typography>
+                            </Link>
+                        ))}
+                        <Link href="/" underline="none">
                             <Typography
-                                key={service.name}
                                 variant="body4"
-                                component={Link}
-                                to={service.path}
-                                color={dark[500]}
+                                color="primary"
                                 sx={{
-                                    mx: 1,
+                                    ml: 1,
+                                    mr: 4,
                                     fontWeight: "600",
-                                    textDecoration: "none",
                                     '&:hover': {
-                                        fontWeight: 'bold',
                                         color: 'primary.main',
                                     },
-                                    transition: 'all 0.3s',
                                 }}
                             >
-                                {service.name}
+                                Hướng dẫn
                             </Typography>
-                        ))}
-                        <Typography
-                            variant="body4"
-                            color="primary"
-                            sx={{
-                                ml: 1,
-                                mr: 4,
-                                fontWeight: "600",
-                                '&:hover': {
-                                    fontWeight: 'bold',
-                                    color: 'primary.main',
-                                },
-                                transition: 'all 0.3s',
-                            }}
-                        >
-                            Hướng dẫn
-                        </Typography>
-
+                        </Link>
                         <Box sx={{ display: "flex", gap: 0.2 }}>
                             <Button
                                 variant="contained"
