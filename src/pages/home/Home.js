@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useState } from "react";
-import Header from "../../components/Header";
 import getAuthTheme from "../../config/theme/getAuthTheme";
 import AssistantIcon from "@mui/icons-material/Assistant";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -15,7 +14,6 @@ import Frame1 from "../../assets/vectors/Frame-1.svg";
 import Frame2 from "../../assets/vectors/Frame-2.svg";
 import Chatbox from "../../components/Chatbox";
 import FAQSection from "../../components/home/FAQ";
-import Footer from "../../components/Footer";
 import Reviews from "../../components/home/Reviews";
 import Usages from "../../components/home/Usages";
 import DocumentSupport from "../../components/home/DocumentSupport";
@@ -39,7 +37,6 @@ const Home = () => {
 
     return (
         <ThemeProvider theme={showCustomTheme ? HomeTheme : defaultTheme}>
-            <Header />
             <Box
                 sx={{
                     position: "absolute",
@@ -265,7 +262,6 @@ const Home = () => {
 
             <Reviews />
             <FAQSection />
-            <Footer />
 
             <Tooltip
                 title="Trợ lý ảo"
