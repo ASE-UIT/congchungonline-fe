@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import {
     Box,
     Typography,
-    IconButton,
     List,
     ListItem,
     ListItemText,
     Collapse,
-    Divider
+    Divider,
+    IconButton,
+    ListItemButton
 } from "@mui/material";
-import { ArrowBackIos, ArrowForwardIos, KeyboardArrowRight, KeyboardArrowDown } from "@mui/icons-material";
-import { dark } from "../../config/theme/themePrimitives";
+import { ArrowBackIosNewRounded, ArrowForwardIosRounded, KeyboardArrowRightRounded, KeyboardArrowDownRounded } from "@mui/icons-material";
+import { dark, primary, white } from "../../config/theme/themePrimitives";
 
 const Guide = () => {
     const [currentStep, setCurrentStep] = useState(0);
@@ -66,7 +67,7 @@ const Guide = () => {
                 display: "flex",
             }}
             mx={2}
-            mb={10}
+            mb={15}
             gap={5}
         >
             <Box
@@ -112,12 +113,12 @@ const Guide = () => {
                 <Typography variant="body2" mt={1} mr={10}>
                     {guides[currentStep]?.description}
                 </Typography>
-                <Box display="flex" mt={5}>
-                    <IconButton onClick={handlePrevStep} disabled={currentStep === 0}>
-                        <ArrowBackIos />
+                <Box display="flex" mt={5} gap={2}>
+                    <IconButton onClick={handlePrevStep} disabled={currentStep === 0} sx={{ color: primary[500], border: 1 }}>
+                        <ArrowBackIosNewRounded fontSize="large" />
                     </IconButton>
-                    <IconButton onClick={handleNextStep} disabled={currentStep === guides.length - 1}>
-                        <ArrowForwardIos />
+                    <IconButton onClick={handleNextStep} disabled={currentStep === guides.length - 1} sx={{ color: primary[500], border: 1 }}>
+                        <ArrowForwardIosRounded fontSize="large" />
                     </IconButton>
                 </Box>
             </Box>
@@ -134,28 +135,40 @@ const Guide = () => {
             >
                 <List>
                     {guides.map((guide, index) => (
-                        <React.Fragment key={index}>
+                        <Fragment key={index}>
                             <ListItem
                                 button
                                 onClick={() => {
                                     toggleExpand(index);
                                     setCurrentStep(index);
                                 }}
-                                sx={{ "&:hover": { backgroundColor: "transparent" } }}
+                                sx={{
+                                    '&:hover': {
+                                        backgroundColor: "transparent"
+                                    }
+                                }}
                             >
+                                <ListItemButton disabled={currentStep === index} sx={{ cursor: "default", padding: 0, width: "10%" }}>
+                                    {currentStep === index ? (
+                                        <KeyboardArrowRightRounded
+                                            sx={{ color: dark[500], '&:hover': { color: white[50], backgroundColor: primary[500] }, borderRadius: 100 }}
+                                            fontSize="large"
+                                        />
+                                    ) : (
+                                        <KeyboardArrowDownRounded
+                                            sx={{ color: dark[500], '&:hover': { color: white[50], backgroundColor: primary[500] }, borderRadius: 100 }}
+                                            fontSize="large"
+                                        />
+                                    )}
+                                </ListItemButton>
+
                                 <ListItemText
                                     primary={`Bước ${index + 1}`}
                                     primaryTypographyProps={{ fontSize: 18, fontWeight: 600, color: dark[500] }}
-                                    sx={{ cursor: "default" }}
+                                    sx={{ cursor: "default", padding: 0, width: "80%" }}
                                 />
-                                <IconButton disabled={currentStep === index}>
-                                    {currentStep === index ? (
-                                        <KeyboardArrowRight sx={{ color: dark[500] }} />
-                                    ) : (
-                                        <KeyboardArrowDown sx={{ color: dark[500] }} />
-                                    )}
-                                </IconButton>
                             </ListItem>
+
                             <Collapse in={currentStep === index}>
                                 <Typography
                                     variant="body1"
@@ -171,7 +184,7 @@ const Guide = () => {
                                 </Typography>
                             </Collapse>
                             {index < guides.length - 1 && <Divider sx={{ my: 2 }} />}
-                        </React.Fragment>
+                        </Fragment>
                     ))}
                 </List>
             </Box>
