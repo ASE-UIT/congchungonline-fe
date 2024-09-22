@@ -53,7 +53,7 @@ const Home = () => {
                 }}
             />
 
-            <Container sx={{ pt: 10, pb: 5, height: "100vh", width: "100%" }}>
+            <Container sx={{ pt: 10, pb: 5 }}>
                 <Box
                     textAlign="center"
                     sx={{

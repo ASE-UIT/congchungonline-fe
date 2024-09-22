@@ -220,6 +220,10 @@ export const getDesignTokens = (mode) => {
                 fontSize: defaultTheme.typography.pxToRem(14),
                 fontWeight: 500,
             },
+            body5: {
+                fontSize: defaultTheme.typography.pxToRem(12),
+                fontWeight: 400,
+            },
             caption1: {
                 fontSize: defaultTheme.typography.pxToRem(12),
                 fontWeight: 400,
