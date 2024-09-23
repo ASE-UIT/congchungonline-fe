@@ -100,7 +100,7 @@ const Header = () => {
                                     </MenuItem>
                                 </Link>
                             ))}
-                            <Link href='/userguide' underline="none" color={dark[500]}>
+                            <Link href="/" underline="none" color={dark[500]}>
                                 <MenuItem
                                     onClick={handleMenuClose}
                                     sx={{
@@ -159,7 +159,7 @@ const Header = () => {
                                 </Typography>
                             </Link>
                         ))}
-                        <Link href="/userguide" underline="none">
+                        <Link href="/" underline="none">
                             <Typography
                                 variant="body4"
                                 color="primary"
