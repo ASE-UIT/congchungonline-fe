@@ -13,39 +13,7 @@ import {
 } from "@mui/material";
 import { dark, gray, primary } from "../../config/theme/themePrimitives";
 import Guide from "../../components/services/Guide";
-
-const services = [
-	{
-		title: "Dịch vụ vay tài sản",
-		description:
-			"Dịch vụ vay tài sản của chúng tôi cho phép bạn vay tiền để mua tài sản mới. Chúng tôi cung cấp các điều kiện vay linh hoạt và lãi suất cạnh tranh.",
-		href: "/",
-	},
-	{
-		title: "Dịch vụ mượn tài sản",
-		description:
-			"Dịch vụ mượn tài sản của chúng tôi cho phép bạn mượn tài sản để sử dụng trong một thời gian ngắn. Chúng tôi có một danh mục tài sản rộng lớn để bạn lựa chọn.",
-		href: "/",
-	},
-	{
-		title: "Dịch vụ cho thuê tài sản",
-		description:
-			"Dịch vụ cho thuê tài sản của chúng tôi cho phép bạn thuê tài sản trong một thời gian dài. Chúng tôi có các điều kiện thuê linh hoạt và giá cả cạnh tranh.",
-		href: "/",
-	},
-	{
-		title: "Dịch vụ cầm cố tài sản",
-		description:
-			"Dịch vụ cầm cố tài sản của chúng tôi cho phép bạn cầm cố tài sản để vay tiền. Chúng tôi có các chuyên gia để đánh giá giá trị tài sản của bạn.",
-		href: "/",
-	},
-	{
-		title: "Dịch vụ mua bán tài sản",
-		description:
-			"Dịch vụ mua bán tài sản của chúng tôi cho phép bạn mua và bán tài sản một cách an toàn và minh bạch. Chúng tôi có các chuyên gia để hỗ trợ bạn trong suốt quá trình.",
-		href: "/",
-	},
-];
+import { services } from "../../utils/fakeData";
 
 const Services = () => {
 	const [filteredData, setFilteredData] = useState(services);
