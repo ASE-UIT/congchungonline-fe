@@ -21,7 +21,7 @@ const CreateNotarizationProfile = lazy(() =>
 
 function App() {
 	const theme = createTheme(getDesignTokens());
-	const [isSignedIn, setIsSignedIn] = useState(true);
+	const [isSignedIn, setIsSignedIn] = useState(false);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -39,7 +39,7 @@ function App() {
 							path="/create-notarization-profile"
 							element={<CreateNotarizationProfile />}
 						/>
-            <Route path="/userguide" element={<UserGuide />} />
+						<Route path="/userguide" element={<UserGuide />} />
 					</Routes>
 					{!isSignedIn && <Footer />}
 				</Box>
