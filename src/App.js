@@ -12,10 +12,11 @@ const SignIn = lazy(() => import("./pages/signin/SignIn"));
 const SignUp = lazy(() => import("./pages/signup/SignUp"));
 const Home = lazy(() => import("./pages/home/Home"));
 const Services = lazy(() => import("./pages/services/Services"));
+const UserGuide = lazy(() => import("./pages/static/UserGuide"));
 
 function App() {
     const theme = createTheme(getDesignTokens());
-    const [isSignedIn, setIsSignedIn] = useState(true);
+    const [isSignedIn, setIsSignedIn] = useState(false);
 
     return (
         <ThemeProvider theme={theme}>
@@ -28,6 +29,7 @@ function App() {
                         <Route path="/services" element={<Services />} />
                         <Route path="/signin" element={<SignIn />} />
                         <Route path="/signup" element={<SignUp />} />
+                        <Route path="/userguide" element={<UserGuide />} />
                     </Routes>
                     {!isSignedIn && <Footer />}
                 </Box>
