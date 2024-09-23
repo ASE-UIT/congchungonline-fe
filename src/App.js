@@ -14,28 +14,38 @@ const Home = lazy(() => import("./pages/home/Home"));
 const Services = lazy(() => import("./pages/services/Services"));
 const UserGuide = lazy(() => import("./pages/static/UserGuide"));
 
-function App() {
-    const theme = createTheme(getDesignTokens());
-    const [isSignedIn, setIsSignedIn] = useState(false);
+const UserProfile = lazy(() => import("./pages/profile/UserProfile"));
+const CreateNotarizationProfile = lazy(() =>
+	import("./pages/services/CreateNotarizationProfile")
+);
 
-    return (
-        <ThemeProvider theme={theme}>
-            <Box display={'flex'} >
-                {isSignedIn && <Sidebar />}
-                <Box flex={1}>
-                    {!isSignedIn && <Header />}
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/services" element={<Services />} />
-                        <Route path="/signin" element={<SignIn />} />
-                        <Route path="/signup" element={<SignUp />} />
-                        <Route path="/userguide" element={<UserGuide />} />
-                    </Routes>
-                    {!isSignedIn && <Footer />}
-                </Box>
-            </Box>
-        </ThemeProvider>
-    );
+function App() {
+	const theme = createTheme(getDesignTokens());
+	const [isSignedIn, setIsSignedIn] = useState(true);
+
+	return (
+		<ThemeProvider theme={theme}>
+			<Box display={"flex"}>
+				{isSignedIn && <Sidebar />}
+				<Box flex={1}>
+					{!isSignedIn && <Header />}
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/services" element={<Services />} />
+						<Route path="/signin" element={<SignIn />} />
+						<Route path="/signup" element={<SignUp />} />
+						<Route path="/profile" element={<UserProfile />} />
+						<Route
+							path="/create-notarization-profile"
+							element={<CreateNotarizationProfile />}
+						/>
+            <Route path="/userguide" element={<UserGuide />} />
+					</Routes>
+					{!isSignedIn && <Footer />}
+				</Box>
+			</Box>
+		</ThemeProvider>
+	);
 }
 
 export default App;
