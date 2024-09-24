@@ -20,7 +20,8 @@ const StepCard = ({ step, index, expandedIndex, handleExpandClick }) => {
                 borderRadius: 2,
                 overflow: "hidden",
                 gap: 3,
-                boxShadow: "0px 0px 10px 0px rgba(229, 231, 234)",
+                //boxShadow: "0px 0px 10px 0px rgba(210, 213, 219)",
+                boxShadow: "0px 0px 10px 0px rgba(210, 213, 219)",
                 '&:hover': {
                     boxShadow: "0px 0px 20px 0px rgba(221, 166, 177, 0.50)",
                 },
@@ -56,14 +57,17 @@ const StepCard = ({ step, index, expandedIndex, handleExpandClick }) => {
                     <Typography variant="h5" color="textPrimary">
                         {step.title}
                     </Typography>
-                    <Typography variant="body1" color="textSecondary">
-                        {step.description}
-                    </Typography>
+                    <Typography
+                        variant="body1"
+                        color="textSecondary"
+                        dangerouslySetInnerHTML={{ __html: step.description }}
+                    />
                 </Box>
 
                 <Typography
                     variant="body2"
-                    color="textSecondary"
+                    color="primary"
+                    fontWeight={500}
                     onClick={() => handleExpandClick(index)}
                     sx={{ cursor: "pointer" }}
                 >
@@ -81,10 +85,10 @@ const StepCard = ({ step, index, expandedIndex, handleExpandClick }) => {
             {/* Step Image */}
             <Box
                 sx={{
+                    flex: 1,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flex: 1,
                 }}
             >
                 <img

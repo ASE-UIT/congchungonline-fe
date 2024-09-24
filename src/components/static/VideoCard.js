@@ -19,6 +19,7 @@ const VideoCard = () => {
                 borderRadius: 2,
                 overflow: "hidden",
                 gap: 3,
+                //boxShadow: "0px 0px 10px 0px rgba(210, 213, 219)",
                 boxShadow: "0px 0px 10px 0px rgba(229, 231, 234)",
                 '&:hover': {
                     boxShadow: "0px 0px 20px 0px rgba(221, 166, 177, 0.50)",
@@ -60,17 +61,20 @@ const VideoCard = () => {
             {/* Video */}
             <Box
                 sx={{
+                    flex: 1,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    flex: 1,
-
                 }}
             >
-                <img
-                    src={require(`../../assets/images/howitworkscard.png`)}
-                    alt="step"
-                    style={{ width: "100%", height: "100%" }}
+                <video
+                    src='https://youtu.be/35KDnej1hlI?si=C8QJyPy5tlLLtQUa'
+                    controls
+                    preload='metadata'
+                    controlsList='nodownload'
+                    width={400}
+                    height={225}
+                    style={{ borderRadius: 8 }}
                 />
             </Box>
         </Paper>

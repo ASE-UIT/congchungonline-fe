@@ -12,7 +12,7 @@ const FooterCard = () => {
                 display: "flex",
                 flexDirection: "row",
                 width: 900,
-                height: 350,
+                height: 300,
                 alignItems: "center",
                 justifyContent: "center",
                 paddingX: 6,
@@ -20,7 +20,8 @@ const FooterCard = () => {
                 borderRadius: 2,
                 overflow: "hidden",
                 gap: 3,
-                boxShadow: "0px 0px 10px 0px rgba(229, 231, 234)",
+                //boxShadow: "0px 0px 10px 0px rgba(210, 213, 219)",
+                boxShadow: "0px 0px 10px 0px rgba(210, 213, 219)",
                 '&:hover': {
                     boxShadow: "0px 0px 20px 0px rgba(221, 166, 177, 0.50)",
                 },
@@ -39,11 +40,12 @@ const FooterCard = () => {
                     gap: 3,
                 }}
             >
-                <Typography variant="h3" color="primary" fontWeight={'600'}>
+                <Typography fontSize={'32px'} color="primary" fontWeight={'800'}>
                     Tạo hồ sơ công chứng ngay hôm nay
                 </Typography>
-                <Typography variant="body1" color="textSecondary" textAlign={'center'}>
-                    Lorem ipsum dolor sit amet consectetur. Morbi elementum libero sed cras diam neque mi fringilla posuere. Morbi odio sed etiam netus in faucibus laoreet at quam. Nibh tellus risus lectus diam elit sollicitudin tortor. In ipsum morbi aenean enim amet habitasse vel venenatis.
+                <Typography fontSize={'16px'} color="textSecondary" textAlign={'center'}>
+                    Dịch vụ công chứng trực tuyến của chúng tôi cung cấp giải pháp nhanh chóng và tiện lợi cho mọi nhu cầu công chứng của bạn.
+                    Hãy bắt đầu ngay hôm nay và trải nghiệm sự khác biệt!
                 </Typography>
                 <Button
                     variant="contained"
@@ -60,7 +62,7 @@ const FooterCard = () => {
                     Tạo hồ sơ công chứng
                 </Button>
             </Box>
-        </Paper>
+        </Paper >
     )
 }
 
