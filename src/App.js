@@ -12,6 +12,8 @@ const SignIn = lazy(() => import("./pages/signin/SignIn"));
 const SignUp = lazy(() => import("./pages/signup/SignUp"));
 const Home = lazy(() => import("./pages/home/Home"));
 const Services = lazy(() => import("./pages/services/Services"));
+const UserGuide = lazy(() => import("./pages/static/UserGuide"));
+
 const UserProfile = lazy(() => import("./pages/profile/UserProfile"));
 const CreateNotarizationProfile = lazy(() =>
 	import("./pages/services/CreateNotarizationProfile")
@@ -19,7 +21,7 @@ const CreateNotarizationProfile = lazy(() =>
 
 function App() {
 	const theme = createTheme(getDesignTokens());
-	const [isSignedIn, setIsSignedIn] = useState(true);
+	const [isSignedIn, setIsSignedIn] = useState(false);
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -37,6 +39,7 @@ function App() {
 							path="/create-notarization-profile"
 							element={<CreateNotarizationProfile />}
 						/>
+						<Route path="/userguide" element={<UserGuide />} />
 					</Routes>
 					{!isSignedIn && <Footer />}
 				</Box>
