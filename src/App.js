@@ -1,50 +1,57 @@
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import { lazy, useState } from "react";
+import { Suspense } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import getDesignTokens from "./config/theme/themePrimitives";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Sidebar from "./components/Sidebar";
 import { Box } from "@mui/material";
-
-const SignIn = lazy(() => import("./pages/signin/SignIn"));
-const SignUp = lazy(() => import("./pages/signup/SignUp"));
-const Home = lazy(() => import("./pages/home/Home"));
-const Services = lazy(() => import("./pages/services/Services"));
-const UserGuide = lazy(() => import("./pages/static/UserGuide"));
-
-const UserProfile = lazy(() => import("./pages/profile/UserProfile"));
-const CreateNotarizationProfile = lazy(() =>
-	import("./pages/services/CreateNotarizationProfile")
-);
+import { useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import PrivateRoute from "./routes/PrivateRoute";
+import routes from "./routes/routes";
 
 function App() {
 	const theme = createTheme(getDesignTokens());
-	const [isSignedIn, setIsSignedIn] = useState(false);
+	const { isAuthenticated } = useSelector((state) => state.auth);
 
 	return (
-		<ThemeProvider theme={theme}>
-			<Box display={"flex"}>
-				{isSignedIn && <Sidebar />}
-				<Box flex={1}>
-					{!isSignedIn && <Header />}
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/services" element={<Services />} />
-						<Route path="/signin" element={<SignIn />} />
-						<Route path="/signup" element={<SignUp />} />
-						<Route path="/profile" element={<UserProfile />} />
-						<Route
-							path="/create-notarization-profile"
-							element={<CreateNotarizationProfile />}
-						/>
-						<Route path="/userguide" element={<UserGuide />} />
-					</Routes>
-					{!isSignedIn && <Footer />}
+		<Suspense fallback={<div>Loading...</div>}>
+			<ThemeProvider theme={theme}>
+				<Box display={"flex"}>
+					{isAuthenticated && <Sidebar />}
+					<Box flex={1}>
+						{!isAuthenticated && <Header />}
+						<Routes>
+							{routes.map(({ path, element: Element, authRequired }) => (
+								<Route
+									exact
+									key={path}
+									path={path}
+									element={
+										authRequired ? (
+											<PrivateRoute element={<Element />} />
+										) : (
+											<Element />
+										)
+									}
+								/>
+							))}
+						</Routes>
+						{!isAuthenticated && <Footer />}
+					</Box>
 				</Box>
-			</Box>
-		</ThemeProvider>
+				<ToastContainer
+					position="bottom-left"
+					autoClose={5000}
+					newestOnTop
+					rtl={false}
+					pauseOnFocusLoss
+					pauseOnHover
+				/>
+			</ThemeProvider>
+		</Suspense>
 	);
 }
 
