@@ -1,9 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { AppBar, Toolbar, Typography, Button, Box, Menu, MenuItem, IconButton, useMediaQuery } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    Button,
+    Box,
+    Menu,
+    MenuItem,
+    IconButton,
+    useMediaQuery,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { styled } from "@mui/system";
 import { dark, white } from "../config/theme/themePrimitives";
-import Link from '@mui/material/Link';
+import Link from "@mui/material/Link";
 
 const Logo = styled(Box)(({ theme }) => ({
     width: theme.spacing(5),
@@ -44,7 +54,7 @@ const Header = () => {
         { name: "Dịch vụ công chứng", path: "/services" },
         { name: "Tra cứu hồ sơ công chứng", path: "/" },
         { name: "Văn phòng công chứng", path: "/" },
-        { name: "Đăng ký VPCC", path: "/" }
+        { name: "Đăng ký VPCC", path: "*" },
     ];
 
     return (
@@ -62,11 +72,7 @@ const Header = () => {
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Logo />
-                    <Typography
-                        variant="h6"
-                        color={dark[500]}
-                        sx={{ ml: 2 }}
-                    >
+                    <Typography variant="h6" color={dark[500]} sx={{ ml: 2 }}>
                         ratonity
                     </Typography>
                 </Box>
@@ -87,7 +93,11 @@ const Header = () => {
                             onClose={handleMenuClose}
                         >
                             {services.map((service) => (
-                                <Link href={service.path} underline="none" color={dark[500]}>
+                                <Link
+                                    href={service.path}
+                                    underline="none"
+                                    color={dark[500]}
+                                >
                                     <MenuItem
                                         key={service.name}
                                         onClick={handleMenuClose}
@@ -100,7 +110,11 @@ const Header = () => {
                                     </MenuItem>
                                 </Link>
                             ))}
-                            <Link href="/userguide" underline="none" color={dark[500]}>
+                            <Link
+                                href="/userguide"
+                                underline="none"
+                                color={dark[500]}
+                            >
                                 <MenuItem
                                     onClick={handleMenuClose}
                                     sx={{
@@ -114,24 +128,26 @@ const Header = () => {
 
                             <MenuItem
                                 onClick={() => {
-                                    window.location.href = '/signin';
+                                    window.location.href = "/signin";
                                 }}
                                 sx={{
                                     fontSize: 14,
                                     fontWeight: "600",
-                                    color: (theme) => theme.palette.primary.main,
+                                    color: (theme) =>
+                                        theme.palette.primary.main,
                                 }}
                             >
                                 Đăng nhập
                             </MenuItem>
                             <MenuItem
                                 onClick={() => {
-                                    window.location.href = '/signup';
+                                    window.location.href = "/signup";
                                 }}
                                 sx={{
                                     fontSize: 14,
                                     fontWeight: "600",
-                                    color: (theme) => theme.palette.primary.main,
+                                    color: (theme) =>
+                                        theme.palette.primary.main,
                                 }}
                             >
                                 Đăng ký
@@ -150,8 +166,8 @@ const Header = () => {
                                         mx: 1,
                                         fontWeight: "bold",
                                         textDecoration: "none",
-                                        '&:hover': {
-                                            color: 'primary.main',
+                                        "&:hover": {
+                                            color: "primary.main",
                                         },
                                     }}
                                 >
@@ -167,8 +183,8 @@ const Header = () => {
                                     ml: 1,
                                     mr: 4,
                                     fontWeight: "600",
-                                    '&:hover': {
-                                        color: 'primary.main',
+                                    "&:hover": {
+                                        color: "primary.main",
                                     },
                                 }}
                             >
@@ -198,7 +214,7 @@ const Header = () => {
                                     fontSize: 12,
                                     fontWeight: "600",
                                     textTransform: "capitalize",
-                                    width: "100px"
+                                    width: "100px",
                                 }}
                                 href="/signup"
                             >
