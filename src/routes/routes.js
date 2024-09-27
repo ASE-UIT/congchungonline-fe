@@ -34,6 +34,13 @@ const routes = [
         authRequired: true,
     },
     {
+        path: "/lookup",
+        element: lazy(() =>
+            import("../pages/services/LookupNotarizationProfile")
+        ),
+        authRequired: false,
+    },
+    {
         path: "*",
         element: lazy(() => import("../pages/notfound/NotFound")),
     },
