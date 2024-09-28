@@ -8,34 +8,32 @@ import {
 
 } from "@mui/material";
 import { black, white } from "../../config/theme/themePrimitives";
-import { red, green, grey } from "@mui/material/colors";
+import { red, green,} from "@mui/material/colors";
 
 import ErrorIcon from '@mui/icons-material/Error';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import CircularProgress from '@mui/material/CircularProgress';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 {/* Status Box for returning result */ }
 
 const StatusBox = ({status, displayText}) => {
     // Status of searching for result | displayText = the profileID, used for displaying
+    
     // This one below return the icon + animationtype + message for each corresponding status | More status could be add here
     const statusConfig = {
         notFound: {
-            icon: <ErrorIcon sx={{ position: "absolute", left: "25px", color: red[500] }} />,
+            icon: <ErrorIcon size={40} sx={{ position: "absolute", left: "25px", color: red[500], }} />,
             message: <>Không tìm thấy hồ sơ có số: <strong>#{displayText}</strong></>,
             animationType: "grow",
         },
         searching: {
-            icon: <RefreshIcon sx={{ 
-                animation: "rotate 2s linear infinite",  
-                color: grey[400], 
-                position: "absolute", 
-                left: "25px",
-                "@keyframes rotate": { // Định nghĩa keyframes xoay
-                            from: { transform: "rotate(0deg)" },
-                            to: { transform: "rotate(360deg)" },
-                        },
-            
-            }} />,
+            icon: <CircularProgress 
+                thickness={5}
+                size={25}
+                sx={{
+                    color: black[400], 
+                    position: "absolute", 
+                    left: "25px",
+                }} />,
                 
             message: <>Đang tìm hồ sơ có số: <strong>#{displayText}</strong></>,
             animationType: "fade",
