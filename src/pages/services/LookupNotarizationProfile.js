@@ -40,17 +40,20 @@ const LookupNotarizationProfile = () => {
 	};
 
 	const handleSearchClick = (text) => {
-		setSearchLoading(true);
-		setStatus({ notFound: false, searching: true, found: false });
-		setDisplayText(inputValue);
-		setTimeout(() => {
-			// Furthersearch  API will be emplemented here
+		if (!searchLoading) {
 
-			const isFound = (Math.floor(Math.random() * 100)) % 2 === 0; // This one is just a RNG to simulate searching result
-			setStatus({ notFound: !isFound, searching: false, found: isFound });
-			setSearchLoading(false);
-			setSearchLoading(false);
-		}, 2000);
+			setSearchLoading(true);
+			setStatus({ notFound: false, searching: true, found: false });
+			setDisplayText(inputValue);
+			setTimeout(() => {
+				// Furthersearch  API will be emplemented here
+
+				const isFound = (Math.floor(Math.random() * 100)) % 2 === 0; // This one is just a RNG to simulate searching result
+				setStatus({ notFound: !isFound, searching: false, found: isFound });
+				setSearchLoading(false);
+			}, 2000);
+
+		}
 	};
 
 	useEffect(() => {
@@ -114,7 +117,6 @@ const LookupNotarizationProfile = () => {
 					}}
 				>
 					<TextField
-						disabled={loading}
 						id="lookupText"
 						type="search"
 						name="lookup"
