@@ -33,16 +33,70 @@ import Guide from "../../components/services/Guide";
 import { TextFields } from "@mui/icons-material";
 import { green } from "@mui/material/colors";
 
+{/* Status Box for returning result */ }
+const StatusBox = ({ icon, message, isVisible, animationType, status }) => {
+	const AnimationComponent = animationType === 'grow' ? Grow : Fade;
+
+	return (
+		<AnimationComponent in={isVisible} timeout={400}>
+			<Box
+				sx={{
+					display: "flex",
+					flexDirection: "column",
+					width: "80%",
+					height: "auto",
+					flexWrap: "wrap",
+					flexGrow: 1,
+					minWidth: "350px",
+					p: 4,
+					alignItems: "center",
+					justifyContent: "space-around",
+					position: "absolute",
+					my: -4,
+					color: "primary.main",
+					background: white[50],
+					boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
+					transition: "box-shadow 0.3s",
+					borderRadius: "8px",
+				}}>
+				{icon}
+				<Typography sx={{ position: "absolute", left: "75px", color: black[900] }}>
+					{message}
+				</Typography>
+
+				{status.found && (
+					<Link
+						sx={{
+							position: { xs: "relative", md: "absolute" },
+							left: { xs: "initial", md: "initial" },
+							right: { xs: "initial", md: "50px" },
+							marginTop: { xs: "100px", md: "0" },
+							whiteSpace: "nowrap",
+						}}
+						component="button"
+						variant="body2"
+						onClick={() => {
+							console.info("Đây là giả lập :D"); // Simulate showing detail result
+						}}
+					>
+						Xem chi tiết
+					</Link>
+				)}
+
+
+			</Box>
+		</AnimationComponent>
+	);
+};
+
 const LookupNotarizationProfile = () => {
 
-	const [filteredData, setFilteredData] = useState(services);
-	const [loading, setLoading] = useState(true); // simutale loading when fetching data from server side (API)
-	const [searchLoading, setSearchLoading] = useState(false); // simulate loading when querying data from server side (API)
 	const [inputValue, setInputValue] = useState('');
-	const [displayText, setDisplayText] = useState(''); // This will control the Typography text
-	const [isResultNotFound, setIsResultNotFound] = useState(false);  // Visibility control for Result Not Found
-	const [isResultSearching, setIsResultSearching] = useState(false);  // Visibility control for Searching
-	const [isResultFound, setIsResultFound] = useState(false);  // Visibility control for Result Found
+	const [displayText, setDisplayText] = useState('');
+	const [loading, setLoading] = useState(true);
+	const [searchLoading, setSearchLoading] = useState(false);
+	const [status, setStatus] = useState({ notFound: false, searching: false, found: false });
+
 
 
 	const handleInputChange = (event) => {
@@ -51,19 +105,14 @@ const LookupNotarizationProfile = () => {
 
 	const handleSearchClick = (text) => {
 		setSearchLoading(true);
-		setIsResultNotFound(false);
-		setIsResultFound(false);
-		setIsResultSearching(true);
+		setStatus({ notFound: false, searching: true, found: false });
 		setDisplayText(inputValue);
 		setTimeout(() => {
 			// Furthersearch  API will be emplemented here
 
-			if ((Math.floor(Math.random() * 100)) % 2 == 0) // Simulate searching for result 
-				setIsResultFound(true);
-			else
-				setIsResultNotFound(true);
-
-			setIsResultSearching(false);
+			const isFound = (Math.floor(Math.random() * 100)) % 2 === 0; // This one is just a RNG to simulate searching result
+			setStatus({ notFound: !isFound, searching: false, found: isFound });
+			setSearchLoading(false);
 			setSearchLoading(false);
 		}, 2000);
 	};
@@ -169,187 +218,42 @@ const LookupNotarizationProfile = () => {
 				</Box>
 			</Box>
 
-			{/* Services Section */}
-			<Box
-				sx={{
-					display: "flex",
-					flexWrap: "wrap",
-					height: "auto",
-					flexDirection: "column",
-					flexGrow: 1,
-					alignItems: "center",
-					p: 20,
-
-					background: gray[50],
-					justifyContent: "space-between",
-					position: "relative",
-
-				}}>
-
-				{/* Không tìm thấy hồ sơ */}
-				<Grow in={isResultNotFound} timeout={400}>
-					<Box
-						sx={{
-
-							display: "flex",
-							flexDirection: "column",
-							width: "80%",
-							height: "auto",
-							flexWrap: "wrap",
-							flexGrow: 1,
-							minWidth: "350px",
-							p: 4,
-							alignItems: "center",
-							justifyContent: "space-around",
-							position: "absolute",
-							top: "25%",
-							my: 2,
-							color: "primary.main",
-							background: white[50],
-							boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-							transition: "box-shadow 0.3s",
-							borderRadius: "8px 8px 8px 8px",
-						}}>
-						<ErrorIcon
-							sx={{
-								position: "absolute",
-								left: "25px",
-								color: red[500],
-							}}>
-						</ErrorIcon>
-						<Typography
-							sx={{
-								position: "absolute",
-								left: "75px",
-								color: black[900],
-							}}
-						>
+			{/* Service Section */}
+			<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 20, background: gray[50], position: "relative" }}>
+				<StatusBox
+					icon={<ErrorIcon sx={{ position: "absolute", left: "25px", color: red[500] }} />}
+					message={
+						<>
 							Không tìm thấy hồ sơ có số: <strong>#{displayText}</strong>
-						</Typography>
-
-
-					</Box>
-				</Grow>
-
-				{/* Đang tìm hồ sơ */}
-				<Fade in={isResultSearching} timeout={200}>
-					<Box
-						sx={{
-
-							display: "flex",
-							flexDirection: "column",
-							width: "80%",
-							height: "auto",
-							flexWrap: "wrap",
-							flexGrow: 1,
-							minWidth: "350px",
-							p: 4,
-							alignItems: "center",
-							justifyContent: "space-around",
-							position: "absolute",
-							top: "25%",
-							my: 2,
-							color: "primary.main",
-							background: white[50],
-							boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-							transition: "box-shadow 0.3s",
-							borderRadius: "8px 8px 8px 8px",
-						}}>
-						<RefreshIcon
-							sx={{
-
-								animation: "rotate 2s linear infinite",
-								color: "red",
-								'@keyframes rotate': {
-									'0%': {
-										transform: 'rotate(0deg)',
-									},
-									'100%': {
-										transform: 'rotate(360deg)',
-									},
-								},
-								position: "absolute",
-								left: "25px",
-								color: black[400],
-							}}>
-						</RefreshIcon>
-						<Typography
-							sx={{
-								position: "absolute",
-								left: "75px",
-								color: black[900],
-							}}
-						>
+						</>
+					}
+					isVisible={status.notFound}
+					animationType="grow"
+					status={status}
+				/>
+				<StatusBox
+					icon={<RefreshIcon sx={{ animation: "rotate 2s linear infinite", color: black[400], position: "absolute", left: "25px" }} />}
+					message={
+						<>
 							Đang tìm hồ sơ có số: <strong>#{displayText}</strong>
-						</Typography>
-
-					</Box>
-				</Fade>
-
-				{/* Đã tìm thấy hồ sơ */}
-				<Grow in={isResultFound} timeout={400}>
-					<Box
-						sx={{
-
-							display: "flex",
-							flexDirection: "column",
-							width: "80%",
-							height: "auto",
-							flexWrap: "wrap",
-							flexGrow: 1,
-							minWidth: "350px",
-							p: 4,
-							alignItems: "center",
-							justifyContent: "space-around",
-							position: "absolute",
-							top: "25%",
-							my: 2,
-							color: "primary.main",
-							background: white[50],
-							boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-							transition: "box-shadow 0.3s",
-							borderRadius: "8px 8px 8px 8px",
-						}}>
-						<CheckCircleIcon
-							sx={{
-								position: "absolute",
-								left: "25px",
-								color: green[500],
-							}}>
-						</CheckCircleIcon>
-						<Typography
-							sx={{
-								position: "absolute",
-								left: "75px",
-								color: black[900],
-							}}
-						>
+						</>
+					}
+					isVisible={status.searching}
+					animationType="fade"
+					status={status}
+				/>
+				<StatusBox
+					icon={<CheckCircleIcon sx={{ position: "absolute", left: "25px", color: green[500] }} />}
+					message={
+						<>
 							Đã tìm thấy hồ sơ có số: <strong>#{displayText}</strong>
-						</Typography>
-
-						<Link
-							sx={{
-								position: { xs: "relative", md: "absolute" },
-								left: { xs: "initial", md: "initial" },
-								right: { xs: "initial", md: "50px" },
-								marginTop: { xs: "100px", md: "0" },
-								whiteSpace: "nowrap",
-
-							}}
-							component="button"
-							variant="body2"
-
-							onClick={() => {
-								console.info("I'm a button."); // Simulate showing detail result 
-							}}
-						>
-							Xem chi tiết
-						</Link>
-					</Box>
-				</Grow>
-
+						</>
+					}
+					isVisible={status.found}
+					animationType="grow"
+					status={status}
+				/>
 			</Box>
-
 			{/* Guide Section */}
 			<Guide />
 		</Box>
