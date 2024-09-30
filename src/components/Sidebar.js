@@ -27,6 +27,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { userLogout } from '../stores/actions/authAction';
+import YesNoModal from './modals/YesNoModal';
 
 const MENUS = {
   SETTINGS: 'setting',
@@ -41,6 +42,16 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
+  const [open, setOpen] = useState(false);
+
+  const handleYes = () => {
+    setOpen(false);
+    handleLogout();
+  };
+
+  const handleNo = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     const savedState = localStorage.getItem('openSideBar');
@@ -268,7 +279,7 @@ const Sidebar = () => {
             ...commonListItemStyles,
             backgroundColor: activeMenu === MENUS.LOGOUT ? primary[50] : white[50],
           }}
-          onClick={() => handleLogout()}
+          onClick={() => setOpen(true)}
         >
           <ListItemIcon sx={{ color: 'error.main', justifyContent: 'center' }}>
             <Logout />
@@ -300,10 +311,10 @@ const Sidebar = () => {
           </ListItemIcon>
           {openSideBar && (
             <ListItemText
-              primary={`${userInfo?.name}` || 'Stranger'}
+              primary={`${userInfo?.name}` || 'Undefined'}
               sx={{
                 '& .MuiListItemText-primary': {
-                  fontSize: '18px',
+                  fontSize: '16px',
                   color: dark[500],
                   fontWeight: 600,
                 },
@@ -312,6 +323,14 @@ const Sidebar = () => {
           )}
         </ListItem>
       </List>
+      <YesNoModal
+        title="Đăng xuất"
+        content="Bạn có chắc chắn muốn đăng xuất?"
+        open={open}
+        setOpen={setOpen}
+        onYes={handleYes}
+        onNo={handleNo}
+      />
     </Box>
   );
 };
