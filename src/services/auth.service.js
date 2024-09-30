@@ -67,10 +67,31 @@ const refreshAccessToken = async () => {
   }
 };
 
+const register = async (name, email, password) => {
+  try {
+    console.log("AUTH_ENDPOINT", AUTH_ENDPOINT);
+    const response = await axios.post(`${AUTH_ENDPOINT}/register`, {
+      name,
+      email,
+      password,
+    });
+
+    if (response.status === 201) {
+      return response;
+    }
+  } catch (error) {
+    if (error.response) {
+      throw error.response.status;
+    }
+    throw new Error('An error occurred while registering.');
+  }
+};
+
 const AuthService = {
   login,
   logout,
   refreshAccessToken,
+  register,
 };
 
 export default AuthService;

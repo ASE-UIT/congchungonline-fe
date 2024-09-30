@@ -10,7 +10,10 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Link from "@mui/material/Link";
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from "./CustomIcons";
-
+import AuthService from "../../services/auth.service";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: "flex",
@@ -37,8 +40,9 @@ export default function SignUpCard() {
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
     const [nameError, setNameError] = React.useState(false);
     const [nameErrorMessage, setNameErrorMessage] = React.useState("");
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
@@ -46,6 +50,23 @@ export default function SignUpCard() {
             email: data.get("email"),
             password: data.get("password"),
         });
+
+        try {
+            const response = await AuthService.register(
+                data.get("name"),
+                data.get("email"),
+                data.get("password")
+            );
+            console.log(response);
+            if (response.status === 201) {
+                toast.success('Đăng ký thành công');
+                navigate('/signin/');
+            }
+        } catch (error) {
+            if (error === 400) {
+                toast.error('Email đã tồn tại');
+            }
+        }
     };
 
     return (

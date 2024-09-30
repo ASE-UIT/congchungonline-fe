@@ -6,7 +6,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    Link
 } from "@mui/material";
 import { LinkedIn, Facebook, Instagram } from "@mui/icons-material"
 
@@ -36,14 +35,7 @@ const Footer = () => {
                 <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} spacing={5}>
                     <Box flex={1} mb={{ xs: 4, md: 0 }}>
                         <Box>
-                            <Box
-                                sx={{
-                                    width: 100,
-                                    height: 100,
-                                    backgroundColor: "grey.300",
-                                    borderRadius: "50%",
-                                }}
-                            />
+                            <img src={require("../assets/images/ASE-light.png")} alt="logo" width={'82px'} height={'96px'} />
                             <Typography
                                 variant="h4"
                                 fontWeight="bold"
@@ -62,19 +54,52 @@ const Footer = () => {
                                 Kết nối với chúng tôi:
                             </Typography>
                             <IconButton
-                                sx={{ color: "white" }}
+                                sx={{
+                                    color: "white",
+                                    padding: 0,
+                                    mr: 2,
+                                    mt: 1,
+                                    "&:hover": {
+                                        backgroundColor: "transparent",
+                                    },
+                                    "&:focus": {
+                                        outline: "none",
+                                    },
+                                }}
                                 size="large"
                             >
                                 <Facebook />
                             </IconButton>
                             <IconButton
-                                sx={{ color: "white" }}
+                                sx={{
+                                    color: "white",
+                                    padding: 0,
+                                    mr: 2,
+                                    mt: 1,
+                                    "&:hover": {
+                                        backgroundColor: "transparent",
+                                    },
+                                    "&:focus": {
+                                        outline: "none",
+                                    },
+                                }}
                                 size="large"
                             >
                                 <Instagram />
                             </IconButton>
                             <IconButton
-                                sx={{ color: "white" }}
+                                sx={{
+                                    color: "white",
+                                    padding: 0,
+                                    mr: 2,
+                                    mt: 1,
+                                    "&:hover": {
+                                        backgroundColor: "transparent",
+                                    },
+                                    "&:focus": {
+                                        outline: "none",
+                                    },
+                                }}
                                 size="large"
                             >
                                 <LinkedIn />
