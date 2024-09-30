@@ -11,16 +11,8 @@ import {
     useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { styled } from "@mui/system";
 import { dark, white } from "../config/theme/themePrimitives";
 import Link from "@mui/material/Link";
-
-const Logo = styled(Box)(({ theme }) => ({
-    width: theme.spacing(5),
-    height: theme.spacing(5),
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: theme.shape.borderRadius,
-}));
 
 const Header = () => {
     const [elevated, setElevated] = useState(false);
@@ -70,12 +62,30 @@ const Header = () => {
             }}
         >
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Logo />
+                <Button
+                    display="flex"
+                    flexDirection="row"
+                    alignItems="center"
+                    href="/"
+                    disableRipple
+                    disableFocusRipple
+                    sx={{
+                        textTransform: "none",
+                        padding: 0,
+                        "&:hover": {
+                            backgroundColor: "transparent",
+                        },
+                        "&:focus": {
+                            outline: "none",
+                        },
+                    }}
+                >
+                    <img src={require("../assets/images/ASE.png")} alt="logo" width={'32.8px'} height={'38.4px'} />
                     <Typography variant="h6" color={dark[500]} sx={{ ml: 2 }}>
-                        ratonity
+                        ASE
                     </Typography>
-                </Box>
+                </Button>
+
 
                 {isMobile ? (
                     <>
