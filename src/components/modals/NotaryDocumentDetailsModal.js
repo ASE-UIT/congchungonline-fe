@@ -5,7 +5,7 @@ import { blue, dark, green, red, yellow, black } from '../../config/theme/themeP
 import NotaryStep from './NotaryStep';
 
 const NotaryDocumentDetailsModal = ({ open, handleClose }) => {
-    const [currentStep, setCurrentStep] = useState(2);
+    const [currentStep] = useState(2);
 
     const document = {
         id: 9999,
@@ -402,7 +402,7 @@ const NotaryDocumentDetailsModal = ({ open, handleClose }) => {
                         p: '16px',
                     }}
                 >
-                    <NotaryStep currentStep={currentStep} setCurrentStep={setCurrentStep} />
+                    <NotaryStep currentStep={currentStep} />
                     <Box
                         flex={1}
                         justifyContent={'top'}

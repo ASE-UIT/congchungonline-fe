@@ -5,40 +5,35 @@ import { styled } from "@mui/system";
 import { primary, black, gray, white } from "../../config/theme/themePrimitives";
 
 const steps = [
-    { label: "Chờ xử lý", number: 1 },
-    { label: "Kiểm tra hồ sơ", number: 2 },
-    { label: "Tiếp nhận và xử lý", number: 3 },
-    { label: "Sẵn sàng ký số", number: 4 },
-    { label: "Hoàn tất", number: 5 },
+    { label: "Chờ xử lý" },
+    { label: "Kiểm tra hồ sơ" },
+    { label: "Tiếp nhận và xử lý" },
+    { label: "Sẵn sàng ký số" },
+    { label: "Hoàn tất" },
 ];
 
-// Custom Step Connector to extend its length
-const CustomConnector = styled(StepConnector)(() => ({
+const CustomConnector = styled(StepConnector)(({ lineColor }) => ({
     '& .MuiStepConnector-line': {
-        minHeight: 80, // Adjust the connector line height here
+        minHeight: 80,
     },
 }));
 
-// Custom Circle Icon with step number for inactive steps
-const CustomCircleIcon = styled('div')(() => ({
+const CustomCircleIcon = styled('div')(({ bgColor, textColor }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: 24,
     height: 24,
     borderRadius: '50%',
-    backgroundColor: black[300],
-    color: white[50],
+    backgroundColor: bgColor || black[300],
+    color: textColor || white[50],
     fontSize: 12,
     fontWeight: 'bold',
 }));
 
-const NotaryStep = ({ currentStep, setCurrentStep }) => {
-    // Handler for when user clicks on an icon
+const NotaryStep = ({ currentStep }) => {
     const handleStepClick = (index) => {
-        if (index <= currentStep) {
-            setCurrentStep(index);
-        }
+        console.log('index', index);
     };
 
     return (
@@ -46,30 +41,42 @@ const NotaryStep = ({ currentStep, setCurrentStep }) => {
             <Stepper
                 activeStep={currentStep}
                 orientation="vertical"
-                connector={<CustomConnector />} // Apply custom connector
+                connector={
+                    <CustomConnector />
+                }
             >
                 {steps.map((step, index) => (
                     <Step key={step.label}>
                         <StepLabel
                             icon={
                                 <IconButton
-                                    disabled={index > currentStep}
                                     onClick={() => handleStepClick(index)}
-                                    sx={{ width: 24, height: 24, padding: 0 }}
+                                    sx={{ width: 24, height: 24, padding: 0, cursor: "pointer" }}
+                                    disabled={index > currentStep}
                                 >
                                     {index === currentStep ? (
                                         <CheckCircleIcon sx={{ color: primary[500] }} />
+                                    ) : index < currentStep ? (
+                                        <CustomCircleIcon bgColor={primary[500]} textColor={white[50]}>
+                                            {index + 1}
+                                        </CustomCircleIcon>
                                     ) : (
-                                        <CustomCircleIcon>{step.number}</CustomCircleIcon>
+                                        <CustomCircleIcon>{index + 1}</CustomCircleIcon>
                                     )}
                                 </IconButton>
                             }
                         >
                             <Typography
                                 sx={{
-                                    color: index === currentStep ? primary[500] : gray[500],
-                                    fontWeight: index === currentStep ? "bold" : "normal",
+                                    color:
+                                        index === currentStep
+                                            ? primary[500]
+                                            : index < currentStep
+                                                ? primary[500]
+                                                : gray[500],
+                                    fontWeight: index === currentStep ? 'bold' : 'normal',
                                     fontSize: 12,
+                                    cursor: 'pointer',
                                 }}
                             >
                                 {step.label}

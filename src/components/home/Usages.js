@@ -43,11 +43,12 @@ const Usages = () => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 5 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mt: 10 }}>
             <Box sx={{ position: 'relative', width: '100%', height: 450 }}>
                 {UsagesData.map((use, index) => (
                     <Box
                         key={index}
+                        onClick={() => setCurrentCard(index)}
                         sx={{
                             position: 'absolute',
                             top: 0,
@@ -79,7 +80,7 @@ const Usages = () => {
                     </Box>
                 ))}
             </Box>
-            <Box textAlign="center" mt={3}>
+            <Box textAlign="center" mt={7}>
                 <IconButton
                     onClick={handlePrevCard}
                     sx={{
