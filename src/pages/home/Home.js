@@ -2,8 +2,6 @@ import { Box, Button, Container, Typography, Tooltip } from "@mui/material";
 import React, { useState } from "react";
 import AssistantIcon from "@mui/icons-material/Assistant";
 import PhoneIcon from "@mui/icons-material/Phone";
-import Frame1 from "../../assets/vectors/Frame-1.svg";
-import Frame2 from "../../assets/vectors/Frame-2.svg";
 import Chatbox from "../../components/Chatbox";
 import FAQSection from "../../components/home/FAQ";
 import Reviews from "../../components/home/Reviews";
@@ -193,7 +191,7 @@ const Home = () => {
 							width: "50%",
 						}}
 					>
-						<img src={Frame1} alt="Frame" />
+						<img src={require('../../assets/images/individual.png')} alt="Frame" width={'600px'} height={'600px'} />
 					</Box>
 				</Box>
 			</Box>
@@ -221,7 +219,7 @@ const Home = () => {
 							width: "50%",
 						}}
 					>
-						<img src={Frame2} alt="Frame" />
+						<img src={require('../../assets/images/organization.png')} alt="Frame" width={'600px'} height={'600px'} />
 					</Box>
 					<Box
 						sx={{

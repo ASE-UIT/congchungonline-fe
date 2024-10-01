@@ -1,6 +1,7 @@
 import React, { useTransition } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { dark } from "../../config/theme/themePrimitives";
 const svg = require("../../assets/vectors/404.svg");
 
 const NotFound = () => {
@@ -18,20 +19,29 @@ const NotFound = () => {
             sx={{
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "top",
                 alignItems: "center",
                 minHeight: "100vh",
             }}
         >
-            <img src={svg.default} alt="404" style={{ width: "40%" }} />
+            <img src={svg.default} alt="404" width={'40%'} style={{ marginTop: 100 }} />
 
-            <Typography variant="body1" color="text.secondary">
-                Trang bạn đang tìm kiếm không tồn tại.
+            <Typography variant="h4" marginTop={8} color={dark[500]}>
+                Trang bạn tìm kiếm không tồn tại. Trở về trang chủ!
             </Typography>
+
             <Button
                 variant="contained"
                 color="primary"
-                sx={{ mt: 3 }}
+                sx={{
+                    mt: 4,
+                    borderRadius: 1,
+                    px: 4,
+                    py: 1,
+                    textTransform: "inherit",
+                    fontSize: 20,
+                    fontWeight: 600,
+                }}
                 onClick={handleNavigateHome}
                 disabled={isPending}
             >
