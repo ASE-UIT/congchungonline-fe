@@ -49,6 +49,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
+      - name: Install bsdtar
+        run: sudo apt-get install -y bsdtar
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
@@ -59,5 +61,5 @@ jobs:
         with:
           app-name: 'congchungonline-fe'
           slot-name: 'Production'
-          package: .
+          package: ./build
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_06DC803216D14137A14ED491287F7726 }}
