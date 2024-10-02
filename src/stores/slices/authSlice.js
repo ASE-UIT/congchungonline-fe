@@ -2,11 +2,12 @@ import { createSlice } from '@reduxjs/toolkit';
 import { userLogin, userLogout, refreshAccessToken } from '../actions/authAction';
 import Cookies from 'js-cookie';
 
+const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
 const userToken = localStorage.getItem('userToken') ? localStorage.getItem('userToken') : null;
 
 const initialState = {
   loading: false,
-  userInfo: null,
+  userInfo,
   userToken,
   error: null,
   isAuthenticated: !!userToken,
@@ -26,6 +27,7 @@ const authSlice = createSlice({
       state.userInfo = payload.user;
       state.userToken = payload.userToken;
       state.isAuthenticated = true;
+      localStorage.setItem('userInfo', JSON.stringify(payload.user));
       localStorage.setItem('userToken', payload.userToken);
     });
     builder.addCase(userLogin.rejected, (state, { payload }) => {
@@ -41,6 +43,7 @@ const authSlice = createSlice({
       state.userInfo = null;
       state.userToken = null;
       state.isAuthenticated = false;
+      localStorage.removeItem('userInfo');
       localStorage.removeItem('userToken');
       Cookies.remove('refreshToken');
     });
