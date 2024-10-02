@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import AuthService from '../../services/auth.service';
 import Cookies from 'js-cookie';
+
 export const userLogin = createAsyncThunk('auth/login', async ({ email, password }, thunkAPI) => {
   try {
     const response = await AuthService.login(email, password);
