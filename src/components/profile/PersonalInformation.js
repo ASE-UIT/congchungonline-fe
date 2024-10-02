@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Button, Divider } from "@mui/material";
 import { EditSharp } from "@mui/icons-material";
 import {
@@ -8,8 +8,20 @@ import {
 	white,
 } from "../../config/theme/themePrimitives";
 import InfoField from "./InfoField";
+import EditUserProfileModal from "../../components/modals/EditUserProfileModal";
+
 
 const PersonalInformation = ({ user }) => {
+	const [open, setOpen] = useState(false);
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
 	return (
 		<Box
 			sx={{
@@ -49,6 +61,7 @@ const PersonalInformation = ({ user }) => {
 							},
 						}}
 						size="small"
+						onClick={() => setOpen(true)}
 					>
 						<Typography variant="button" textTransform="none">
 							Chỉnh sửa
@@ -56,7 +69,7 @@ const PersonalInformation = ({ user }) => {
 					</Button>
 				</Box>
 			</Box>
-
+			<EditUserProfileModal open={open} handleClose={handleClose} />
 			<Box
 				display="flex"
 				flexDirection={{ xs: "column", sm: "row" }}
