@@ -49,9 +49,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      - name: Install bsdtar
-        run: sudo apt-get install -y bsdtar
-
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
