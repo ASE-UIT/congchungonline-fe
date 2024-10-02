@@ -1,7 +1,7 @@
 import React from 'react';
 import { Avatar, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { black, blue, white } from '../../config/theme/themePrimitives';
+import { black, white } from '../../config/theme/themePrimitives';
 
 const AvatarWithCloseButton = ({ email, onRemove }) => {
   return (
