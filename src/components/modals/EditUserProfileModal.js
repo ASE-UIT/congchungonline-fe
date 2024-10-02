@@ -1,10 +1,43 @@
 import { ArrowBack, ArrowDropDown } from '@mui/icons-material';
 import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { black } from '../../config/theme/themePrimitives';
 import LabeledTextField from './LabeledTextField';
 
 const EditUserProfileModal = ({ open, handleClose }) => {
+    const userData = {
+        name: 'Nguyễn Quốc Thắng',
+        identification: '060204888677',
+        email: 'nguyenqthangwork@gmail.com',
+        phone: '+84 346 129 897',
+        city: 'Bình Dương',
+        district: 'Dĩ An',
+        ward: 'Đông Hòa',
+        street: 'Linh Trung 2',
+    };
+
+    const [formData, setFormData] = useState({
+        name: '',
+        identification: '',
+        email: '',
+        phone: '',
+        city: '',
+        district: '',
+        ward: '',
+        street: '',
+    });
+
+    useEffect(() => {
+        setFormData(userData);
+    }, []);
+
+    const handleInputChange = (field, value) => {
+        setFormData((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
     const cities = [
         { value: 'HCM', label: 'Hồ Chí Minh' },
         { value: 'HN', label: 'Hà Nội' },
@@ -56,7 +89,7 @@ const EditUserProfileModal = ({ open, handleClose }) => {
                     }}
                 >
                     <IconButton sx={{ padding: 0 }} disableRipple onClick={handleClose}>
-                        <ArrowBack sx={{ width: '24px', height: '24px', color: black[900], marginRight: '10px' }} />
+                        <ArrowBack sx={{ width: '24px', height: '24px', color: black[900] }} />
                     </IconButton>
                     <Typography variant="h6" flex={1} color={black[900]}>
                         Cập nhật hồ sơ
@@ -98,13 +131,13 @@ const EditUserProfileModal = ({ open, handleClose }) => {
                     </Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
-                        <LabeledTextField label="Họ và tên" />
-                        <LabeledTextField label="CMND/CCCD" />
+                        <LabeledTextField label="Họ và tên" value={formData.name} onChange={(value) => handleInputChange('name', value)} />
+                        <LabeledTextField label="CMND/CCCD" value={formData.identification} onChange={(value) => handleInputChange('identification', value)} />
                     </Box>
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
-                        <LabeledTextField label="Email" />
-                        <LabeledTextField label="Số điện thoại" />
+                        <LabeledTextField label="Email" value={formData.email} onChange={(value) => handleInputChange('email', value)} />
+                        <LabeledTextField label="Số điện thoại" value={formData.phone} onChange={(value) => handleInputChange('phone', value)} />
                     </Box>
                 </Box>
 
@@ -128,13 +161,13 @@ const EditUserProfileModal = ({ open, handleClose }) => {
                     </Typography>
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
-                        <LabeledTextField label="Tỉnh/Thành phố" adornment={<ArrowDropDown />} options={cities} />
-                        <LabeledTextField label="Quận/Huyện" adornment={<ArrowDropDown />} options={districts} />
-                        <LabeledTextField label="Xã, Phường/Thị trấn" adornment={<ArrowDropDown />} options={wards} />
+                        <LabeledTextField label="Tỉnh/Thành phố" value={formData.city} onChange={(value) => handleInputChange('city', value)} adornment={<ArrowDropDown />} options={cities} />
+                        <LabeledTextField label="Quận/Huyện" value={formData.district} onChange={(value) => handleInputChange('district', value)} adornment={<ArrowDropDown />} options={districts} />
+                        <LabeledTextField label="Xã, Phường/Thị trấn" value={formData.ward} onChange={(value) => handleInputChange('ward', value)} adornment={<ArrowDropDown />} options={wards} />
                     </Box>
 
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: '16px' }}>
-                        <LabeledTextField label="Số nhà, đường/phố" />
+                        <LabeledTextField label="Số nhà, đường/phố" value={formData.street} onChange={(value) => handleInputChange('street', value)} />
                     </Box>
                 </Box>
             </Box>
