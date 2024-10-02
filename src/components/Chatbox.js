@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, IconButton, TextField, Typography, Modal } from "@mui/material";
 import { Close, SendRounded } from "@mui/icons-material";
 import { sendMessageToGemini } from "../services/chat.service";
 import { primary } from "../config/theme/themePrimitives";
@@ -42,33 +42,23 @@ const Chatbox = ({ showChatbox, setShowChatbox }) => {
 
 	return (
 		<>
-			<Button
-				sx={{
-					position: "fixed",
-					bottom: 16,
-					right: 16,
-					backgroundColor: "transparent",
-					boxShadow: "none",
-					"&:hover": {
-						backgroundColor: "transparent",
-					},
-				}}
-				onClick={() => setShowChatbox(true)}
-			/>
-			{showChatbox && (
+			<Modal
+				open={showChatbox}
+				onClose={handleClose}
+			>
 				<Box
 					sx={{
-						position: "fixed",
 						width: "25vw",
 						height: "60vh",
-						bottom: "5%",
-						right: "2%",
 						backgroundColor: "white",
 						borderRadius: 2,
 						boxShadow: "0px 0px 4px rgba(0, 0, 0, 0.3)",
 						display: "flex",
 						flexDirection: "column",
 						padding: 2,
+						position: "fixed",
+						bottom: "5%",
+						right: "2%",
 					}}
 				>
 					<Box
@@ -188,7 +178,7 @@ const Chatbox = ({ showChatbox, setShowChatbox }) => {
 						</IconButton>
 					</Box>
 				</Box>
-			)}
+			</Modal>
 		</>
 	);
 };
