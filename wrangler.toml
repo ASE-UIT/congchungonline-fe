@@ -1,0 +1,9 @@
+name = "congchungonline"
+type = "javascript" 
+
+account_id = "b08af9cbf48e70be8bfcc49eb6667739" 
+
+# Specify build commands
+[build]
+command = "npm run build"
+dir = "./build"
