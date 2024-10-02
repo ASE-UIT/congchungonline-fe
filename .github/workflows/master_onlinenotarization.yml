@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'onlinenotarization'
           slot-name: 'Production'
-          package: .
+          package: build/
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_76F58C54FCEF4F3393E2FB167849B923 }}
