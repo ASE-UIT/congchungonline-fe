@@ -1,180 +1,142 @@
-import React, { useEffect, useState } from "react";
-import {
-	Box,
-	Typography,
-	TextField,
-	Button,
-	IconButton,
-	Autocomplete,
-	Icon,
-
-} from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
-
-import {
-	black,
-	dark,
-	gray,
-	primary,
-	red,
-	white,
-} from "../../config/theme/themePrimitives";
-import "react-toastify/dist/ReactToastify.css";
-import Guide from "../../components/services/Guide";
-import StatusBox from "../../components/services/StatusBox";
-import { green } from "@mui/material/colors";
-
-
+import React, { useState } from 'react';
+import { Box, Typography, TextField, Button } from '@mui/material';
+import { black, dark, gray, primary } from '../../config/theme/themePrimitives';
+import 'react-toastify/dist/ReactToastify.css';
+import StatusBox from '../../components/services/StatusBox';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 const LookupNotarizationProfile = () => {
+  const [inputValue, setInputValue] = useState('');
+  const [displayText, setDisplayText] = useState('');
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [status, setStatus] = useState({ notFound: false, searching: false, found: false });
 
-	const [inputValue, setInputValue] = useState('');
-	const [displayText, setDisplayText] = useState('');
-	const [loading, setLoading] = useState(true);
-	const [searchLoading, setSearchLoading] = useState(false);
-	const [status, setStatus] = useState({ notFound: false, searching: false, found: false });
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
 
+  const handleSearchClick = (text) => {
+    if (!searchLoading) {
+      setSearchLoading(true);
+      setStatus({ notFound: false, searching: true, found: false });
+      setDisplayText(inputValue);
+      setTimeout(() => {
+        const isFound = Math.floor(Math.random() * 100) % 2 === 0;
+        setStatus({ notFound: !isFound, searching: false, found: isFound });
+        setSearchLoading(false);
+      }, 2000);
+    }
+  };
 
+  const renderStatusBox = () => {
+    if (status.notFound) {
+      return <StatusBox status={status} displayText={displayText} />;
+    }
+    if (status.searching) {
+      return <StatusBox status={status} displayText={displayText} />;
+    }
+    if (status.found) {
+      return <StatusBox status={status} displayText={displayText} />;
+    }
+  };
 
-	const handleInputChange = (event) => {
-		setInputValue(event.target.value);
-	};
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      {/* Header Section */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          py: 6,
+        }}
+      >
+        <Box height="fit-content" width="fit-content" sx={{ px: 20 }}>
+          <Typography
+            variant="h2"
+            textAlign="center"
+            color={dark[500]}
+            sx={{
+              width: '100%',
+              fontWeight: 700,
+            }}
+            height="fit-content"
+            width="fit_content"
+          >
+            Tra cứu hồ sơ công chứng
+          </Typography>
+          <Typography variant="body2" textAlign="center" color={dark[500]} sx={{ mt: 2, width: '100%' }}>
+            Vui lòng nhập mã số hồ sơ công chứng để tra cứu trạng thái và thông tin chi tiết
+          </Typography>
+        </Box>
 
-	const handleSearchClick = (text) => {
-		if (!searchLoading) {
+        <Box
+          sx={{
+            display: 'flex',
+            width: '40%',
+            mt: 4,
+            gap: 2,
+          }}
+        >
+          <TextField
+            variant="outlined"
+            size="medium"
+            placeholder="Nhập mã số hồ sơ công chứng..."
+            autoFocus
+            value={inputValue}
+            onChange={handleInputChange}
+            sx={{
+              flex: 1,
+              borderRadius: 1,
+              '& .MuiInputBase-input': {
+                fontSize: 14,
+              },
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearchClick();
+              }
+            }}
+          />
+          <Button
+            startIcon={<SearchRoundedIcon />}
+            variant="contained"
+            disableElevation
+            color="white"
+            sx={{
+              px: 2,
+              color: black[300],
+              border: `1px solid ${black[50]}`,
+              '&:hover': {
+                border: `1px solid ${primary[500]}`,
+                color: primary[500],
+              },
+            }}
+            size="small"
+          >
+            <Typography variant="button" textTransform="none">
+              Tra cứu
+            </Typography>
+          </Button>
+        </Box>
+      </Box>
 
-			setSearchLoading(true);
-			setStatus({ notFound: false, searching: true, found: false });
-			setDisplayText(inputValue);
-			setTimeout(() => {
-				// Furthersearch  API will be emplemented here
-
-				const isFound = (Math.floor(Math.random() * 100)) % 2 === 0; // This one is just a RNG to simulate searching result
-				setStatus({ notFound: !isFound, searching: false, found: isFound });
-				setSearchLoading(false);
-			}, 2000);
-
-		}
-	};
-
-	useEffect(() => {
-		setTimeout(() => {
-			setLoading(false);
-		}, 2000);
-	}, []);
-
-
-
-
-	return (
-		<Box>
-			{/* Header Section */}
-			<Box
-				sx={{
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "center",
-					alignItems: "center",
-					py: 10,
-				}}>
-				<Box height="fit-content" width="fit-content" sx={{ px: 20 }}>
-					<Typography
-						variant="h2"
-						textAlign="center"
-						color={dark[500]}
-						sx={{
-							maxWidth: 900,
-							mx: "auto",
-							width: "100%",
-							fontWeight: 700,
-						}}
-						height="fit-content"
-						width="fit_content"
-					>
-						Tra cứu hồ sơ công chứng
-					</Typography>
-					<Typography
-						variant="body2"
-						textAlign="center"
-						color={dark[500]}
-						sx={{ mt: 4, width: "100%" }}
-						height="fit-content"
-						width="fit-content"
-					>
-						Vui lòng nhập mã số hồ sơ công chứng để tra cứu trạng thái và thông tin chi tiết
-					</Typography>
-				</Box>
-
-				<Box
-					sx={{
-						display: "flex",
-						width: "80%",
-						flexWrap: "wrap",
-						p: 4,
-						justifyContent: "space-around",
-						position: "relative",
-
-
-					}}
-				>
-					<TextField
-						id="lookupText"
-						type="search"
-						name="lookup"
-						placeholder="Tra cứu..."
-						autoFocus
-						value={inputValue}
-						onChange={handleInputChange}
-						sx={{
-							width: "80%",
-							mt: 2,
-							background: gray[50],
-							borderRadius: "8px 8px 8px 8px",
-							boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-							transition: "box-shadow 0.3s"
-						}}
-					/>
-					<Button
-						variant="contained"
-						id="lookupButton"
-						startIcon={<SearchIcon />}
-						size="large"
-						type="submit"
-						color="primary"
-						onClick={handleSearchClick}
-						sx={{
-							width: "flex",
-							mt: 2,
-							border: '1px solid gray',
-							color: "primary.main",
-							background: white[50],
-							boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-							transition: "box-shadow 0.3s"
-						}}
-					>
-						Tìm kiếm
-					</Button>
-				</Box>
-			</Box>
-
-			{/* Service Section */}
-			<Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 20, background: gray[50], position: "relative" }}>
-				<StatusBox
-					status={status}
-					displayText={displayText}
-				/>
-				<StatusBox 
-					status={status}
-					displayText={displayText}
-				/>
-				<StatusBox
-					status={status}
-					displayText={displayText}
-				/>
-			</Box>
-			{/* Guide Section */}
-			<Guide />
-		</Box>
-	);
+      {/* Service Section */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          background: gray[50],
+          position: 'relative',
+          flex: 1,
+          p: 4,
+        }}
+      >
+        {renderStatusBox()}
+      </Box>
+    </Box>
+  );
 };
 
 export default LookupNotarizationProfile;
