@@ -7,13 +7,13 @@ import { CloudUpload } from "@mui/icons-material";
 const UserProfile = () => {
 	const [user] = useState({
 		name: "Nguyễn Quốc Thắng",
-		email: "example@gmail.com",
-		phoneNumber: "+84",
+		email: "nguyenqthangwork@gmail.com",
+		phoneNumber: "+84 346 129 897",
 		idNumber: "0123 1231 2312",
 		province: "Bình Dương",
-		district: "Thủ Dầu Một",
-		ward: "Phú Cường",
-		street: "Lê Lợi",
+		district: "Dĩ An",
+		ward: "Đông Hòa",
+		street: "Linh Xuân 2",
 	});
 
 	return (
