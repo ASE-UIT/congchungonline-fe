@@ -4,6 +4,8 @@ import { black, dark, gray, primary } from '../../config/theme/themePrimitives';
 import 'react-toastify/dist/ReactToastify.css';
 import StatusBox from '../../components/services/StatusBox';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import NotarizationService from '../../services/notarization.service';
+
 const LookupNotarizationProfile = () => {
   const [inputValue, setInputValue] = useState('');
   const [displayText, setDisplayText] = useState('');
@@ -14,16 +16,31 @@ const LookupNotarizationProfile = () => {
     setInputValue(event.target.value);
   };
 
-  const handleSearchClick = (text) => {
-    if (!searchLoading) {
-      setSearchLoading(true);
+  const handleSearchClick = async () => {
+    if (inputValue === '') {
+      setDisplayText('Vui lòng nhập mã số hồ sơ công chứng');
+      setStatus({ notFound: true, searching: false, found: false });
+    } else {
       setStatus({ notFound: false, searching: true, found: false });
-      setDisplayText(inputValue);
-      setTimeout(() => {
-        const isFound = Math.floor(Math.random() * 100) % 2 === 0;
-        setStatus({ notFound: !isFound, searching: false, found: isFound });
+      setSearchLoading(true);
+      try {
+        const response = await NotarizationService.getStatusById(inputValue);
         setSearchLoading(false);
-      }, 2000);
+        if (response) {
+          setDisplayText(response.documentId);
+          setStatus({ notFound: false, searching: false, found: true });
+        }
+      } catch (error) {
+        setSearchLoading(false);
+        if (error === 404) {
+          setDisplayText('Không tìm thấy hồ sơ công chứng');
+          setStatus({ notFound: true, searching: false, found: false });
+        } else {
+          setDisplayText('Đã xảy ra lỗi khi tra cứu hồ sơ');
+          console.error('Error while searching:', error);
+          setStatus({ notFound: true, searching: false, found: false });
+        }
+      }
     }
   };
 
@@ -113,6 +130,7 @@ const LookupNotarizationProfile = () => {
               },
             }}
             size="small"
+            onClick={handleSearchClick}
           >
             <Typography variant="button" textTransform="none">
               Tra cứu
