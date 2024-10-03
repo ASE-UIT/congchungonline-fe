@@ -42,6 +42,11 @@ const routes = [
     authRequired: true,
   },
   {
+    path: '/create-notarization-session',
+    element: lazy(() => import('../pages/services/CreateNotarizationSession')),
+    authRequired: true,
+  },
+  {
     path: '*',
     element: lazy(() => import('../pages/notfound/NotFound')),
   },

@@ -48,8 +48,9 @@ export const sidebarItems = [
     icon: <DocumentScanner />,
   },
   {
-    type: 'create-notary-session',
+    type: 'create-notarization-session',
     title: 'Tạo phiên công chứng',
+    href: '/create-notarization-session',
     icon: <Groups2Rounded />,
   },
   {
