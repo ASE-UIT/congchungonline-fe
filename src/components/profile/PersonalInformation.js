@@ -18,10 +18,6 @@ const PersonalInformation = ({ user }) => {
 		setOpen(false);
 	};
 
-	const handleOpen = () => {
-		setOpen(true);
-	};
-
 	return (
 		<Box
 			sx={{
