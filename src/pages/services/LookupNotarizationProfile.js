@@ -11,6 +11,7 @@ const LookupNotarizationProfile = () => {
   const [displayText, setDisplayText] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
   const [status, setStatus] = useState({ notFound: false, searching: false, found: false });
+  const [notarizationData, setNotarizationData] = useState(null);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -29,15 +30,16 @@ const LookupNotarizationProfile = () => {
         if (response) {
           setDisplayText(response.documentId);
           setStatus({ notFound: false, searching: false, found: true });
+          setNotarizationData(response);
         }
       } catch (error) {
         setSearchLoading(false);
+        console.log(error);
         if (error === 404) {
-          setDisplayText('Không tìm thấy hồ sơ công chứng');
+          setDisplayText(inputValue);
           setStatus({ notFound: true, searching: false, found: false });
         } else {
-          setDisplayText('Đã xảy ra lỗi khi tra cứu hồ sơ');
-          console.error('Error while searching:', error);
+          setDisplayText(inputValue);
           setStatus({ notFound: true, searching: false, found: false });
         }
       }
@@ -52,7 +54,7 @@ const LookupNotarizationProfile = () => {
       return <StatusBox status={status} displayText={displayText} />;
     }
     if (status.found) {
-      return <StatusBox status={status} displayText={displayText} />;
+      return <StatusBox status={status} displayText={displayText} notarizationData={notarizationData} />;
     }
   };
 

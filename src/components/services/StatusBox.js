@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Grow, Fade, Link, Icon } from '@mui/material';
 import { black, white } from '../../config/theme/themePrimitives';
 import { red, green } from '@mui/material/colors';
@@ -7,7 +7,19 @@ import ErrorIcon from '@mui/icons-material/Error';
 import CircularProgress from '@mui/material/CircularProgress';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-const StatusBox = ({ status, displayText, profileDetail }) => {
+import NotaryDocumentDetailsModal from '../modals/NotaryDocumentDetailsModal';
+
+const StatusBox = ({ status, displayText, notarizationData }) => {
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  }
+
   const statusConfig = {
     notFound: {
       icon: <ErrorIcon fontSize="24px" sx={{ color: red[500] }} />,
@@ -55,12 +67,13 @@ const StatusBox = ({ status, displayText, profileDetail }) => {
   if (!currentStatus) return null;
 
   const { icon, message, animationType } = currentStatus;
+
   const AnimationComponent = animationType === 'grow' ? Grow : Fade;
 
   return (
     <Box
       sx={{
-        width: '40%',
+        width: '40vw',
         display: 'flex',
         flexDirection: 'column',
       }}
@@ -68,7 +81,7 @@ const StatusBox = ({ status, displayText, profileDetail }) => {
       <AnimationComponent in={true} timeout={400}>
         <Box
           sx={{
-            width: '100%',
+            width: 'fit-content',
             py: 1,
             px: 2,
             display: 'flex',
@@ -98,6 +111,7 @@ const StatusBox = ({ status, displayText, profileDetail }) => {
               }}
               component="button"
               variant="body2"
+              onClick={handleOpenModal}
             >
               Xem chi tiết
             </Link>
@@ -124,6 +138,10 @@ const StatusBox = ({ status, displayText, profileDetail }) => {
           </Typography>
         </Box>
       )} */}
+      <NotaryDocumentDetailsModal
+        open={openModal}
+        handleClose={handleCloseModal}
+      />
     </Box>
   );
 };
