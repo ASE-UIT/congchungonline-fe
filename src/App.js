@@ -14,7 +14,7 @@ import routes from './routes/routes';
 import UserService from './services/user.service';
 import TokenService from './services/token.service';
 import { userGoogleLogin } from './stores/actions/authAction';
-import { Cookie } from '@mui/icons-material';
+import Cookies from 'js-cookie';
 
 function App() {
   const theme = createTheme(getDesignTokens());
@@ -26,6 +26,7 @@ function App() {
 
   const getUser = async () => {
     const user = await UserService.getUserById(TokenService.decodeToken(token).sub);
+    console.log('User:', user);
     return user;
   };
 
@@ -33,18 +34,11 @@ function App() {
     const fetchUser = async () => {
       if (token && refreshToken) {
         const user = await getUser();
-
         dispatch(userGoogleLogin({
-          userInfo: {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            isEmailVerified: user.isEmailVerified,
-          },
+          userData: user,
           userToken: token,
         }));
-        Cookie.set('refreshToken', refreshToken);
+        Cookies.set('refreshToken', refreshToken);
         return user;
       }
     };
@@ -52,6 +46,7 @@ function App() {
     fetchUser();
     window.history.replaceState({}, document.title, window.location.pathname);
   }, [token, refreshToken, dispatch]);
+
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

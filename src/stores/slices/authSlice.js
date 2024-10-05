@@ -2,8 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import { userLogin, userLogout, refreshAccessToken, userGoogleLogin } from '../actions/authAction';
 import Cookies from 'js-cookie';
 
-const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
-const userToken = localStorage.getItem('userToken') ? localStorage.getItem('userToken') : null;
+const userInfo = (() => {
+  try {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    return storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  } catch (error) {
+    console.error('Error parsing userInfo from localStorage:', error);
+    return null;
+  }
+})();
+
+const userToken = localStorage.getItem('userToken') || null;
 
 const initialState = {
   loading: false,
@@ -12,6 +21,7 @@ const initialState = {
   error: null,
   isAuthenticated: !!userToken,
 };
+
 
 const authSlice = createSlice({
   name: 'auth',

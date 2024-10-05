@@ -29,6 +29,7 @@ export const userLogout = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
   }
 });
 
+
 export const refreshAccessToken = createAsyncThunk('auth/refresh', async (_, thunkAPI) => {
   try {
     const response = await AuthService.refreshAccessToken();
@@ -39,6 +40,10 @@ export const refreshAccessToken = createAsyncThunk('auth/refresh', async (_, thu
 });
 
 export const userGoogleLogin = createAsyncThunk('auth/google', async ({ userData, userToken }, thunkAPI) => {
+  if (!userData || !userToken) {
+    return thunkAPI.rejectWithValue('Invalid Google login data');
+  }
+
   try {
     return {
       user: userData,
