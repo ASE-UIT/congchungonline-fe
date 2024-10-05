@@ -81,7 +81,6 @@ const StatusBox = ({ status, displayText, notarizationData }) => {
       <AnimationComponent in={true} timeout={400}>
         <Box
           sx={{
-            width: 'fit-content',
             py: 1,
             px: 2,
             display: 'flex',

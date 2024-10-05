@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import StatusBox from '../../components/services/StatusBox';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import NotarizationService from '../../services/notarization.service';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LookupNotarizationProfile = () => {
   const [inputValue, setInputValue] = useState('');
@@ -19,9 +21,9 @@ const LookupNotarizationProfile = () => {
 
   const handleSearchClick = async () => {
     if (inputValue === '') {
-      setDisplayText('Vui lòng nhập mã số hồ sơ công chứng');
-      setStatus({ notFound: true, searching: false, found: false });
+      toast.error('Vui lòng nhập mã số hồ sơ công chứng');
     } else {
+      setDisplayText(inputValue);
       setStatus({ notFound: false, searching: true, found: false });
       setSearchLoading(true);
       try {
