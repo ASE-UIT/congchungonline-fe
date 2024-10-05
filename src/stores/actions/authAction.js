@@ -37,3 +37,14 @@ export const refreshAccessToken = createAsyncThunk('auth/refresh', async (_, thu
     return thunkAPI.rejectWithValue(status);
   }
 });
+
+export const userGoogleLogin = createAsyncThunk('auth/google', async ({ userData, userToken }, thunkAPI) => {
+  try {
+    return {
+      user: userData,
+      userToken: userToken,
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
