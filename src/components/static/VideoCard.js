@@ -54,7 +54,7 @@ const VideoCard = () => {
                         Bạn vẫn còn thắc mắc?<br />Hãy xem video hướng dẫn này.
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
-                        Lorem ipsum dolor sit amet consectetur. Morbi elementum libero sed cras diam neque mi fringilla posuere. Morbi odio sed etiam netus in faucibus laoreet at quam.
+                        Video hướng dẫn sử dụng dịch vụ công chứng trực tuyến của chúng tôi.
                     </Typography>
                 </Box>
             </Box>

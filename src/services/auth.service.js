@@ -69,7 +69,6 @@ const refreshAccessToken = async () => {
 
 const register = async (name, email, password) => {
   try {
-    console.log("AUTH_ENDPOINT", AUTH_ENDPOINT);
     const response = await axios.post(`${AUTH_ENDPOINT}/register`, {
       name,
       email,
@@ -87,11 +86,26 @@ const register = async (name, email, password) => {
   }
 };
 
+const forgotPassword = async (email) => {
+  try {
+    const response = await axios.post(`${AUTH_ENDPOINT}/forgot-password`, { email });
+    if (response.status === 204) {
+      return response;
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      throw error.response;
+    }
+    throw new Error('An error occurred while sending reset password email.');
+  }
+};
+
 const AuthService = {
   login,
   logout,
   refreshAccessToken,
   register,
+  forgotPassword,
 };
 
 export default AuthService;

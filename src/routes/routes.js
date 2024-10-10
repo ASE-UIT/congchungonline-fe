@@ -47,6 +47,11 @@ const routes = [
     authRequired: true,
   },
   {
+    path: '/user-guide',
+    element: lazy(() => import('../pages/static/UserGuide')),
+    authRequired: false,
+  },
+  {
     path: '*',
     element: lazy(() => import('../pages/notfound/NotFound')),
   },

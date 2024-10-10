@@ -29,11 +29,27 @@ export const userLogout = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
   }
 });
 
+
 export const refreshAccessToken = createAsyncThunk('auth/refresh', async (_, thunkAPI) => {
   try {
     const response = await AuthService.refreshAccessToken();
     return { userToken: response.tokens.access.token };
   } catch (status) {
     return thunkAPI.rejectWithValue(status);
+  }
+});
+
+export const userGoogleLogin = createAsyncThunk('auth/google', async ({ userData, userToken }, thunkAPI) => {
+  if (!userData || !userToken) {
+    return thunkAPI.rejectWithValue('Invalid Google login data');
+  }
+
+  try {
+    return {
+      user: userData,
+      userToken: userToken,
+    };
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
 });

@@ -4,26 +4,48 @@ import { black, dark, gray, primary } from '../../config/theme/themePrimitives';
 import 'react-toastify/dist/ReactToastify.css';
 import StatusBox from '../../components/services/StatusBox';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import NotarizationService from '../../services/notarization.service';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const LookupNotarizationProfile = () => {
   const [inputValue, setInputValue] = useState('');
   const [displayText, setDisplayText] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
   const [status, setStatus] = useState({ notFound: false, searching: false, found: false });
+  const [notarizationData, setNotarizationData] = useState(null);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
-  const handleSearchClick = (text) => {
-    if (!searchLoading) {
-      setSearchLoading(true);
-      setStatus({ notFound: false, searching: true, found: false });
+  const handleSearchClick = async () => {
+    if (inputValue === '') {
+      toast.error('Vui lòng nhập mã số hồ sơ công chứng');
+    } else {
       setDisplayText(inputValue);
-      setTimeout(() => {
-        const isFound = Math.floor(Math.random() * 100) % 2 === 0;
-        setStatus({ notFound: !isFound, searching: false, found: isFound });
+      setStatus({ notFound: false, searching: true, found: false });
+      setSearchLoading(true);
+      try {
+        const response = await NotarizationService.getStatusById(inputValue);
+        console.log('response', response);
         setSearchLoading(false);
-      }, 2000);
+        if (response) {
+          setDisplayText(response.documentId);
+          setStatus({ notFound: false, searching: false, found: true });
+          setNotarizationData(response);
+        }
+      } catch (error) {
+        setSearchLoading(false);
+        console.log(error);
+        if (error === 404) {
+          setDisplayText(inputValue);
+          setStatus({ notFound: true, searching: false, found: false });
+        } else {
+          setDisplayText(inputValue);
+          setStatus({ notFound: true, searching: false, found: false });
+        }
+      }
     }
   };
 
@@ -35,7 +57,7 @@ const LookupNotarizationProfile = () => {
       return <StatusBox status={status} displayText={displayText} />;
     }
     if (status.found) {
-      return <StatusBox status={status} displayText={displayText} />;
+      return <StatusBox status={status} displayText={displayText} notarizationData={notarizationData} />;
     }
   };
 
@@ -92,6 +114,7 @@ const LookupNotarizationProfile = () => {
                 fontSize: 14,
               },
             }}
+            disabled={searchLoading}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 handleSearchClick();
@@ -99,6 +122,7 @@ const LookupNotarizationProfile = () => {
             }}
           />
           <Button
+            disabled={searchLoading}
             startIcon={<SearchRoundedIcon />}
             variant="contained"
             disableElevation
@@ -113,6 +137,7 @@ const LookupNotarizationProfile = () => {
               },
             }}
             size="small"
+            onClick={handleSearchClick}
           >
             <Typography variant="button" textTransform="none">
               Tra cứu
@@ -121,7 +146,6 @@ const LookupNotarizationProfile = () => {
         </Box>
       </Box>
 
-      {/* Service Section */}
       <Box
         sx={{
           display: 'flex',
