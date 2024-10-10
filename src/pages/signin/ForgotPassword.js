@@ -1,91 +1,96 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { toast } from 'react-toastify';
+import AuthService from '../../services/auth.service';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ForgotPassword({ open, handleClose }) {
-    const [email, setEmail] = React.useState("");
-    const sendResetPassword = async () => {
-        try {
-            const response = await fetch(
-                "http://localhost:3100/v1/auth/forgot-password",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email }),
-                }
-            );
-            if (response.ok) {
-                // Handle success
-            } else {
-                // Handle error
-            }
-        } catch (error) {
-            // Handle error
-        }
-    };
-    return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            PaperProps={{
-                component: "form",
-                onSubmit: (event) => {
-                    event.preventDefault();
-                    handleClose();
-                },
-            }}
-        >
-            <DialogTitle>Reset password</DialogTitle>
-            <DialogContent
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    width: "100%",
-                }}
-            >
-                <DialogContentText>
-                    Enter your account&apos;s email address, and we&apos;ll send
-                    you a link to reset your password.
-                </DialogContentText>
-                <OutlinedInput
-                    autoFocus
-                    required
-                    margin="dense"
-                    id="email"
-                    name="email"
-                    label="Email address"
-                    placeholder="Email address"
-                    type="email"
-                    fullWidth
-                    onChange={(event) => setEmail(event.target.value)}
-                />
-            </DialogContent>
-            <DialogActions sx={{ pb: 3, px: 3 }}>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button
-                    variant="contained"
-                    type="submit"
-                    onClick={sendResetPassword}
-                >
-                    Continue
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
-}
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
-ForgotPassword.propTypes = {
-    handleClose: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
-};
+  const validateInputs = () => {
+    return email.trim() !== '' && /\S+@\S+\.\S+/.test(email);
+  };
+
+  const sendResetPassword = async () => {
+    if (!validateInputs()) {
+      toast.error('Địa chỉ email không hợp lệ.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await AuthService.forgotPassword(email);
+      if (response.status === 204) {
+        toast.success('Email đã được gửi. Vui lòng kiểm tra hộp thư của bạn.');
+        handleClose();
+      }
+    } catch (error) {
+      console.error('Failed to send reset password', error);
+      const errorMessage =
+        error.status === 404 ? 'Email không tồn tại. Vui lòng nhập lại.' : 'Đã xảy ra lỗi. Vui lòng thử lại.';
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      PaperProps={{
+        component: 'form',
+        onSubmit: (event) => {
+          event.preventDefault();
+          sendResetPassword();
+        },
+      }}
+    >
+      <DialogTitle sx={{ fontSize: 20 }}>Quên mật khẩu</DialogTitle>
+      <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+        <DialogContentText sx={{ fontSize: 14 }}>
+          Nhập địa chỉ email của tài khoản của bạn, chúng tôi sẽ gửi cho bạn một liên kết để đặt lại mật khẩu.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          id="email"
+          name="email"
+          label="Địa chỉ email"
+          type="email"
+          placeholder="Nhập địa chỉ email"
+          fullWidth
+          onChange={(event) => setEmail(event.target.value)}
+          size="small"
+          sx={{
+            '& .MuiInputBase-input': {
+              fontSize: 16,
+              py: 1.5,
+            },
+            '& .MuiInputBase-input::placeholder': {
+              fontSize: 16,
+              opacity: 1,
+            },
+          }}
+        />
+      </DialogContent>
+      <DialogActions sx={{ pb: 3, px: 3 }}>
+        <Button onClick={handleClose}>
+          <Typography sx={{ fontSize: 14, fontWeight: 500, textTransform: 'none' }}>Huỷ</Typography>
+        </Button>
+        <Button disabled={loading || !validateInputs()} variant="contained" type="submit">
+          <Typography sx={{ fontSize: 14, fontWeight: 500, textTransform: 'none' }}>Tiếp tục</Typography>
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
 
 export default ForgotPassword;
