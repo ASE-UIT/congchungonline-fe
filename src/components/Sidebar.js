@@ -9,8 +9,6 @@ import YesNoModal from './modals/YesNoModal';
 import { sidebarItems } from '../utils/fakeData';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import SidebarItem from './static/SidebarItem';
-import NotarySessionForm from '../pages/services/NotarySessionForm';
-
 const MENUS = {
   LOGOUT: 'logout',
   PROFILE: 'profile',
@@ -21,7 +19,6 @@ const Sidebar = () => {
   const [openSideBar, setOpenSideBar] = useState(true);
   const [selectedMenu, setSelectedMenu] = useState(null);
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
-  const [openNotarySessionForm, setOpenNotarySessionForm] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -41,10 +38,7 @@ const Sidebar = () => {
       case MENUS.LOGOUT:
         setOpenLogoutModal(true);
         break;
-      case MENUS.CREATE_NOTARY_SESSION:
-        setSelectedMenu(menu.type);
-        setOpenNotarySessionForm(true);
-        break;
+
       default:
         setSelectedMenu(menu.type);
         navigate(menu.href);
@@ -140,13 +134,6 @@ const Sidebar = () => {
           setOpen={setOpenLogoutModal}
           onYes={handleLogout}
           onNo={() => setOpenLogoutModal(false)}
-        />
-        <NotarySessionForm
-          open={openNotarySessionForm}
-          onClose={() => {
-            setOpenNotarySessionForm(false);
-            setSelectedMenu(null);
-          }}
         />
       </Box>
     </Drawer>
