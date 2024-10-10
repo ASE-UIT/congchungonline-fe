@@ -28,6 +28,7 @@ const LookupNotarizationProfile = () => {
       setSearchLoading(true);
       try {
         const response = await NotarizationService.getStatusById(inputValue);
+        console.log('response', response);
         setSearchLoading(false);
         if (response) {
           setDisplayText(response.documentId);
@@ -113,6 +114,7 @@ const LookupNotarizationProfile = () => {
                 fontSize: 14,
               },
             }}
+            disabled={searchLoading}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 handleSearchClick();
@@ -120,6 +122,7 @@ const LookupNotarizationProfile = () => {
             }}
           />
           <Button
+            disabled={searchLoading}
             startIcon={<SearchRoundedIcon />}
             variant="contained"
             disableElevation
@@ -143,7 +146,6 @@ const LookupNotarizationProfile = () => {
         </Box>
       </Box>
 
-      {/* Service Section */}
       <Box
         sx={{
           display: 'flex',
