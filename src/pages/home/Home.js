@@ -12,19 +12,10 @@ import NotaryDocumentDetailsModal from "../../components/modals/NotaryDocumentDe
 
 const Home = () => {
 	const [showChatbox, setShowChatbox] = useState(false);
-	const [openNotaryDocumentDetailsModal, setOpenNotaryDocumentDetailsModal] = useState(false);
 
 	const handleChatboxClick = () => {
 		setShowChatbox(true);
 	};
-
-	const handleOpenNotaryDocumentDetailsModal = () => {
-		setOpenNotaryDocumentDetailsModal(true);
-	}
-
-	const handleCloseNotaryDocumentDetailsModal = () => {
-		setOpenNotaryDocumentDetailsModal(false);
-	}
 
 	return (
 		<Box>
@@ -79,13 +70,11 @@ const Home = () => {
 							fontSize: 20,
 							fontWeight: 600,
 						}}
-						onClick={handleOpenNotaryDocumentDetailsModal}
 					>
 						Tạo hồ sơ công chứng
 					</Button>
 				</Box>
 			</Container>
-			<NotaryDocumentDetailsModal open={openNotaryDocumentDetailsModal} handleClose={handleCloseNotaryDocumentDetailsModal} />
 			<Container
 				sx={{
 					flex: 1,

@@ -121,7 +121,7 @@ const Header = () => {
                                 </Link>
                             ))}
                             <Link
-                                href="/userguide"
+                                href="/user-guide"
                                 underline="none"
                                 color={dark[500]}
                             >
@@ -185,7 +185,7 @@ const Header = () => {
                                 </Typography>
                             </Link>
                         ))}
-                        <Link href="/userguide" underline="none">
+                        <Link href="/user-guide" underline="none">
                             <Typography
                                 variant="body4"
                                 color="primary"
