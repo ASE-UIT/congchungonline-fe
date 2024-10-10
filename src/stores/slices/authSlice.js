@@ -1,9 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { userLogin, userLogout, refreshAccessToken } from '../actions/authAction';
+import { userLogin, userLogout, refreshAccessToken, userGoogleLogin } from '../actions/authAction';
 import Cookies from 'js-cookie';
 
-const userInfo = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null;
-const userToken = localStorage.getItem('userToken') ? localStorage.getItem('userToken') : null;
+const userInfo = (() => {
+  try {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    return storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  } catch (error) {
+    console.error('Error parsing userInfo from localStorage:', error);
+    return null;
+  }
+})();
+
+const userToken = localStorage.getItem('userToken') || null;
 
 const initialState = {
   loading: false,
@@ -12,6 +21,7 @@ const initialState = {
   error: null,
   isAuthenticated: !!userToken,
 };
+
 
 const authSlice = createSlice({
   name: 'auth',
@@ -63,6 +73,23 @@ const authSlice = createSlice({
     builder.addCase(refreshAccessToken.rejected, (state, { payload }) => {
       state.loading = false;
       state.error = payload;
+    });
+    builder.addCase(userGoogleLogin.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(userGoogleLogin.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      state.userInfo = payload.user;
+      state.userToken = payload.userToken;
+      state.isAuthenticated = true;
+      localStorage.setItem('userInfo', JSON.stringify(payload.user));
+      localStorage.setItem('userToken', payload.userToken);
+    });
+    builder.addCase(userGoogleLogin.rejected, (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      state.isAuthenticated = false;
     });
   },
 });
