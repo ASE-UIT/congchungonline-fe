@@ -2,7 +2,7 @@ name = "congchungonline"
 type = "javascript" 
 
 account_id = "b08af9cbf48e70be8bfcc49eb6667739" 
-compatibility_flags = [ "nodejs_compat" ]
+compatibility_flags = [ "nodejs_compat_v2" ]
 
 # Specify build commands
 [build]
