@@ -29,7 +29,6 @@ export const userLogout = createAsyncThunk('auth/logout', async (_, thunkAPI) =>
   }
 });
 
-
 export const refreshAccessToken = createAsyncThunk('auth/refresh', async (_, thunkAPI) => {
   try {
     const response = await AuthService.refreshAccessToken();

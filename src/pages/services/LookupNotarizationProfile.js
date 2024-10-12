@@ -7,6 +7,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import NotarizationService from '../../services/notarization.service';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NotaryDocumentDetailsModal from '../../components/modals/NotaryDocumentDetailsModal';
 
 const LookupNotarizationProfile = () => {
   const [inputValue, setInputValue] = useState('');
@@ -14,9 +15,18 @@ const LookupNotarizationProfile = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [status, setStatus] = useState({ notFound: false, searching: false, found: false });
   const [notarizationData, setNotarizationData] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
+  };
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   const handleSearchClick = async () => {
@@ -57,7 +67,14 @@ const LookupNotarizationProfile = () => {
       return <StatusBox status={status} displayText={displayText} />;
     }
     if (status.found) {
-      return <StatusBox status={status} displayText={displayText} notarizationData={notarizationData} />;
+      return (
+        <StatusBox
+          status={status}
+          displayText={displayText}
+          notarizationData={notarizationData}
+          onOpenModal={handleOpenModal}
+        />
+      );
     }
   };
 
@@ -159,6 +176,7 @@ const LookupNotarizationProfile = () => {
       >
         {renderStatusBox()}
       </Box>
+      <NotaryDocumentDetailsModal open={openModal} handleClose={handleCloseModal} notarizationData={notarizationData} />
     </Box>
   );
 };

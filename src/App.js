@@ -33,20 +33,27 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       if (token && refreshToken) {
+        if (TokenService.isTokenExpired(refreshToken)) {
+          console.log('Refresh token expired');
+          return;
+        }
+
+        Cookies.set('accessToken', token, { expires: 7, secure: true, sameSite: 'Strict' });
+        Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'Strict' });
         const user = await getUser();
-        dispatch(userGoogleLogin({
-          userData: user,
-          userToken: token,
-        }));
-        Cookies.set('refreshToken', refreshToken);
-        return user;
+        Cookies.set('user', JSON.stringify(user), { expires: 7 });
+        dispatch(
+          userGoogleLogin({
+            userData: user,
+            userToken: token,
+          }),
+        );
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
     };
 
     fetchUser();
-    window.history.replaceState({}, document.title, window.location.pathname);
   }, [token, refreshToken, dispatch]);
-
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
