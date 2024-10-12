@@ -5,16 +5,22 @@ import PersonalInformation from "../../components/profile/PersonalInformation";
 import { CloudUpload } from "@mui/icons-material";
 
 const UserProfile = () => {
-	const [user] = useState({
+	const [user, setUser] = useState({
 		name: "Nguyễn Quốc Thắng",
 		email: "nguyenqthangwork@gmail.com",
-		phoneNumber: "+84 346 129 897",
-		idNumber: "0123 1231 2312",
-		province: "Bình Dương",
+		phone: "+84346129897",
+		identification: "012312312312",
+		city: "Bình Dương",
 		district: "Dĩ An",
 		ward: "Đông Hòa",
 		street: "Linh Xuân 2",
 	});
+
+	const handleSave = (newData) => {
+		setUser(newData);
+	};
+	
+	
 
 	return (
 		<Box display="flex" p={4}>
@@ -53,7 +59,7 @@ const UserProfile = () => {
 
 				{/* Personal Information Section */}
 				<Box display="flex" flexDirection="column" gap={2} p={2.5}>
-					<PersonalInformation user={user} />
+					<PersonalInformation user={user} onSave={handleSave}/>
 				</Box>
 			</Box>
 		</Box>

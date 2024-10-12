@@ -3,8 +3,10 @@ import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React, { useState, useEffect, useMemo } from 'react';
 import { black } from '../../config/theme/themePrimitives';
 import LabeledTextField from './LabeledTextField';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const EditUserProfileModal = ({ open, handleClose }) => {
+const EditUserProfileModal = ({ open, handleClose, onSave, user }) => {
   const userData = useMemo(
     () => ({
       name: 'Nguyễn Quốc Thắng',
@@ -31,14 +33,62 @@ const EditUserProfileModal = ({ open, handleClose }) => {
   });
 
   useEffect(() => {
-    setFormData(userData);
-  }, [userData]);
+    if (open) setFormData(user);
+  }, [open, user]);
+
+
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
+  };
+
+  const isFormDataValid = ({ name, identification, email, phone, city, district, ward, street }) => {
+    const validations = [
+      { valid: /^[A-Za-zÀ-ỹ\s]+$/.test(name), message: 'Vui lòng nhập Họ tên hợp lệ' },
+      { valid: /^[0-9]{9}$|^[0-9]{12}$/.test(identification), message: 'Vui lòng nhập đúng số CCCD' },
+      { valid: /^\+?[0-9]{10,15}$/.test(phone), message: 'Vui lòng nhập đúng Số điện thoại' },
+      {
+        valid: /^[\w-]+(\.[\w-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,})$/.test(email),
+        message: 'Vui lòng nhập email hợp lệ',
+      },
+      { valid: city && district && ward && street, message: 'Vui lòng điền đầy đủ thông tin địa chỉ' },
+    ];
+
+    for (let { valid, message } of validations) {
+      if (!valid) {
+        toast.error(message);
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleSaveChanges = () => {
+    if (!isFormDataValid(formData)) {
+    } else {
+      try {
+        // API call to Back end here
+        const response = true; // This is a replacement response for API call, please replace it with proper API call later
+        console.log('response', response);
+
+        if (response) {
+          onSave(formData);
+          handleClose();
+          toast.success('Cập nhật thông tin thành công!');
+        }
+      } catch (error) {
+        console.log(error);
+        if (error === 404) {
+          toast.error('Không tìm thấy dữ liệu');
+        } else {
+          toast.error('Có lỗi xảy ra, vui lòng thử lại sau');
+        }
+      }
+    }
   };
 
   const cities = [
@@ -103,7 +153,7 @@ const EditUserProfileModal = ({ open, handleClose }) => {
               },
               textTransform: 'none',
             }}
-            onClick={handleClose}
+            onClick={handleSaveChanges}
           >
             Lưu thay đổi
           </Button>

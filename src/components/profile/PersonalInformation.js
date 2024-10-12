@@ -11,7 +11,7 @@ import InfoField from "./InfoField";
 import EditUserProfileModal from "../../components/modals/EditUserProfileModal";
 
 
-const PersonalInformation = ({ user }) => {
+const PersonalInformation = ({ user, onSave }) => {
 	const [open, setOpen] = useState(false);
 
 	const handleClose = () => {
@@ -65,7 +65,7 @@ const PersonalInformation = ({ user }) => {
 					</Button>
 				</Box>
 			</Box>
-			<EditUserProfileModal open={open} handleClose={handleClose} />
+			<EditUserProfileModal open={open} handleClose={handleClose} onSave={onSave} user={user} />
 			<Box
 				display="flex"
 				flexDirection={{ xs: "column", sm: "row" }}
@@ -79,10 +79,10 @@ const PersonalInformation = ({ user }) => {
 					<InfoField label="Email" value={user.email} />
 				</Box>
 				<Box flex={1} minWidth="250px">
-					<InfoField label="Số điện thoại" value={user.phoneNumber} />
+					<InfoField label="Số điện thoại" value={user.phone} />
 				</Box>
 				<Box flex={1} minWidth="250px">
-					<InfoField label="CMND/CCCD/Hộ chiếu" value={user.idNumber} />
+					<InfoField label="CMND/CCCD/Hộ chiếu" value={user.identification} />
 				</Box>
 			</Box>
 
@@ -105,7 +105,7 @@ const PersonalInformation = ({ user }) => {
 					my={2}
 				>
 					<Box flex={1} minWidth="250px">
-						<InfoField label="Tỉnh/Thành phố" value={user.province} />
+						<InfoField label="Tỉnh/Thành phố" value={user.city} />
 					</Box>
 					<Box flex={1} minWidth="250px">
 						<InfoField label="Quận/Huyện" value={user.district} />
