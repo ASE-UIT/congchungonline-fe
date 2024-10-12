@@ -10,36 +10,34 @@ const axiosConfig = axios.create({
 axiosConfig.interceptors.request.use(
   (config) => {
     const accessToken = Cookies.get('accessToken');
-    console.log('Access Token:', accessToken);
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
 axiosConfig.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
     if (error.response && error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      console.log('Token expired. Refreshing token...');
+
       try {
         const refreshResponse = await AuthService.refreshAccessToken();
 
-        Cookies.set('accessToken', refreshResponse.tokens.access.token);
-
-        originalRequest.headers['Authorization'] = `Bearer ${refreshResponse.tokens.access.token}`;
+        const newAccessToken = refreshResponse.tokens.access.token;
+        Cookies.set('accessToken', newAccessToken, { expires: 7 });
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
 
         return axiosConfig(originalRequest);
       } catch (refreshError) {
+        Cookies.remove('refreshToken');
+        Cookies.remove('accessToken');
+        Cookies.remove('user');
         return Promise.reject(refreshError);
       }
     }

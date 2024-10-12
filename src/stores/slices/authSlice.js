@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { userLogin, userLogout, refreshAccessToken, userGoogleLogin } from '../actions/authAction';
+import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
-
 const userInfo = (() => {
   try {
-    const storedUserInfo = localStorage.getItem('userInfo');
+    const storedUserInfo = Cookies.get('user');
     return storedUserInfo ? JSON.parse(storedUserInfo) : null;
   } catch (error) {
     console.error('Error parsing userInfo from localStorage:', error);
@@ -12,7 +12,7 @@ const userInfo = (() => {
   }
 })();
 
-const userToken = localStorage.getItem('userToken') || null;
+const userToken = Cookies.get('accessToken') || null;
 
 const initialState = {
   loading: false,
@@ -21,7 +21,6 @@ const initialState = {
   error: null,
   isAuthenticated: !!userToken,
 };
-
 
 const authSlice = createSlice({
   name: 'auth',
@@ -37,8 +36,6 @@ const authSlice = createSlice({
       state.userInfo = payload.user;
       state.userToken = payload.userToken;
       state.isAuthenticated = true;
-      localStorage.setItem('userInfo', JSON.stringify(payload.user));
-      localStorage.setItem('userToken', payload.userToken);
     });
     builder.addCase(userLogin.rejected, (state, { payload }) => {
       state.loading = false;
@@ -53,9 +50,6 @@ const authSlice = createSlice({
       state.userInfo = null;
       state.userToken = null;
       state.isAuthenticated = false;
-      localStorage.removeItem('userInfo');
-      localStorage.removeItem('userToken');
-      Cookies.remove('refreshToken');
     });
     builder.addCase(userLogout.rejected, (state, { payload }) => {
       state.loading = false;
@@ -66,13 +60,23 @@ const authSlice = createSlice({
       state.error = null;
     });
     builder.addCase(refreshAccessToken.fulfilled, (state, { payload }) => {
-      state.loading = false;
-      state.userToken = payload.userToken;
-      localStorage.setItem('userToken', payload.userToken);
+      const isTokenValid = (token) => {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.exp * 1000 > Date.now();
+      };
+
+      if (isTokenValid(payload.userToken)) {
+        state.loading = false;
+        state.userToken = payload.userToken;
+      } else {
+        console.log('Refreshed token is invalid or expired');
+        state.userToken = null;
+        state.isAuthenticated = false;
+      }
     });
     builder.addCase(refreshAccessToken.rejected, (state, { payload }) => {
       state.loading = false;
-      state.error = payload;
+      state.error = payload || 'Failed to refresh token';
     });
     builder.addCase(userGoogleLogin.pending, (state) => {
       state.loading = true;
@@ -83,12 +87,10 @@ const authSlice = createSlice({
       state.userInfo = payload.user;
       state.userToken = payload.userToken;
       state.isAuthenticated = true;
-      localStorage.setItem('userInfo', JSON.stringify(payload.user));
-      localStorage.setItem('userToken', payload.userToken);
     });
     builder.addCase(userGoogleLogin.rejected, (state, { payload }) => {
       state.loading = false;
-      state.error = payload;
+      state.error = payload || 'Google login failed. Please try again.';
       state.isAuthenticated = false;
     });
   },

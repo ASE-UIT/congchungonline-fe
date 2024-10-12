@@ -11,37 +11,41 @@ const login = async (email, password) => {
       email,
       password,
     });
-    console.log('Response:', response);
 
-    if (response && response.data && response.data.tokens && response.data.tokens.refresh) {
-      console.log('Refresh Token:', response.data.tokens.refresh.token);
-      Cookies.set('refreshToken', response.data.tokens.refresh.token, {
-        expires: 7,
-      });
-    } else {
-      throw new Error('Refresh token not found in response');
-    }
+    if (response && response.data && response.data.tokens) {
+      const { access, refresh } = response.data.tokens;
 
-    if (response.status === 200) {
+      Cookies.set('accessToken', access.token, { expires: 7, secure: true, sameSite: 'Strict' });
+
+      Cookies.set('refreshToken', refresh.token, { expires: 7, secure: true, sameSite: 'Strict' });
+
+      Cookies.set('user', JSON.stringify(response.data.user), { expires: 7, secure: true, sameSite: 'Strict' });
+
       return response.data;
     } else {
-      throw new Error('Login failed');
+      throw new Error('Tokens not found in response');
     }
   } catch (error) {
     if (error.response) {
-      throw error.response.status;
+      throw error.response.data.message || 'Login failed';
     }
     throw new Error('An error occurred while logging in.');
   }
 };
 
-const logout = async (refreshToken) => {
+const logout = async () => {
   try {
-    const response = await axios.post(`${AUTH_ENDPOINT}/logout`, { refreshToken });
-    return response.data;
+    const refreshToken = Cookies.get('refreshToken');
+    if (!refreshToken) throw new Error('No refresh token found');
+
+    await axios.post(`${AUTH_ENDPOINT}/logout`, { refreshToken });
+
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
+    Cookies.remove('user');
   } catch (error) {
     if (error.response) {
-      throw error.response.status;
+      throw error.response.data.message || 'Logout failed';
     } else {
       throw new Error('Network Error');
     }
@@ -57,13 +61,13 @@ const refreshAccessToken = async () => {
       refreshToken,
     });
 
-    return response.data;
+    const { access } = response.data.tokens;
+
+    return { userToken: access.token };
   } catch (error) {
-    if (error.response) {
-      throw error.response.status;
-    } else {
-      throw new Error('Network Error');
-    }
+    Cookies.remove('refreshToken');
+
+    throw error.response ? error.response.data.message || 'Token refresh failed' : 'Network Error';
   }
 };
 
@@ -76,11 +80,11 @@ const register = async (name, email, password) => {
     });
 
     if (response.status === 201) {
-      return response;
+      return response.data;
     }
   } catch (error) {
     if (error.response) {
-      throw error.response.status;
+      throw error.response.data.message || 'Registration failed';
     }
     throw new Error('An error occurred while registering.');
   }
@@ -90,11 +94,11 @@ const forgotPassword = async (email) => {
   try {
     const response = await axios.post(`${AUTH_ENDPOINT}/forgot-password`, { email });
     if (response.status === 204) {
-      return response;
+      return response.data;
     }
   } catch (error) {
-    if (error.response && error.response.status === 404) {
-      throw error.response;
+    if (error.response) {
+      throw error.response.data.message || 'Error sending password reset email';
     }
     throw new Error('An error occurred while sending reset password email.');
   }

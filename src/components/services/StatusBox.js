@@ -8,18 +8,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import NotaryDocumentDetailsModal from '../modals/NotaryDocumentDetailsModal';
 
-const StatusBox = ({ status, displayText }) => {
-  const [openModal, setOpenModal] = React.useState(false);
-  console.log('status', status);
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
+const StatusBox = ({ status, displayText, onOpenModal }) => {
   const renderIconByStatus = (status) => {
     switch (true) {
       case status.notFound:
@@ -102,14 +91,13 @@ const StatusBox = ({ status, displayText }) => {
               }}
               component="button"
               variant="body2"
-              onClick={handleOpenModal}
+              onClick={onOpenModal}
             >
               Xem chi tiết
             </Link>
           )}
         </Box>
       </Grow>
-      <NotaryDocumentDetailsModal open={openModal} handleClose={handleCloseModal} />
     </Box>
   );
 };
