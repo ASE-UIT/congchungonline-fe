@@ -1,13 +1,28 @@
 import { ArrowBack, PictureAsPdf, FileDownloadOutlined, Error, FiberManualRecord } from '@mui/icons-material';
-import { Box, IconButton, Modal, Typography } from '@mui/material';
+import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { blue, dark, green, red, yellow, black, white, gray } from '../../config/theme/themePrimitives';
+import { dark, red, yellow, black, white, gray } from '../../config/theme/themePrimitives';
 import NotaryStep from './NotaryStep';
+import NotarizationService from '../../services/notarization.service';
 
 const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => {
   console.log('notarizationData', notarizationData);
 
   const [currentStep] = useState(0);
+
+  const handleConfirm = async () => {
+    try {
+      const formattedData = {
+        ...notarizationData,
+        notaryField: notarizationData.notaryField.name,
+        notaryService: notarizationData.notaryService.name,
+      };
+      const response = await NotarizationService.uploadNotarizationDocument(formattedData);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const renderStatusBox = (status) => {
     switch (status) {
@@ -15,13 +30,14 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
         return (
           <Box
             sx={{
-              bgcolor: dark[50],
+              backgroundColor: dark[50],
               color: dark[500],
               borderRadius: '30px',
-              p: 1,
+              py: 0.5,
+              px: 2,
             }}
           >
-            <Typography variant="caption">Chưa xác nhận</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>Chưa xác nhận</Typography>
           </Box>
         );
 
@@ -29,84 +45,84 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
         return (
           <Box
             sx={{
-              bgcolor: dark[50],
+              backgroundColor: dark[50],
               color: dark[500],
               borderRadius: '30px',
-              px: '24px',
-              py: '4px',
+              py: 0.5,
+              px: 2,
             }}
           >
-            <Typography variant="caption">Chờ xử lý</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>Chờ xử lý</Typography>
           </Box>
         );
       case 'processing':
         return (
           <Box
             sx={{
-              bgcolor: yellow[50],
-              color: yellow[500],
+              backgroundColor: dark[50],
+              color: dark[500],
               borderRadius: '30px',
-              px: '24px',
-              py: '4px',
+              py: 0.5,
+              px: 2,
             }}
           >
-            <Typography variant="caption">Đang xử lý</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>Đang xử lý</Typography>
           </Box>
         );
       case 'receiving':
         return (
           <Box
             sx={{
-              bgcolor: 'error.main',
-              color: 'error.contrastText',
+              backgroundColor: dark[50],
+              color: dark[500],
               borderRadius: '30px',
-              px: '24px',
-              py: '4px',
+              py: 0.5,
+              px: 2,
             }}
           >
-            <Typography variant="caption">Tiếp nhận và sử lý</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>Tiếp nhận và sử lý</Typography>
           </Box>
         );
       case 'ready':
         return (
           <Box
             sx={{
-              bgcolor: blue[50],
-              color: blue[500],
+              backgroundColor: dark[50],
+              color: dark[500],
               borderRadius: '30px',
-              px: '24px',
-              py: '4px',
+              py: 0.5,
+              px: 2,
             }}
           >
-            <Typography variant="caption">Sẵn sàng ký số</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>Sẵn sàng ký số</Typography>
           </Box>
         );
       case 'completed':
         return (
           <Box
             sx={{
-              bgcolor: green[50],
-              color: green[500],
+              backgroundColor: dark[50],
+              color: dark[500],
               borderRadius: '30px',
-              px: '24px',
-              py: '4px',
+              py: 0.5,
+              px: 2,
             }}
           >
-            <Typography variant="caption">Hoàn tất</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>Hoàn tất</Typography>
           </Box>
         );
       default:
         return (
           <Box
             sx={{
-              bgcolor: red[50],
-              color: red[500],
+              backgroundColor: dark[50],
+              color: dark[500],
               borderRadius: '30px',
-              px: '24px',
-              py: '4px',
+              py: 0.5,
+              px: 2,
             }}
           >
-            <Typography variant="caption">Không hợp lệ</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>Không hợp lệ</Typography>
           </Box>
         );
     }
@@ -115,39 +131,56 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
   const renderFileBox = (file) => {
     return (
       <Box
-        padding={'8px'}
-        display={'flex'}
-        flexDirection={'row'}
-        gap={'16px'}
-        borderRadius={'8px'}
-        border={'1px solid'}
-        borderColor={dark[50]}
-        alignItems={'center'}
-        justifyContent={'space-between'}
+        sx={{
+          p: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 4,
+          borderRadius: 1,
+          boxShadow: 1,
+          border: `1px solid ${black[50]}`,
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
       >
         <Box
-          borderRadius={'100px'}
-          bgcolor={red[50]}
-          justifyContent={'center'}
-          alignItems={'center'}
-          display={'flex'}
-          padding={'8px'}
+          sx={{
+            borderRadius: 100,
+            backgroundColor: red[50],
+            justifyContent: 'center',
+            alignItems: 'center',
+            display: 'flex',
+            padding: 1,
+          }}
         >
-          <PictureAsPdf fontSize={'medium'} sx={{ color: red[500] }} />
-        </Box>
-        <Box display={'flex'} flexDirection={'column'} gap={'4px'}>
-          <Typography variant={'body2'}>{file.name}</Typography>
-          <Typography variant={'body3'}>{file.size}</Typography>
+          <PictureAsPdf fontSize={'small'} sx={{ color: red[500] }} />
         </Box>
         <Box
-          borderRadius={'100px'}
-          bgcolor={dark[50]}
-          justifyContent={'center'}
-          alignItems={'center'}
-          display={'flex'}
-          padding={'8px'}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1,
+            minWidth: '100px',
+            maxWidth: '100px',
+            whiteSpace: 'nowrap',
+            overflow: 'clip',
+            textOverflow: 'ellipsis',
+          }}
         >
-          <FileDownloadOutlined fontSize={'medium'} sx={{ color: black[900] }} />
+          <Typography sx={{ flex: 1, fontSize: 14, fontWeight: 500 }}>{file.name}</Typography>
+          <Typography sx={{ fontSize: 12, fontWeight: 400 }}>{file.size}</Typography>
+        </Box>
+        <Box
+          sx={{
+            borderRadius: 100,
+            backgroundColor: dark[50],
+            justifyContent: 'center',
+            alignItems: 'center',
+            display: 'flex',
+            padding: 1,
+          }}
+        >
+          <FileDownloadOutlined fontSize={'small'} sx={{ color: black[900] }} />
         </Box>
       </Box>
     );
@@ -168,13 +201,13 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
       >
         <Box
           borderRadius={'100px'}
-          bgcolor={yellow[50]}
+          backgroundColor={yellow[50]}
           justifyContent={'center'}
           alignItems={'center'}
           display={'flex'}
           padding={'8px'}
         >
-          <PictureAsPdf fontSize={'medium'} sx={{ color: yellow[500] }} />
+          <PictureAsPdf fontSize={'small'} sx={{ color: yellow[500] }} />
         </Box>
         <Box display={'flex'} flexDirection={'column'} gap={'4px'}>
           <Typography variant={'body2'}>{image.name}</Typography>
@@ -182,13 +215,13 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
         </Box>
         <Box
           borderRadius={'100px'}
-          bgcolor={dark[50]}
+          backgroundColor={dark[50]}
           justifyContent={'center'}
           alignItems={'center'}
           display={'flex'}
           padding={'8px'}
         >
-          <FileDownloadOutlined fontSize={'medium'} sx={{ color: black[900] }} />
+          <FileDownloadOutlined fontSize={'small'} sx={{ color: black[900] }} />
         </Box>
       </Box>
     );
@@ -237,7 +270,6 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
           </Box>
           {renderStatusBox(notarizationData.status)}
         </Box>
-
         {/* User Information Section */}
         <Box
           sx={{
@@ -256,29 +288,33 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
             <Typography variant="body3" flex={1}>
               Họ và tên:
             </Typography>
-            <Typography variant="body3">alksjdakjsdlkajsj</Typography>
+            <Typography variant="body3">{notarizationData?.requesterInfo?.fullName}</Typography>
           </Box>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
             <Typography variant="body3" flex={1} textAlign={'left'}>
               Số CMND/CCCD:
             </Typography>
-            <Typography variant="body3" flex={1} textAlign={'right'}></Typography>
+            <Typography variant="body3" flex={1} textAlign={'right'}>
+              {notarizationData?.requesterInfo?.citizenId}
+            </Typography>
           </Box>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
             <Typography variant="body3" flex={1} textAlign={'left'}>
               Số điện thoại:
             </Typography>
-            <Typography variant="body3" flex={1} textAlign={'right'}></Typography>
+            <Typography variant="body3" flex={1} textAlign={'right'}>
+              {notarizationData?.requesterInfo?.phoneNumber}
+            </Typography>
           </Box>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
             <Typography variant="body3" flex={1} textAlign={'left'}>
               Email:
             </Typography>
-            <Typography variant="body3" flex={1} textAlign={'right'}></Typography>
+            <Typography variant="body3" flex={1} textAlign={'right'}>
+              {notarizationData?.requesterInfo?.email}
+            </Typography>
           </Box>
         </Box>
-
-        {/* Type of Service Section */}
         <Box
           sx={{
             display: 'flex',
@@ -294,18 +330,21 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
           </Typography>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
             <Typography variant="body3" flex={1} textAlign={'left'}>
-              Loại dịch vụ công chứng:
+              Lĩnh vực công chứng:
             </Typography>
-            <Typography variant="body3" flex={1} textAlign={'right'}></Typography>
+            <Typography variant="body3" flex={1} textAlign={'right'}>
+              {notarizationData?.notaryField?.name}
+            </Typography>
           </Box>
           <Box display={'flex'} flexDirection={'row'} justifyContent={'space-between'}>
             <Typography variant="body3" flex={1} textAlign={'left'}>
-              Lĩnh vực công chứng:
+              Dịch vụ công chứng:
             </Typography>
-            <Typography variant="body3" flex={1} textAlign={'right'}></Typography>
+            <Typography variant="body3" flex={1} textAlign={'right'}>
+              {notarizationData?.notaryService?.name}
+            </Typography>
           </Box>
         </Box>
-
         {/* Files Section */}
         <Box
           sx={{
@@ -322,14 +361,15 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
             sx={{
               display: 'flex',
               flexDirection: 'row',
-              gap: '10px',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              gap: 1,
             }}
           >
             {notarizationData.files.map((file) => renderFileBox(file))}
           </Box>
         </Box>
-
-        {/* Images Section
+        {/* Images Section */}
         <Box
           sx={{
             display: 'flex',
@@ -347,105 +387,101 @@ const NotaryDocumentDetailsModal = ({ open, handleClose, notarizationData }) => 
               flexDirection: 'row',
               gap: '10px',
             }}
-          >
-            {document.images.map((image) => renderFileIcon(image))}
-          </Box>
-        </Box> */}
-
-        {/* Steps Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '32px',
-            p: '16px',
-          }}
-        >
-          <NotaryStep currentStep={currentStep} />
-          <Box flex={1} justifyContent={'top'} alignItems={'center'}>
+          ></Box>
+        </Box>
+        {notarizationData.status !== undefined && (
+          <>
+            {/* Steps Section */}
             <Box
-              flexDirection={'column'}
-              justifyContent={'left'}
-              alignItems={'center'}
-              padding={'16px'}
-              height={'fit-content'}
-              borderRadius={'8px'}
-              border={'1px solid'}
-              borderColor={dark[50]}
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '32px',
+                p: '16px',
+              }}
             >
-              <Typography textAlign={'left'} sx={{ fontSize: '14px', fontWeight: '600' }}>
-                Ghi chú
-              </Typography>
+              <NotaryStep currentStep={currentStep} />
               <Box
-                padding={'8px'}
-                display={'flex'}
-                flexDirection={'row'}
-                gap={'10px'}
-                borderRadius={'8px'}
-                backgroundColor={red[50]}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-                width={'fit-content'}
-                marginY={'16px'}
+                sx={{
+                  flex: 1,
+                  backgroundColor: white[50],
+                  boxShadow: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  p: 2,
+                  height: 'fit-content',
+                  borderRadius: 1,
+                  border: `1px solid ${black[50]}`,
+                }}
               >
-                <Error fontSize={'medium'} sx={{ color: red[400] }} />
-                <Typography sx={{ color: black[900], fontSize: '12px', fontWeight: '500' }}>
-                  Hồ sơ cần bổ sung thêm giấy tờ
-                </Typography>
-              </Box>
+                <Typography sx={{ fontSize: 14, fontWeight: 600, textAlign: 'left' }}>Ghi chú</Typography>
+                <Box
+                  sx={{
+                    p: 1,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 1,
+                    borderRadius: 1,
+                    backgroundColor: red[50],
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: 'fit-content',
+                    my: 2,
+                  }}
+                >
+                  <Error fontSize={'small'} sx={{ color: red[400] }} />
+                  <Typography sx={{ color: black[900], fontSize: 12, fontWeight: 500 }}>
+                    Hồ sơ cần bổ sung thêm giấy tờ
+                  </Typography>
+                </Box>
 
-              <Typography textAlign={'left'} sx={{ fontSize: '14px', fontWeight: '500', marginBottom: '8px' }}>
-                Tài liệu cần bổ sung
-              </Typography>
+                <Typography sx={{ fontSize: 14, fontWeight: 600, mb: 1, textAlign: 'left' }}>
+                  Tài liệu cần bổ sung
+                </Typography>
 
-              <Box
-                display={'flex'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-                width={'fit-content'}
-                gap={'10px'}
-                padding={'8px'}
-              >
-                <FiberManualRecord sx={{ color: black[900], width: '8px', height: '8px' }} />
-                <Typography sx={{ color: black[900], fontSize: '12px', fontWeight: '500' }}>
-                  Hồ sơ cần bổ sung thêm giấy tờ
-                </Typography>
-              </Box>
-              <Box
-                display={'flex'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-                width={'fit-content'}
-                gap={'10px'}
-                padding={'8px'}
-              >
-                <FiberManualRecord sx={{ color: black[900], width: '8px', height: '8px' }} />
-                <Typography sx={{ color: black[900], fontSize: '12px', fontWeight: '500' }}>
-                  Hồ sơ cần bổ sung thêm giấy tờ
-                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 1,
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: 'fit-content',
+                    p: 1,
+                  }}
+                >
+                  <FiberManualRecord sx={{ color: black[900], width: '8px', height: '8px' }} />
+                  <Typography sx={{ color: black[900], fontSize: 12, fontWeight: 400 }}>
+                    Giấy tờ chứng minh nhân dân
+                  </Typography>
+                </Box>
               </Box>
             </Box>
-          </Box>
-        </Box>
-        {/* Contact Section */}
-        <Box
-          sx={{
-            flexDirection: 'column',
-            gap: '16px',
-            p: '16px',
-            width: 'fit-content',
-            border: '1px solid',
-            borderColor: dark[50],
-            borderRadius: '8px',
-          }}
-        >
-          <Typography sx={{ color: black[900], fontSize: '14px', fontWeight: '600' }}>Hỗ trợ khách hàng</Typography>
-          <Typography sx={{ color: black[900], fontSize: '12px', fontWeight: '400' }}>
-            Liên hệ: 1900-123-456 hoặc email: support@notary.vn
-          </Typography>
-        </Box>
+            {/* Contact Section */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                p: 1,
+                width: 'fit-content',
+                border: `1px solid ${black[50]}`,
+                borderRadius: 1,
+                backgroundColor: gray[50],
+              }}
+            >
+              <Typography sx={{ color: black[900], fontSize: 14, fontWeight: 500, mb: 1 }}>Hỗ trợ khách hàng</Typography>
+              <Typography sx={{ color: black[900], fontSize: 12, fontWeight: 400 }}>
+                Liên hệ: 1900-123-456 hoặc email: support@notary.vn
+              </Typography>
+            </Box>
+          </>
+        )}
+
+        {notarizationData.status === undefined && (
+          <Button variant="contained" color="primary" onClick={handleConfirm}>
+            Xác nhận
+          </Button>
+        )}
       </Box>
     </Modal>
   );

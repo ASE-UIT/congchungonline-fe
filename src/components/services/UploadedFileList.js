@@ -1,16 +1,15 @@
 import React from 'react';
-import { List, LinearProgress, IconButton, Box, Typography } from '@mui/material';
+import { List, IconButton, Box, Typography } from '@mui/material';
 import {
   Cancel,
-  Autorenew,
   CheckCircle,
   PictureAsPdfRounded as PdfIcon,
   ArticleRounded as DocIcon,
   PhotoRounded as ImageIcon,
 } from '@mui/icons-material';
-import { black, blue, gray, green, red, white, yellow } from '../../config/theme/themePrimitives';
+import { black, blue, green, red, white, yellow } from '../../config/theme/themePrimitives';
 
-const UploadedFileList = ({ files, onRemove, onRetry }) => {
+const UploadedFileList = ({ files, onRemove }) => {
   const getFileIcon = (fileName) => {
     const extension = fileName.split('.').pop().toLowerCase();
     switch (extension) {
