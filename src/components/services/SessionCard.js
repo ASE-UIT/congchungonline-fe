@@ -1,13 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Card, CardContent, IconButton, Divider, Typography, Avatar, Menu, MenuItem } from '@mui/material';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { black, dark, red, white } from '../../config/theme/themePrimitives';
 import AvatarIcon from '../static/AvatarIcon';
+import UserService from '../../services/user.service';
 
-const SessionCard = () => {
+const SessionCard = React.memo(({ session }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [userEmail, setUserEmail] = useState('');
+  const [userName, setUserName] = useState('');
+  const [timeRemaining, setTimeRemaining] = useState('');
+
+  const fetchUserInfo = useCallback(async () => {
+    try {
+      const user = await UserService.getUserById(session.createdBy);
+      setUserName(user.name);
+      setUserEmail(user.email);
+    } catch (error) {
+      console.error('Error fetching user name: ', error);
+    }
+  }, [session.createdBy]);
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, [fetchUserInfo]);
+
+  useEffect(() => {
+    const calculateTimeRemaining = () => {
+      const endDate = new Date(session.endDate);
+      const now = new Date();
+      const durationRemaining = endDate - now;
+
+      if (durationRemaining > 0) {
+        const totalSecondsRemaining = Math.floor(durationRemaining / 1000);
+        const daysRemaining = Math.floor(totalSecondsRemaining / (60 * 60 * 24));
+        const hoursRemaining = Math.floor((totalSecondsRemaining % (60 * 60 * 24)) / (60 * 60));
+        const minutesRemaining = Math.floor((totalSecondsRemaining % (60 * 60)) / 60);
+
+        const timeStrings = [];
+        if (daysRemaining > 0) {
+          timeStrings.push(`${daysRemaining} ngày ${hoursRemaining} giờ`);
+        } else {
+          if (hoursRemaining > 0) {
+            timeStrings.push(`${hoursRemaining} giờ ${minutesRemaining} phút`);
+          } else {
+            timeStrings.push(`${minutesRemaining} phút`);
+          }
+        }
+
+        setTimeRemaining(timeStrings.join(' '));
+      } else {
+        setTimeRemaining('Đã kết thúc');
+      }
+    };
+
+    calculateTimeRemaining();
+  }, [session.endDate]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -54,9 +104,7 @@ const SessionCard = () => {
         }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box display="flex" alignItems="center">
-            <Avatar src="https://via.placeholder.com/40x40" sx={{ width: 40, height: 40, borderRadius: 1 }} />
-          </Box>
+          <Avatar src="https://via.placeholder.com/40x40" sx={{ width: 40, height: 40, borderRadius: 1 }} />
           <IconButton onClick={handleMenuOpen}>
             <MoreHorizRoundedIcon sx={{ fontSize: 24, color: black[300] }} />
           </IconButton>
@@ -82,8 +130,8 @@ const SessionCard = () => {
         </Box>
 
         <CardContent sx={{ px: 0, fontWeight: 500 }}>
-          <Typography sx={{ fontSize: 14, fontWeight: 500, color: black[900] }}>Tên phiên công chứng</Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 500, color: black[300] }}>tạo bởi nquynqthanq</Typography>
+          <Typography sx={{ fontSize: 14, fontWeight: 500, color: black[900] }}>{session.sessionName}</Typography>
+          <Typography sx={{ fontSize: 12, fontWeight: 500, color: black[300] }}>tạo bởi {userName}</Typography>
         </CardContent>
 
         <Divider />
@@ -100,7 +148,7 @@ const SessionCard = () => {
               alignItems: 'center',
             }}
           >
-            <Typography sx={{ fontSize: 10, fontWeight: 500, color: dark[500] }}>Vay-Mượn tài sản</Typography>
+            <Typography sx={{ fontSize: 10, fontWeight: 500, color: dark[500] }}>{session.notaryField.name}</Typography>
           </Box>
         </Box>
 
@@ -108,13 +156,16 @@ const SessionCard = () => {
           <Typography sx={{ flex: 1, fontSize: 10, fontWeight: 500 }}>Dịch vụ:</Typography>
           <Box sx={{ px: 1, py: 0.5, backgroundColor: dark[50], borderRadius: 1, display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ fontSize: 10, fontWeight: 500, color: dark[500] }}>
-              Công chứng hợp đồng vay mượn tài sản
+              {session.notaryService.name}
             </Typography>
           </Box>
         </Box>
 
         <Box display="flex" alignItems="center" mt={2}>
-          <AvatarIcon email={'Chsj'} />
+          <AvatarIcon email={userEmail || 'Undefined'} />
+          {session.users.map((user, index) => (
+            <AvatarIcon key={index} email={user.email} />
+          ))}
         </Box>
 
         <Box
@@ -133,12 +184,12 @@ const SessionCard = () => {
         >
           <ScheduleIcon sx={{ width: 12, height: 12 }} />
           <Typography color="#EE443F" sx={{ fontSize: 10, fontWeight: 500 }}>
-            Còn 2 ngày
+            Còn {timeRemaining}
           </Typography>
         </Box>
       </Card>
     </Box>
   );
-};
+});
 
 export default SessionCard;

@@ -8,17 +8,17 @@ const Usages = () => {
 
     const UsagesData = [
         {
-            image: require("../../assets/images/usages.png"),
+            image: require("../../assets/images/SaveTime.png"),
             title: "Tiết kiệm thời gian",
             content: "Bạn có thể thực hiện các thủ tục công chứng ngay tại nhà, không cần phải xếp hàng hay đến cơ quan công chứng trực tiếp.",
         },
         {
-            image: require("../../assets/images/usages.png"),
+            image: require("../../assets/images/FastConvenient.png"),
             title: "Nhanh chóng và tiện lợi",
             content: "Hệ thống trực tuyến cho phép bạn hoàn tất giao dịch chỉ với vài thao tác đơn giản, mọi quy trình đều được tối ưu hóa.",
         },
         {
-            image: require("../../assets/images/usages.png"),
+            image: require("../../assets/images/TransparencySafety.png"),
             title: "Minh bạch và an toàn",
             content: "Tất cả các giao dịch được thực hiện đảm bảo tính pháp lý, an toàn thông tin, và rõ ràng trong từng bước.",
         },

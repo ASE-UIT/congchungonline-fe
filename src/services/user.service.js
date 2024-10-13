@@ -15,8 +15,22 @@ const getUserById = async (id) => {
   }
 };
 
+const searchUserByEmail = async (email) => {
+  try {
+    const response = await axiosConfig.get(`${USER_ENDPOINT}/search-user-by-email/${email}`);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.status;
+    } else {
+      throw new Error('Network Error');
+    }
+  }
+}
+
 const UserService = {
   getUserById,
+  searchUserByEmail,
 };
 
 export default UserService;

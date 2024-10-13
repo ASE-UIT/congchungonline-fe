@@ -1,13 +1,60 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Typography, TextField, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import { black, gray, primary, white } from '../../config/theme/themePrimitives';
 import SessionCard from '../../components/services/SessionCard';
 import NotarySessionForm from './NotarySessionForm';
+import SessionService from '../../services/session.service';
 
 const CreateNotarizationSession = () => {
   const [openNotarySessionForm, setOpenNotarySessionForm] = useState(false);
+  const [sessions, setSessions] = useState([]);
+  const [searchingSessions, setSearchingSessions] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+
+  const fetchSessions = async () => {
+    const data = await SessionService.getAllSessions();
+    console.log('Session: ', data);
+    setSessions(data);
+  };
+
+  useEffect(() => {
+    fetchSessions();
+  }, []);
+
+  const handleAddSessionSuccess = useCallback(() => {
+    fetchSessions();
+  }, []);
+
+  function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  }
+
+  const handleSearch = useCallback(
+    debounce((value) => {
+      if (value === '') {
+        setSearchingSessions([]);
+      } else {
+        const searchResult = sessions.filter((session) =>
+          session.sessionName.toLowerCase().includes(value.toLowerCase())
+        );
+        setSearchingSessions(searchResult);
+      }
+    }, 1000),
+    [sessions]
+  );
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    handleSearch(value);
+  };
+
 
   return (
     <Box sx={{ display: 'flex', width: '100%', height: '100vh', flexDirection: 'column' }}>
@@ -97,6 +144,8 @@ const CreateNotarizationSession = () => {
             <TextField
               placeholder="Tìm kiếm phiên công chứng..."
               variant="outlined"
+              onChange={handleChange}
+              value={searchValue}
               sx={{
                 width: '100%',
                 '& fieldset': { border: 'none' },
@@ -116,42 +165,60 @@ const CreateNotarizationSession = () => {
               }}
             />
           </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              mt: 2,
-              justifyContent: { sm: 'center', md: 'center', lg: 'space-between', xl: 'space-between' },
-              position: 'relative',
-              '&:after': {
-                content: '""',
-                flexBasis: {
-                  xs: '100%',
-                  sm: 'calc(50%)',
-                  md: 'calc(33.33%)',
+          {sessions.length > 0 ? (
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                mt: 2,
+                justifyContent: { sm: 'center', md: 'center', lg: 'space-between', xl: 'space-between' },
+                position: 'relative',
+                '&:after': {
+                  content: '""',
+                  flexBasis: {
+                    xs: '100%',
+                    sm: 'calc(50%)',
+                    md: 'calc(33.33%)',
+                  },
+                  display: 'block',
+                  visibility: 'hidden',
                 },
-                display: 'block',
-                visibility: 'hidden',
-              },
-              '& > *': {
-                mx: 1,
-              },
-            }}
-          >
-            <SessionCard />
-            <SessionCard />
-            <SessionCard />
-          </Box>
+                '& > *': {
+                  mx: 1,
+                },
+              }}
+            >
+              {searchingSessions.length > 0 ? (
+                searchingSessions.map((session, index) => <SessionCard key={index} session={session} />)
+              ) : (
+                sessions.map((session, index) => <SessionCard key={index} session={session} />)
+              )}
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+              }}
+            >
+              <Typography variant="body2" sx={{ color: black[300] }}>
+                Không có phiên công chứng nào
+              </Typography>
+            </Box>
+          )}
+
         </Box>
+        <NotarySessionForm
+          open={openNotarySessionForm}
+          onClose={() => {
+            setOpenNotarySessionForm(false);
+          }}
+          onSuccess={handleAddSessionSuccess}
+        />
       </Box>
-      <NotarySessionForm
-        open={openNotarySessionForm}
-        onClose={() => {
-          setOpenNotarySessionForm(false);
-        }}
-      />
     </Box>
   );
-};
-
+}
 export default CreateNotarizationSession;
