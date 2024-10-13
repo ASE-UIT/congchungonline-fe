@@ -9,6 +9,6 @@ compatibility_date = "2024-09-23"
 [vars]
 REACT_APP_API_BASE_URL="https://congchungonline.up.railway.app/v1"
 
-[build]
+[main]
 command = "npm run build"
 dir = "./build"
