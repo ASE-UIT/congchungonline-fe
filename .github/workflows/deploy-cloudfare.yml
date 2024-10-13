@@ -30,4 +30,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          commands: npx wrangler pages deploy --project-name congchungonline --branch deploy-cloudfare ./build
+          commands: wrangler pages deploy --project-name congchungonline --branch deploy-cloudfare ./build
