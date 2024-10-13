@@ -3,8 +3,12 @@ type = "javascript"
 
 account_id = "b08af9cbf48e70be8bfcc49eb6667739" 
 compatibility_flags = [ "nodejs_compat_v2" ]
-
+compatibility_date = "2024-09-23"
 # Specify build commands
+
+[vars]
+REACT_APP_API_BASE_URL=https://congchungonline.up.railway.app/v1
+
 [build]
 command = "npm run build"
 dir = "./build"
