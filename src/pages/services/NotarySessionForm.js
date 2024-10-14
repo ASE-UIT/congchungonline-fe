@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Box, Typography, TextField, IconButton, Button, Autocomplete, Modal, styled } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { black, gray, white } from '../../config/theme/themePrimitives';
@@ -13,6 +13,213 @@ import UserService from '../../services/user.service';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const CustomAutocomplete = ({
+  options,
+  value,
+  onChange,
+  placeholder,
+  loading,
+  fetchOptions,
+  isSubmitting,
+}) => (
+  <Autocomplete
+    loading={loading}
+    options={options}
+    getOptionLabel={(option) => option.name}
+    onChange={onChange}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        inputProps={{ ...params.inputProps, readOnly: true }}
+        sx={{
+          '& fieldset': { border: 'none' },
+          mt: 1,
+          backgroundColor: gray[50],
+          borderRadius: 1,
+          '& .MuiInputBase-input': {
+            fontSize: 14,
+          },
+        }}
+        placeholder={placeholder}
+      />
+    )}
+    renderOption={(props, option) => (
+      <li
+        {...props}
+        key={option.id}
+        style={{
+          fontSize: '14px',
+          fontWeight: 'regular',
+        }}
+      >
+        {option.name}
+      </li>
+    )}
+    value={value}
+    onOpen={fetchOptions}
+    disabled={isSubmitting}
+    loadingText={
+      <Typography sx={{ fontSize: '14px', fontWeight: 'regular', color: gray[600] }}>
+        Đang tải...
+      </Typography>
+    }
+    noOptionsText={
+      <Typography sx={{ fontSize: '14px', fontWeight: 'regular', color: gray[600] }}>
+        Không tìm thấy kết quả
+      </Typography>
+    }
+  />
+);
+
+const DateTimePickerSection = ({
+  label,
+  startDate,
+  setStartDate,
+  startTime,
+  setStartTime,
+  isSubmitting
+}) => (
+  <Box>
+    <Typography variant="body2">{label}</Typography>
+    <Box sx={{ display: 'flex', flexDirection: 'row', mb: 2 }}>
+      {/* Date Picker */}
+      <Box sx={{ mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
+        <DatePicker
+          value={startDate}
+          onChange={(newValue) => setStartDate(newValue)}
+          slotProps={{
+            textField: {
+              variant: 'outlined',
+              fullWidth: true,
+              sx: {
+                '& fieldset': { border: 'none' },
+                mt: 1,
+                backgroundColor: gray[50],
+                borderRadius: 1,
+                '& .MuiInputBase-input': { fontSize: 14 },
+              },
+            },
+          }}
+          format='DD/MM/YYYY'
+          disabled={isSubmitting}
+        />
+      </Box>
+      {/* Time Picker */}
+      <Box sx={{ mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
+        <TimePicker
+          value={startTime}
+          onChange={(newValue) => setStartTime(newValue)}
+          ampm={false}
+          slotProps={{
+            textField: {
+              variant: 'outlined',
+              fullWidth: true,
+              sx: {
+                '& fieldset': { border: 'none' },
+                mt: 1,
+                backgroundColor: gray[50],
+                borderRadius: 1,
+                '& .MuiInputBase-input': { fontSize: 14 },
+              },
+            },
+          }}
+          format='HH:mm'
+          disabled={isSubmitting}
+        />
+      </Box>
+    </Box>
+  </Box>
+);
+
+const GuestSection = ({
+  value,
+  options,
+  handleInputChange,
+  handleAddGuest,
+  users,
+  handleRemoveGuest,
+  loading,
+  isSubmitting,
+}) => (
+  <Box sx={{ mb: 2 }}>
+    <Typography variant="body2">Thêm khách mời</Typography>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        mt: 1,
+        backgroundColor: gray[50],
+        borderRadius: 1,
+      }}
+    >
+      {/* Guest Autocomplete */}
+      <Autocomplete
+        value={value}
+        loading={loading}
+        options={options}
+        getOptionLabel={(option) => option?.email || option}
+        onInputChange={handleInputChange}
+        sx={{ flexGrow: 1 }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="outlined"
+            placeholder="Nhập email khách mời"
+            sx={{
+              flexGrow: 1,
+              '& fieldset': { border: 'none' },
+              '& .MuiInputBase-input': { fontSize: '14px' },
+            }}
+            onKeyDown={(event) => event.key === 'Enter' && handleAddGuest()}
+          />
+        )}
+        renderOption={(props, option) => (
+          <li
+            {...props}
+            key={typeof option === 'string' ? option : option.id}
+            style={{ fontSize: '14px', fontWeight: 'regular' }}
+          >
+            {typeof option === 'string' ? option : option.email}
+          </li>
+        )}
+        disabled={isSubmitting}
+        loadingText={
+          <Typography sx={{ fontSize: '14px', fontWeight: 'regular', color: gray[600] }}>
+            Đang tải...
+          </Typography>
+        }
+        noOptionsText={
+          <Typography sx={{ fontSize: '14px', fontWeight: 'regular', color: gray[600] }}>
+            Không tìm thấy kết quả
+          </Typography>
+        }
+      />
+
+      <Button
+        size="small"
+        variant="contained"
+        onClick={handleAddGuest}
+        sx={{ fontSize: 14, backgroundColor: white[50], color: black[900], textTransform: 'none', mr: 1 }}
+        disabled={isSubmitting}
+      >
+        Thêm
+      </Button>
+    </Box>
+
+    {/* Added Guests */}
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 2 }}>
+      {users.map((guest, index) => (
+        <AvatarWithCloseButton
+          key={index}
+          email={guest.email}
+          onRemove={() => handleRemoveGuest(guest.email)}
+        />
+      ))}
+    </Box>
+  </Box>
+);
+
+
 const CustomTextField = styled(TextField)(({ theme }) => ({
   '& fieldset': { border: 'none' },
   marginTop: theme.spacing(1),
@@ -23,7 +230,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-const NotarySessionForm = ({ open, onClose, onSuccess }) => {
+const NotarySessionForm = ({ open, setOpen, handleSuccess }) => {
   const [startDate, setStartDate] = useState(dayjs());
   const [startTime, setStartTime] = useState(dayjs());
 
@@ -33,8 +240,6 @@ const NotarySessionForm = ({ open, onClose, onSuccess }) => {
   const [email, setEmail] = useState('');
   const [users, setUsers] = useState([]);
   const [options, setOptions] = useState([]);
-
-  const [inputValue, setInputValue] = useState('');
 
   const [notarizationFields, setNotarizationFields] = useState([]);
   const [notarizationServices, setNotarizationServices] = useState([]);
@@ -56,17 +261,11 @@ const NotarySessionForm = ({ open, onClose, onSuccess }) => {
 
   const fetchEmails = useCallback(
     debounce(async (value) => {
-      if (!value) {
-        setOptions([]);
-        return;
-      }
-
       setLoading(true);
       try {
         const response = await UserService.searchUserByEmail(value);
-        setOptions(response || []);
+        setOptions(response);
       } catch (error) {
-        console.error('Error fetching emails:', error);
         setOptions([]);
       } finally {
         setLoading(false);
@@ -76,7 +275,6 @@ const NotarySessionForm = ({ open, onClose, onSuccess }) => {
   );
 
   const handleInputChange = (event, newValue) => {
-    setInputValue(newValue);
     setEmail(newValue);
     fetchEmails(newValue);
   };
@@ -116,24 +314,15 @@ const NotarySessionForm = ({ open, onClose, onSuccess }) => {
     }
   };
 
+
   useEffect(() => {
     setNotarizationServices([]);
     setNotaryService(null);
   }, [notaryField]);
 
   const handleCreateSession = async () => {
-    if (!sessionName) {
-      toast.error('Vui lòng nhập tên phiên công chứng.');
-      return;
-    }
-
-    if (!notaryField || !notaryService) {
-      toast.error('Vui lòng chọn lĩnh vực và dịch vụ công chứng.');
-      return;
-    }
-
-    if (!endDate || !endTime) {
-      toast.error('Vui lòng chọn thời gian kết thúc.');
+    if (!sessionName || !notaryField || !notaryService || !startDate || !startTime) {
+      toast.error('Vui lòng nhập đầy đủ thông tin.');
       return;
     }
 
@@ -159,9 +348,8 @@ const NotarySessionForm = ({ open, onClose, onSuccess }) => {
       const response = await SessionService.createSession(session);
       if (response) {
         toast.success('Tạo phiên công chứng thành công.');
-        resetForm();
-        onSuccess();
-        onClose();
+        handleSuccess();
+        handleOnClose();
       }
     } catch (error) {
       console.error('Error creating session:', error);
@@ -209,20 +397,25 @@ const NotarySessionForm = ({ open, onClose, onSuccess }) => {
 
     setUsers((prev) => [...prev, { email }]);
     setEmail('');
-    setInputValue('');
   };
 
   const handleOnClose = () => {
+    if (isSubmitting) {
+      return;
+    }
     resetForm();
-    onClose();
+    setOpen(false);
   }
 
   return (
-    <Modal open={open} onClose={handleOnClose} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <Modal
+      open={open}
+      onClose={handleOnClose}
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
       <Box
         sx={{
           width: { xs: '90vw', sm: '80vw', md: '70vw' },
-          maxHeight: '80vh',
           p: 4,
           backgroundColor: white[50],
           borderRadius: 2,
@@ -254,236 +447,71 @@ const NotarySessionForm = ({ open, onClose, onSuccess }) => {
           <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: 2 }}>
             <Box sx={{ flex: '1 1 30%', mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
               <Typography variant="body2">Lĩnh vực công chứng</Typography>
-              <Autocomplete
-                loading={loading}
+              <CustomAutocomplete
                 options={notarizationFields}
-                getOptionLabel={(option) => option.name}
-                onChange={(e, value) => setNotaryField(value)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    inputProps={{ ...params.inputProps, readOnly: true }}
-                    sx={{
-                      '& fieldset': { border: 'none' },
-                      mt: 1,
-                      backgroundColor: gray[50],
-                      borderRadius: 1,
-                      '& .MuiInputBase-input': {
-                        fontSize: 14,
-                      },
-                    }}
-                    placeholder='Chọn lĩnh vực công chứng'
-                  />
-                )}
                 value={notaryField}
-                onOpen={fetchNotarizationField}
-                disabled={isSubmitting}
+                onChange={(e, value) => setNotaryField(value)}
+                placeholder="Chọn lĩnh vực công chứng"
+                loading={loading}
+                fetchOptions={fetchNotarizationField}
+                isSubmitting={isSubmitting}
               />
             </Box>
             <Box sx={{ flex: '1 1 30%', mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
               <Typography variant="body2">Dịch vụ công chứng</Typography>
-              <Autocomplete
-                loading={loading}
+              <CustomAutocomplete
                 options={notarizationServices}
-                getOptionLabel={(option) => option.name}
-                onChange={(e, value) => setNotaryService(value)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    inputProps={{ ...params.inputProps, readOnly: true }}
-                    sx={{
-                      '& fieldset': { border: 'none' },
-                      mt: 1,
-                      backgroundColor: gray[50],
-                      borderRadius: 1,
-                      '& .MuiInputBase-input': {
-                        fontSize: 14,
-                      },
-                    }}
-                    placeholder='Chọn dịch vụ công chứng'
-                  />
-                )}
                 value={notaryService}
-                onOpen={fetchNotarizationService}
-                disabled={isSubmitting}
+                onChange={(e, value) => setNotaryService(value)}
+                placeholder="Chọn dịch vụ công chứng"
+                loading={loading}
+                fetchOptions={fetchNotarizationService}
+                isSubmitting={isSubmitting}
               />
             </Box>
           </Box>
 
-          {/* Start Date and Time */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="body2">Thời gian bắt đầu</Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: 2 }}>
-              {/* Start Date Picker */}
-              <Box sx={{ flex: '1 1 30%', mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
-                <DatePicker
-                  value={startDate}
-                  onChange={(newValue) => setStartDate(newValue)}
-                  slotProps={{
-                    textField: {
-                      variant: 'outlined',
-                      fullWidth: true,
-                      sx: {
-                        '& fieldset': { border: 'none' },
-                        mt: 1,
-                        backgroundColor: gray[50],
-                        borderRadius: 1,
-                        '& .MuiInputBase-input': {
-                          fontSize: 14,
-                        },
-                      },
-                    },
-                  }}
-                  format='DD/MM/YYYY'
-                  disabled={isSubmitting}
-                />
-              </Box>
-              {/* Start Time Picker */}
-              <Box sx={{ flex: '1 1 30%', mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
-                <TimePicker
-                  value={startTime}
-                  onChange={(newValue) => setStartTime(newValue)}
-                  ampm={false}
-                  slotProps={{
-                    textField: {
-                      variant: 'outlined',
-                      fullWidth: true,
-                      sx: {
-                        '& fieldset': { border: 'none' },
-                        mt: 1,
-                        backgroundColor: gray[50],
-                        borderRadius: 1,
-                        '& .MuiInputBase-input': {
-                          fontSize: 14,
-                        },
-                      },
-                    },
-                  }}
-                  format='HH:mm'
-                  disabled={isSubmitting}
-                />
-              </Box>
-            </Box>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 2,
+          }}>
+            <DateTimePickerSection
+              label="Thời gian bắt đầu"
+              startDate={startDate}
+              setStartDate={setStartDate}
+              startTime={startTime}
+              setStartTime={setStartTime}
+              isSubmitting={isSubmitting}
+            />
+            <DateTimePickerSection
+              label="Thời gian kết thúc"
+              startDate={endDate}
+              setStartDate={setEndDate}
+              startTime={endTime}
+              setStartTime={setEndTime}
+              isSubmitting={isSubmitting}
+            />
           </Box>
 
-          {/* End Date and Time */}
+          {/* Duration */}
           <Box sx={{ mb: 2 }}>
-            <Typography variant="body2">Thời gian kết thúc</Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: 2 }}>
-              {/* End Date Picker */}
-              <Box sx={{ flex: '1 1 30%', mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
-                <DatePicker
-                  value={endDate}
-                  onChange={(newValue) => setEndDate(newValue)}
-                  slotProps={{
-                    textField: {
-                      variant: 'outlined',
-                      fullWidth: true,
-                      sx: {
-                        '& fieldset': { border: 'none' },
-                        mt: 1,
-                        backgroundColor: gray[50],
-                        borderRadius: 1,
-                        '& .MuiInputBase-input': {
-                          fontSize: 14,
-                        },
-                      },
-                    },
-                  }}
-                  format='DD/MM/YYYY'
-                  disabled={isSubmitting}
-                />
-              </Box>
-              {/* End Time Picker */}
-              <Box sx={{ flex: '1 1 30%', mr: { xs: 0, sm: 2 }, mb: { xs: 2, sm: 0 } }}>
-                <TimePicker
-                  value={endTime}
-                  onChange={(newValue) => setEndTime(newValue)}
-                  ampm={false}
-                  slotProps={{
-                    textField: {
-                      variant: 'outlined',
-                      fullWidth: true,
-                      sx: {
-                        '& fieldset': { border: 'none' },
-                        mt: 1,
-                        backgroundColor: gray[50],
-                        borderRadius: 1,
-                        '& .MuiInputBase-input': {
-                          fontSize: 14,
-                        },
-                      },
-                    },
-                  }}
-                  format='HH:mm'
-                  disabled={isSubmitting}
-                />
-              </Box>
-            </Box>
-            <Typography variant="caption" sx={{ mb: 2, color: black[400] }}>
+            <Typography variant="caption" sx={{ color: black[400] }}>
               Sự kiện này sẽ diễn ra từ {startDate.format('DD/MM/YYYY')} - {startTime.format('HH:mm')} đến {endDate ? endDate.format('DD/MM/YYYY') : '.. / .. / ..'} - {endTime ? endTime.format('HH:mm') : '.. : ..'}
             </Typography>
           </Box>
 
-          {/* Add Guests */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-            <Typography variant="body2">Thêm khách mời</Typography>
-            <Box
-              sx={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                mt: 1,
-                backgroundColor: gray[50],
-                borderRadius: 1,
-              }}
-            >
-              <Autocomplete
-                freeSolo
-                value={email}
-                inputValue={inputValue}
-                options={options.map(option => option.email)}
-                onInputChange={handleInputChange}
-                sx={{ flexGrow: 1 }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    placeholder="Nhập email khách mời"
-                    sx={{
-                      flexGrow: 1,
-                      '& fieldset': { border: 'none' },
-                      '& .MuiInputBase-input': { fontSize: '14px' },
-                    }}
-                    onKeyDown={(event) => event.key === 'Enter' && handleAddGuest()}
-                  />
-                )}
-                loading={loading}
-                disabled={isSubmitting}
-              />
-
-              <Button
-                size="small"
-                variant="contained"
-                onClick={handleAddGuest}
-                sx={{ fontSize: 14, backgroundColor: white[50], color: black[900], textTransform: 'none', mr: 1 }}
-                disabled={isSubmitting}
-              >
-                Thêm
-              </Button>
-            </Box>
-          </Box>
-
-          {/* Added Guests */}
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', mb: 2 }}>
-            {users.map((guest, index) => (
-              <AvatarWithCloseButton
-                key={index}
-                email={guest.email}
-                onRemove={() => handleRemoveGuest(guest.email)}
-              />
-            ))}
-          </Box>
+          {/* Guests */}
+          <GuestSection
+            value={email}
+            options={options}
+            handleInputChange={handleInputChange}
+            handleAddGuest={handleAddGuest}
+            users={users}
+            handleRemoveGuest={handleRemoveGuest}
+            loading={loading}
+            isSubmitting={isSubmitting}
+          />
 
           {/* Actions */}
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>

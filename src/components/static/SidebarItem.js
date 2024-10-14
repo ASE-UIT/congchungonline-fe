@@ -14,7 +14,7 @@ const SidebarItem = ({ type, icon, title, selectedMenu, openSideBar, onClick, te
   };
 
   return (
-    <ListItem button disablePadding onClick={onClick} sx={itemStyles}>
+    <ListItem disablePadding onClick={onClick} sx={itemStyles}>
       <ListItemIcon
         sx={{
           minWidth: 0,

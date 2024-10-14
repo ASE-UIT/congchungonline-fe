@@ -2,30 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Card, CardContent, IconButton, Divider, Typography, Avatar, Menu, MenuItem } from '@mui/material';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import { black, dark, red, white } from '../../config/theme/themePrimitives';
+import { black, dark, red, white, yellow } from '../../config/theme/themePrimitives';
 import AvatarIcon from '../static/AvatarIcon';
-import UserService from '../../services/user.service';
 
 const SessionCard = React.memo(({ session }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const [userEmail, setUserEmail] = useState('');
-  const [userName, setUserName] = useState('');
   const [timeRemaining, setTimeRemaining] = useState('');
-
-  const fetchUserInfo = useCallback(async () => {
-    try {
-      const user = await UserService.getUserById(session.createdBy);
-      setUserName(user.name);
-      setUserEmail(user.email);
-    } catch (error) {
-      console.error('Error fetching user name: ', error);
-    }
-  }, [session.createdBy]);
-
-  useEffect(() => {
-    fetchUserInfo();
-  }, [fetchUserInfo]);
+  const [remainingTimeColor, setRemainingTimeColor] = useState({
+    color: black[500],
+    backgroundColor: black[50],
+  });
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
@@ -48,6 +35,14 @@ const SessionCard = React.memo(({ session }) => {
           } else {
             timeStrings.push(`${minutesRemaining} phút`);
           }
+        }
+
+        if (daysRemaining >= 5) {
+          setRemainingTimeColor({ color: black[500], backgroundColor: black[50] });
+        } else if (daysRemaining >= 2) {
+          setRemainingTimeColor({ color: yellow[500], backgroundColor: yellow[50] });
+        } else {
+          setRemainingTimeColor({ color: red[500], backgroundColor: red[50] });
         }
 
         setTimeRemaining(timeStrings.join(' '));
@@ -131,7 +126,7 @@ const SessionCard = React.memo(({ session }) => {
 
         <CardContent sx={{ px: 0, fontWeight: 500 }}>
           <Typography sx={{ fontSize: 14, fontWeight: 500, color: black[900] }}>{session.sessionName}</Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 500, color: black[300] }}>tạo bởi {userName}</Typography>
+          <Typography sx={{ fontSize: 12, fontWeight: 500, color: black[300] }}>tạo bởi {session.creator.name}</Typography>
         </CardContent>
 
         <Divider />
@@ -162,7 +157,7 @@ const SessionCard = React.memo(({ session }) => {
         </Box>
 
         <Box display="flex" alignItems="center" mt={2}>
-          <AvatarIcon email={userEmail || 'Undefined'} />
+          <AvatarIcon email={session.creator.email || 'Undefined'} />
           {session.users.map((user, index) => (
             <AvatarIcon key={index} email={user.email} />
           ))}
@@ -171,8 +166,8 @@ const SessionCard = React.memo(({ session }) => {
         <Box
           sx={{
             alignSelf: 'flex-start',
-            backgroundColor: red[50],
-            color: red[500],
+            backgroundColor: remainingTimeColor.backgroundColor,
+            color: remainingTimeColor.color,
             gap: 1,
             px: 1,
             py: 0.5,
@@ -183,7 +178,7 @@ const SessionCard = React.memo(({ session }) => {
           }}
         >
           <ScheduleIcon sx={{ width: 12, height: 12 }} />
-          <Typography color="#EE443F" sx={{ fontSize: 10, fontWeight: 500 }}>
+          <Typography sx={{ fontSize: 10, fontWeight: 500 }}>
             Còn {timeRemaining}
           </Typography>
         </Box>

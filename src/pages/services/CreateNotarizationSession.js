@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Button, Typography, TextField, InputAdornment } from '@mui/material';
+import { Box, Button, Typography, TextField, InputAdornment, Skeleton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
-import { black, gray, primary, white } from '../../config/theme/themePrimitives';
+import { black, dark, gray, primary, white } from '../../config/theme/themePrimitives';
 import SessionCard from '../../components/services/SessionCard';
 import NotarySessionForm from './NotarySessionForm';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
+import UserService from '../../services/user.service';
 import SessionService from '../../services/session.service';
 
 const CreateNotarizationSession = () => {
@@ -12,12 +16,31 @@ const CreateNotarizationSession = () => {
   const [sessions, setSessions] = useState([]);
   const [searchingSessions, setSearchingSessions] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const sessionsPerPage = 6;
 
   const fetchSessions = async () => {
-    const data = await SessionService.getAllSessions();
-    console.log('Session: ', data);
-    setSessions(data);
+    setLoading(true);
+    try {
+      const data = await SessionService.getAllSessions();
+      const sessions = await Promise.all(
+        data.map(async (session) => {
+          const creatorData = await UserService.getUserById(session.createdBy);
+          return {
+            ...session,
+            creator: creatorData,
+          };
+        })
+      );
+      setSessions(sessions);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   useEffect(() => {
     fetchSessions();
@@ -45,7 +68,7 @@ const CreateNotarizationSession = () => {
         );
         setSearchingSessions(searchResult);
       }
-    }, 1000),
+    }, 300),
     [sessions]
   );
 
@@ -53,8 +76,40 @@ const CreateNotarizationSession = () => {
     const value = e.target.value;
     setSearchValue(value);
     handleSearch(value);
+    setCurrentPage(1);
   };
 
+  const indexOfLastSession = currentPage * sessionsPerPage;
+  const indexOfFirstSession = indexOfLastSession - sessionsPerPage;
+  const currentSessions = searchingSessions.length > 0
+    ? searchingSessions.slice(indexOfFirstSession, indexOfLastSession)
+    : sessions.slice(indexOfFirstSession, indexOfLastSession);
+
+  const totalSessions = searchingSessions.length > 0 ? searchingSessions.length : sessions.length;
+  const totalPages = Math.ceil(totalSessions / sessionsPerPage);
+
+  const handlePageChange = (event, page) => {
+    setCurrentPage(page);
+  };
+
+  const skeletons = Array.from({ length: sessionsPerPage }).map((_, index) => (
+    <Box
+      sx={{
+        width: {
+          xs: '100%',
+          sm: 'calc(50% - 24px)',
+          md: 'calc(33.33% - 24px)',
+        },
+        mb: 2
+      }}
+      key={index}
+    >
+      <Skeleton variant="rectangular" width="100%" height={140} />
+      <Skeleton width="60%" height={30} sx={{ mt: 1 }} />
+      <Skeleton width="80%" height={20} />
+      <Skeleton width="40%" height={20} />
+    </Box>
+  ));
 
   return (
     <Box sx={{ display: 'flex', width: '100%', height: '100vh', flexDirection: 'column' }}>
@@ -165,7 +220,7 @@ const CreateNotarizationSession = () => {
               }}
             />
           </Box>
-          {sessions.length > 0 ? (
+          {loading ? (
             <Box
               sx={{
                 display: 'flex',
@@ -188,11 +243,34 @@ const CreateNotarizationSession = () => {
                 },
               }}
             >
-              {searchingSessions.length > 0 ? (
-                searchingSessions.map((session, index) => <SessionCard key={index} session={session} />)
-              ) : (
-                sessions.map((session, index) => <SessionCard key={index} session={session} />)
-              )}
+              {skeletons}
+            </Box>
+          ) : sessions.length > 0 ? (
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                mt: 2,
+                justifyContent: { sm: 'center', md: 'center', lg: 'space-between', xl: 'space-between' },
+                position: 'relative',
+                '&:after': {
+                  content: '""',
+                  flexBasis: {
+                    xs: '100%',
+                    sm: 'calc(50%)',
+                    md: 'calc(33.33%)',
+                  },
+                  display: 'block',
+                  visibility: 'hidden',
+                },
+                '& > *': {
+                  mx: 1,
+                },
+              }}
+            >
+              {currentSessions.map((session, index) => (
+                <SessionCard key={index} session={session} />
+              ))}
             </Box>
           ) : (
             <Box
@@ -208,17 +286,47 @@ const CreateNotarizationSession = () => {
               </Typography>
             </Box>
           )}
-
         </Box>
+        {/* Pagination Controls */}
+        <Stack spacing={2} sx={{ alignItems: 'flex-end', mr: 2 }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            showFirstButton
+            showLastButton
+            sx={{
+              '& .MuiPaginationItem-root': {
+                color: gray[400],
+                border: `1px solid ${gray[300]}`,
+                fontSize: 14,
+                '&.Mui-selected': {
+                  border: `1px solid ${dark[500]}`,
+                  color: dark[500],
+                  backgroundColor: 'transparent',
+                },
+                '&:hover': {
+                  border: `1px solid ${dark[500]}`,
+                  color: dark[500],
+                  backgroundColor: 'transparent',
+                },
+                borderRadius: '4px',
+                fontWeight: 'bold',
+                backgroundColor: 'transparent',
+              },
+            }}
+          />
+        </Stack>
+
+        {/* Creating Session Modal */}
         <NotarySessionForm
           open={openNotarySessionForm}
-          onClose={() => {
-            setOpenNotarySessionForm(false);
-          }}
-          onSuccess={handleAddSessionSuccess}
+          setOpen={setOpenNotarySessionForm}
+          handleSuccess={handleAddSessionSuccess}
         />
       </Box>
     </Box>
   );
-}
+};
+
 export default CreateNotarizationSession;

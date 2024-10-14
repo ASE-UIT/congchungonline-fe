@@ -34,19 +34,19 @@ const StatusBox = ({ status, displayText, onOpenModal }) => {
       case status.notFound:
         return (
           <Typography sx={{ fontSize: 14 }}>
-            Không tìm thấy yêu cầu công chứng: <strong>{displayText}</strong>
+            Không tìm thấy hồ sơ: <strong>{displayText}</strong>
           </Typography>
         );
       case status.searching:
         return (
           <Typography sx={{ fontSize: 14 }}>
-            Đang tìm hồ sơ có số: <strong>{displayText}</strong>
+            Đang tìm hồ sơ: <strong>{displayText}</strong>
           </Typography>
         );
       case status.found:
         return (
           <Typography sx={{ fontSize: 14 }}>
-            Đã tìm thấy hồ sơ có số: <strong>{displayText}</strong>
+            Đã tìm thấy hồ sơ: <strong>{displayText}</strong>
           </Typography>
         );
       default:
@@ -59,6 +59,8 @@ const StatusBox = ({ status, displayText, onOpenModal }) => {
       sx={{
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
+        height: '100%',
       }}
     >
       <Grow in={true} timeout={400}>
