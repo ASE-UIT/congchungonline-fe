@@ -39,10 +39,22 @@ const getAllNotarizationService = async () => {
   }
 };
 
+const getHistory = async () => {
+  try {
+    const response = await axiosConfig.get(`${NOTARIZATION_ENDPOINT}/history`);
+    return response.data;
+  } catch (error) {
+    const status = error.response?.status;
+    const message = error.response?.data?.message;
+    throw { status, message };
+  }
+};
+
 const NotarizationService = {
   getStatusById,
   getAllNotarizationField,
   getAllNotarizationService,
+  getHistory,
 };
 
 export default NotarizationService;

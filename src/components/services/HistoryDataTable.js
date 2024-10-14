@@ -1,5 +1,5 @@
 import * as React from 'react';
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,35 +13,6 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
-
-function createData(id, profile, date, name, status, service) {
-  return {
-    id,
-    profile,
-    date,
-    name,
-    status,
-    service,
-  };
-}
-
-const rows = [
-  createData(1, '#0001', '12/07/2004', 'Võ Trần Minh Tuấn', 'Đang xử lý', 'Cell'),
-  createData(2, '#0002', '13/08/2004', 'Đặng Thái Tuấn', 'Chờ xử lý', 'Cell'),
-  createData(3, '#0003', '2/11/1942', 'Mai Chiến Thắng', 'Sẵn sàng ký số', 'Cell'),
-  createData(4, '#0004', '19/02/1981', 'Võ Minh Tú', 'Hoàn tất', 'Cell'),
-  createData(5, '#0005', '28/01/1999', 'Trần Thanh Vy', 'Không hợp lệ', 'Cell'),
-  createData(6, '#0006', '12/07/2004', 'Trần Thanh Vy', 'Đang xử lý', 'Cell'),
-  createData(7, '#0007', '12/07/2004', 'Trần Thanh Vyn', 'Hoàn tất', 'Cell'),
-  createData(8, '#0008', '12/07/2004', 'Tiến Luật', 'Hoàn tất', 'Cell'),
-  createData(9, '#0009', '12/07/2004', 'Võ Minh Tún', 'Hoàn tất', 'Cell'),
-  createData(10, '#0010', '12/07/2004', 'Huỳnh Trấn Thành', 'Đang xử lý', 'Cell'),
-  createData(11, '#0011', '12/07/2004', 'Hoài Linh ', 'Sẵn sàng ký số', 'Cell'),
-  createData(12, '#0012', '12/07/2004', 'Công Vinh', 'Chờ xử lý', 'Cell'),
-  createData(13, '#0013', '12/07/2004', 'Thủy Tiên', 'Đang xử lý', 'Cell'),
-  createData(14, '#0014', '12/07/2004', 'Việt Hương', 'Hoàn tất', 'Cell'),
-  createData(15, '#0015', '12/07/2004', 'Lâm Vỹ Dạ', 'Sẵn sàng ký số', 'Cell'),
-];
 
 const StatusTypes = {
   All: 'Tất cả',
@@ -69,6 +40,16 @@ function SetStatusColor(params) {
   else if (params === 'Sẵn sàng ký số') color = '#0095FF';
   else if (params === 'Hoàn tất') color = '#43B75D';
   else if (params === 'Không hợp lệ') color = '#EE443F';
+  return color;
+}
+
+function SetStatusBackgroundColor(params) {
+  let color = '';
+  if (params === 'Chờ xử lý') color = '#EBEDEF';
+  else if (params === 'Đang xử lý') color = '#FFF7E6';
+  else if (params === 'Sẵn sàng ký số') color = '#E6F4FF';
+  else if (params === 'Hoàn tất') color = '#ECF8EF';
+  else if (params === 'Không hợp lệ') color = '#FDECEC';
   return color;
 }
 
@@ -163,7 +144,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const HistoryDataTable = ({ filterStatus, searchText }) => {
+const HistoryDataTable = ({ filterStatus, searchText, rows }) => {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('profile');
   const [selected, setSelected] = React.useState([]);
@@ -197,7 +178,7 @@ const HistoryDataTable = ({ filterStatus, searchText }) => {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
+    } 
     setSelected(newSelected);
   };
 
@@ -286,7 +267,7 @@ const HistoryDataTable = ({ filterStatus, searchText }) => {
                       <Typography
                         sx={{
                           color: SetStatusColor(row.status),
-                          backgroundColor: '#EBEDEF',
+                          backgroundColor: SetStatusBackgroundColor(row.status),
                           padding: '4px 16px',
                           borderRadius: '30px',
                           fontSize: '15px',
