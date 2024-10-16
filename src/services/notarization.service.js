@@ -28,6 +28,19 @@ const getAllNotarizationField = async () => {
   }
 };
 
+const getNotarizationServiceByFieldId = async (fieldId) => {
+  try {
+    const response = await axiosConfig.get(
+      `${NOTARIZATION_SERVICE_ENDPOINT}/get-notarization-services-by-field-id/${fieldId}`,
+    );
+    return response.data;
+  } catch (error) {
+    const status = error.response?.status;
+    const message = error.response?.data?.message;
+    throw { status, message };
+  }
+};
+
 const getAllNotarizationService = async () => {
   try {
     const response = await axiosConfig.get(`${NOTARIZATION_SERVICE_ENDPOINT}/get-all-notarization-services`);
@@ -50,11 +63,25 @@ const getHistory = async () => {
   }
 };
 
+const uploadNotarizationDocument = async (document) => {
+  try {
+    console.log('document', document);
+    const response = await axiosConfig.post(`${NOTARIZATION_ENDPOINT}/upload-files`, document);
+    return response.data;
+  } catch (error) {
+    const status = error.response?.status;
+    const message = error.response?.data?.message;
+    throw { status, message };
+  }
+};
+
 const NotarizationService = {
   getStatusById,
   getAllNotarizationField,
   getAllNotarizationService,
   getHistory,
+  getNotarizationServiceByFieldId,
+  uploadNotarizationDocument,
 };
 
 export default NotarizationService;

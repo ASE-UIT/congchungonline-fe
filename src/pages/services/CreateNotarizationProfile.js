@@ -6,7 +6,6 @@ import { black, dark, gray, primary, red, white } from '../../config/theme/theme
 import UploadedFileList from '../../components/services/UploadedFileList';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { services } from '../../utils/fakeData';
 import NotaryDocumentDetailsModal from '../../components/modals/NotaryDocumentDetailsModal';
 import NotarizationService from '../../services/notarization.service';
 
@@ -16,8 +15,7 @@ const CreateNotarizationProfile = () => {
   const [notarizationField, setNotarizationField] = useState([]);
   const [notarizationService, setNotarizationService] = useState([]);
   const [loadingNotarization, setLoadingNotarization] = useState(false);
-  const [filteredFields, setFilteredFields] = useState([]);
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedService, setSelectedService] = useState([]);
   const [selectedField, setSelectedField] = useState(null);
   const [requesterInfo, setRequesterInfo] = useState({});
 
@@ -98,7 +96,9 @@ const CreateNotarizationProfile = () => {
     if (notarizationService.length > 0) return;
     setLoadingNotarization(true);
     try {
-      const response = await NotarizationService.getAllNotarizationService();
+      console.log('selectedField', selectedField);
+      const response = await NotarizationService.getNotarizationServiceByFieldId(selectedField.id);
+      console.log('response', response);
       setNotarizationService(response);
     } catch (error) {
       console.error(error);
@@ -108,11 +108,9 @@ const CreateNotarizationProfile = () => {
   };
 
   useEffect(() => {
-    if (selectedService) {
-      const filtered = notarizationField.filter((field) => field.id === selectedService.fieldId);
-      setFilteredFields(filtered);
-    }
-  }, [selectedService, notarizationField]);
+    setNotarizationService([]);
+    setSelectedService(null);
+  }, [selectedField]);
 
   useEffect(() => {
     console.log('notarizationData', notarizationData);
@@ -162,22 +160,36 @@ const CreateNotarizationProfile = () => {
           <Autocomplete
             size="small"
             loading={loadingNotarization}
-            options={notarizationService}
+            options={notarizationField}
             getOptionLabel={(option) => option.name}
-            onChange={(e, value) => setSelectedService(value)}
+            onChange={(e, value) => setSelectedField(value)}
             sx={{ flex: 1, backgroundColor: white[50] }}
-            renderInput={(params) => <TextField {...params} label="Dịch vụ công chứng" />}
-            onOpen={fetchNotarizationService}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Lĩnh vực công chứng"
+                inputProps={{ ...params.inputProps, readOnly: true }} // Prevents user from typing
+              />
+            )}
+            value={selectedField}
+            onOpen={fetchNotarizationField}
           />
           <Autocomplete
             size="small"
             loading={loadingNotarization}
-            options={filteredFields}
+            options={notarizationService}
             getOptionLabel={(option) => option.name}
-            onChange={(e, value) => setSelectedField(value)}
+            onChange={(e, value) => setSelectedService(value)}
             sx={{ flex: 1, backgroundColor: white[50] }}
-            renderInput={(params) => <TextField {...params} label="Lĩnh vực công chứng" />}
-            onOpen={fetchNotarizationField}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Dịch vụ công chứng"
+                inputProps={{ ...params.inputProps, readOnly: true }} // Prevents user from typing
+              />
+            )}
+            value={selectedService}
+            onOpen={fetchNotarizationService}
           />
         </Box>
 
