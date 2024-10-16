@@ -176,7 +176,7 @@ const LookupNotarizationProfile = () => {
       >
         {renderStatusBox()}
       </Box>
-      <NotaryDocumentDetailsModal open={openModal} handleClose={handleCloseModal} notarizationData={notarizationData} />
+      {/* <NotaryDocumentDetailsModal open={openModal} handleClose={handleCloseModal} notarizationData={notarizationData} /> */}
     </Box>
   );
 };
