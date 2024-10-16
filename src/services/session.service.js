@@ -27,9 +27,28 @@ const getAllSessions = async () => {
     }
 };
 
+const deleteUserOutOfSession = async (sessionId, email) => {
+    try {
+        const response = await axiosConfig.delete(`${SESSION_ENDPOINT}/deleteUser/${sessionId}`, {
+            data: {
+                email: email
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            return error.response.data;
+        }
+        return error.message;
+    }
+};
+
+
+
 const SessionService = {
     createSession,
     getAllSessions,
+    deleteUserOutOfSession
 };
 
 export default SessionService;

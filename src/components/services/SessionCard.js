@@ -4,6 +4,7 @@ import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { black, dark, red, white, yellow } from '../../config/theme/themePrimitives';
 import AvatarIcon from '../static/AvatarIcon';
+import NotarizationSessionDetailsModal from './NotarizationSessionDetailsModal';
 
 const SessionCard = React.memo(({ session }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -13,6 +14,7 @@ const SessionCard = React.memo(({ session }) => {
     color: black[500],
     backgroundColor: black[50],
   });
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const calculateTimeRemaining = () => {
@@ -64,13 +66,16 @@ const SessionCard = React.memo(({ session }) => {
 
   const handleViewDetails = () => {
     handleMenuClose();
-    console.log('Xem chi tiết phiên công chứng');
+    setOpenModal(true);
   };
 
   const handleCancelSession = () => {
     handleMenuClose();
-    console.log('Huỷ phiên công chứng');
   };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  }
 
   return (
     <Box
@@ -85,6 +90,7 @@ const SessionCard = React.memo(({ session }) => {
         flexDirection: 'column',
       }}
     >
+      <NotarizationSessionDetailsModal open={openModal} onClose={handleCloseModal} session={session} />
       <Card
         sx={{
           display: 'flex',
