@@ -18,6 +18,12 @@ const PersonalInformation = ({ user, onSave }) => {
 		setOpen(false);
 	};
 
+	const handleSave = (newData) => {
+		onSave({
+		  ...user,
+		  ...newData, 
+		});
+	  };
 	return (
 		<Box
 			sx={{
@@ -65,7 +71,7 @@ const PersonalInformation = ({ user, onSave }) => {
 					</Button>
 				</Box>
 			</Box>
-			<EditUserProfileModal open={open} handleClose={handleClose} onSave={onSave} user={user} />
+			<EditUserProfileModal open={open} handleClose={handleClose} onSave={onSave} />
 			<Box
 				display="flex"
 				flexDirection={{ xs: "column", sm: "row" }}
