@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import 'react-toastify/dist/ReactToastify.css';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
@@ -7,6 +7,8 @@ import { white, black } from '../../config/theme/themePrimitives';
 import StatusFilterButton from '../../components/services/StatusFilterButton';
 import HistoryDataTable from '../../components/services/HistoryDataTable';
 import NotarizationService from '../../services/notarization.service';
+import UserService from '../../services/user.service';
+import { toast } from 'react-toastify';
 
 function createData(id, profile, date, name, status, service) {
   return {
@@ -18,25 +20,7 @@ function createData(id, profile, date, name, status, service) {
     service,
   };
 }
-
-const rows = [
-  createData(1, '#0001', '12/07/2004', 'Võ Trần Minh Tuấn', 'Đang xử lý', 'Cell'),
-  createData(2, '#0002', '13/08/2004', 'Đặng Thái Tuấn', 'Chờ xử lý', 'Cell'),
-  createData(3, '#0003', '2/11/1942', 'Mai Chiến Thắng', 'Sẵn sàng ký số', 'Cell'),
-  createData(4, '#0004', '19/02/1981', 'Võ Minh Tú', 'Hoàn tất', 'Cell'),
-  createData(5, '#0005', '28/01/1999', 'Trần Thanh Vy', 'Không hợp lệ', 'Cell'),
-  createData(6, '#0006', '12/07/2004', 'Trần Thanh Vy', 'Đang xử lý', 'Cell'),
-  createData(7, '#0007', '12/07/2004', 'Trần Thanh Vyn', 'Hoàn tất', 'Cell'),
-  createData(8, '#0008', '12/07/2004', 'Tiến Luật', 'Hoàn tất', 'Cell'),
-  createData(9, '#0009', '12/07/2004', 'Võ Minh Tún', 'Hoàn tất', 'Cell'),
-  createData(10, '#0010', '12/07/2004', 'Huỳnh Trấn Thành', 'Đang xử lý', 'Cell'),
-  createData(11, '#0011', '12/07/2004', 'Hoài Linh ', 'Sẵn sàng ký số', 'Cell'),
-  createData(12, '#0012', '12/07/2004', 'Công Vinh', 'Chờ xử lý', 'Cell'),
-  createData(13, '#0013', '12/07/2004', 'Thủy Tiên', 'Đang xử lý', 'Cell'),
-  createData(14, '#0014', '12/07/2004', 'Việt Hương', 'Hoàn tất', 'Cell'),
-  createData(15, '#0015', '12/07/2004', 'Lâm Vỹ Dạ', 'Sẵn sàng ký số', 'Cell'),
-];
-
+let rows = [];
 const HistoryNotarizationProfile = () => {
   const StatusTypes = {
     All: 'Tất cả',
@@ -50,23 +34,54 @@ const HistoryNotarizationProfile = () => {
   const [statusFilter, setStatusFilter] = useState(StatusTypes.All);
   const [statusClicked, setStatusClicked] = useState(StatusTypes.All);
   const [searchText, setSearchText] = useState('');
+  const [loadingStatus, setLoadingStatus] = useState(false);
+  // const [rows, setRows] = useState([]);
 
   async function getHistoryFromDB() {
     try{
+      setLoadingStatus(true);
       const response = await NotarizationService.getHistory();
-      console.log(response.userId);
-      return response;
-    }
+      
+      rows = await Promise.all (response.map(async (item, index) => {
+        const statusResponse = await NotarizationService.getStatusById(item.id);
+        const userResponse = await UserService.getUserById(item.userId);
+        const date = new Date(statusResponse.updatedAt);
+        const notaryDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        let status;
+        
+        if(statusResponse.status == 'pending') status = 'Chờ xử lý';
+        if(statusResponse.status == 'processing') status = 'Đang xử lý';
+        if(statusResponse.status == 'digitalSignature') status = 'Sẵn sàng ký số';
+        if(statusResponse.status == 'completed') status = 'Hoàn tất';
+        if(statusResponse.status == 'verification') status = 'Không hợp lệ';
+        return createData(
+          index+1,
+          item.id,
+          notaryDate,
+          userResponse.name,
+          status,
+          item.notarizationService.name);     
+      }));  
+      setLoadingStatus(false);
+      console.log(rows);
+      }
     catch(error)
     {
-      console.log(error);
+      if(error.response && error.response.status === 401)
+      {
+        toast.error('Vui lòng đăng nhập');
+      }
     }
   };
 
-  const init = getHistoryFromDB();
-  console.log(init);
-  
+  useEffect(() =>
+  {
+    getHistoryFromDB();
 
+  }, [])
+
+  console.log(rows);
+  
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
       {/* Header */}
@@ -205,7 +220,7 @@ const HistoryNotarizationProfile = () => {
           borderRadius: '8px',
           background: white[50],
         }}>
-          <HistoryDataTable filterStatus={statusFilter} searchText={searchText} rows={rows}></HistoryDataTable>
+          <HistoryDataTable filterStatus={statusFilter} searchText={searchText} rows={rows} loadingStatus={loadingStatus}></HistoryDataTable>
         </Box>
       </Box>
     </Box>

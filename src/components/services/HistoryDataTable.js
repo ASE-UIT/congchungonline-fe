@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const StatusTypes = {
   All: 'Tất cả',
@@ -144,7 +145,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const HistoryDataTable = ({ filterStatus, searchText, rows }) => {
+const HistoryDataTable = ({ filterStatus, searchText, rows, loadingStatus }) => {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('profile');
   const [selected, setSelected] = React.useState([]);
@@ -230,9 +231,20 @@ const HistoryDataTable = ({ filterStatus, searchText, rows }) => {
             <TableBody sx={{
               backgroundColor: '#FFF'
             }}>
-              {visibleRows.map((row, index) => {
+              {loadingStatus && (
+                <TableRow>
+                <TableCell colSpan={6} align="center">
+                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <CircularProgress />
+                  </Box>
+                </TableCell>
+              </TableRow>
+              )}
+              {loadingStatus == false && visibleRows.map((row, index) => {
                 const isItemSelected = selected.includes(row.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
+                const labelId = `enhanced-table-checkbox-${index}`;  
+                console.log(loadingStatus);
+                          
 
                 return (
                   <TableRow
