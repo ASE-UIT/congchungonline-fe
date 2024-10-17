@@ -9,6 +9,7 @@ import HistoryDataTable from '../../components/services/HistoryDataTable';
 import NotarizationService from '../../services/notarization.service';
 import UserService from '../../services/user.service';
 import { toast } from 'react-toastify';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function createData(id, profile, date, name, status, service) {
   return {
@@ -35,7 +36,6 @@ const HistoryNotarizationProfile = () => {
   const [statusClicked, setStatusClicked] = useState(StatusTypes.All);
   const [searchText, setSearchText] = useState('');
   const [loadingStatus, setLoadingStatus] = useState(false);
-  // const [rows, setRows] = useState([]);
 
   async function getHistoryFromDB() {
     try{
@@ -61,9 +61,8 @@ const HistoryNotarizationProfile = () => {
           userResponse.name,
           status,
           item.notarizationService.name);     
-      }));  
+      }));      
       setLoadingStatus(false);
-      console.log(rows);
       }
     catch(error)
     {
@@ -80,8 +79,6 @@ const HistoryNotarizationProfile = () => {
 
   }, [])
 
-  console.log(rows);
-  
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
       {/* Header */}
@@ -216,11 +213,17 @@ const HistoryNotarizationProfile = () => {
           ></TextField>
         </Box>
         <Box sx={{
-          border: '1px solid var(--black-50, #E0E0E0)',
+          border: (!loadingStatus ? '1px solid var(--black-50, #E0E0E0)' : 'none'),
           borderRadius: '8px',
           background: white[50],
         }}>
-          <HistoryDataTable filterStatus={statusFilter} searchText={searchText} rows={rows} loadingStatus={loadingStatus}></HistoryDataTable>
+          {loadingStatus ? (
+            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
+            <CircularProgress />
+          </Box>
+          ) : (
+            <HistoryDataTable filterStatus={statusFilter} searchText={searchText} rows={rows} ></HistoryDataTable>
+          )}
         </Box>
       </Box>
     </Box>

@@ -145,7 +145,7 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const HistoryDataTable = ({ filterStatus, searchText, rows, loadingStatus }) => {
+const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('profile');
   const [selected, setSelected] = React.useState([]);
@@ -231,20 +231,9 @@ const HistoryDataTable = ({ filterStatus, searchText, rows, loadingStatus }) => 
             <TableBody sx={{
               backgroundColor: '#FFF'
             }}>
-              {loadingStatus && (
-                <TableRow>
-                <TableCell colSpan={6} align="center">
-                  <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <CircularProgress />
-                  </Box>
-                </TableCell>
-              </TableRow>
-              )}
-              {loadingStatus == false && visibleRows.map((row, index) => {
+              {visibleRows.map((row, index) => {
                 const isItemSelected = selected.includes(row.id);
-                const labelId = `enhanced-table-checkbox-${index}`;  
-                console.log(loadingStatus);
-                          
+                const labelId = `enhanced-table-checkbox-${index}`;                                  
 
                 return (
                   <TableRow
