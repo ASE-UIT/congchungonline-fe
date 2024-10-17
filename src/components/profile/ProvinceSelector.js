@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LabeledTextField from '../modals/LabeledTextField';
+import { Box } from '@mui/material';
 import { ArrowDropDown } from '@mui/icons-material';
 import { getProvinces, getDistrictsByProvinceCode, getWardsByDistrictCode } from 'vn-provinces';
 
@@ -47,7 +48,12 @@ const ProvinceSelector = ({ city, district, ward, onCityChange, onDistrictChange
   }, [district, districts]);
 
   return (
-    <div style={{ display: 'flex', gap: '16px' }}>
+    <Box sx={{
+      display: 'flex',
+      gap: '16px',
+      flexDirection: { xs: 'column', sm: 'row' },
+      flexWrap: { xs: 'wrap', md: 'nowrap' },
+    }}>
       <LabeledTextField
         label="Tỉnh/Thành phố"
         value={city || ''}
@@ -71,7 +77,7 @@ const ProvinceSelector = ({ city, district, ward, onCityChange, onDistrictChange
         options={wards}
         disabled={!district}
       />
-    </div>
+    </Box>
   );
 };
 
