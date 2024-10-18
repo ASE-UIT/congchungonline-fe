@@ -9,7 +9,37 @@ import HistoryDataTable from '../../components/services/HistoryDataTable';
 import NotarizationService from '../../services/notarization.service';
 import UserService from '../../services/user.service';
 import { toast } from 'react-toastify';
-import CircularProgress from '@mui/material/CircularProgress';
+import SkeletonHistoryDataTable from '../../components/services/SkeletonHistoryDataTable';
+import { useNavigate } from 'react-router-dom';
+import { create } from '@mui/material/styles/createTransitions';
+
+const headCells = [
+  {
+    id: 'profile',
+    disablePadding: true,
+    label: 'Số hồ sơ',
+  },
+  {
+    id: 'date',
+    disablePadding: false,
+    label: 'Ngày công chứng',
+  },
+  {
+    id: 'name',
+    disablePadding: false,
+    label: 'Người yêu cầu',
+  },
+  {
+    id: 'status',
+    disablePadding: false,
+    label: 'Tình trạng',
+  },
+  {
+    id: 'service',
+    disablePadding: false,
+    label: 'Loại dịch vụ',
+  },
+];
 
 function createData(id, profile, date, name, status, service) {
   return {
@@ -36,48 +66,44 @@ const HistoryNotarizationProfile = () => {
   const [statusClicked, setStatusClicked] = useState(StatusTypes.All);
   const [searchText, setSearchText] = useState('');
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const navigate = useNavigate();
 
   async function getHistoryFromDB() {
-    try{
+    try {
       setLoadingStatus(true);
       const response = await NotarizationService.getHistory();
-      
-      rows = await Promise.all (response.map(async (item, index) => {
-        const statusResponse = await NotarizationService.getStatusById(item.id);
-        const userResponse = await UserService.getUserById(item.userId);
-        const date = new Date(statusResponse.updatedAt);
-        const notaryDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-        let status;
-        
-        if(statusResponse.status == 'pending') status = 'Chờ xử lý';
-        if(statusResponse.status == 'processing') status = 'Đang xử lý';
-        if(statusResponse.status == 'digitalSignature') status = 'Sẵn sàng ký số';
-        if(statusResponse.status == 'completed') status = 'Hoàn tất';
-        if(statusResponse.status == 'verification') status = 'Không hợp lệ';
-        return createData(
-          index+1,
-          item.id,
-          notaryDate,
-          userResponse.name,
-          status,
-          item.notarizationService.name);     
-      }));      
+
+      rows = await Promise.all(
+        response.map(async (item, index) => {
+          const statusResponse = await NotarizationService.getStatusById(item.id);
+          const userResponse = await UserService.getUserById(item.userId);
+          const date = new Date(statusResponse.updatedAt);
+          const notaryDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+          let status;
+
+          if (statusResponse.status == 'pending') status = 'Chờ xử lý';
+          if (statusResponse.status == 'processing') status = 'Đang xử lý';
+          if (statusResponse.status == 'digitalSignature') status = 'Sẵn sàng ký số';
+          if (statusResponse.status == 'completed') status = 'Hoàn tất';
+          if (statusResponse.status == 'verification') status = 'Không hợp lệ';
+          return createData(index + 1, item.id, notaryDate, userResponse.name, status, item.notarizationService.name);
+        }),
+      );
       setLoadingStatus(false);
-      }
-    catch(error)
-    {
-      if(error.response && error.response.status === 401)
-      {
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
         toast.error('Vui lòng đăng nhập');
       }
     }
-  };
+  }
 
-  useEffect(() =>
-  {
+  useEffect(() => {
     getHistoryFromDB();
+  }, []);
 
-  }, [])
+  const handleClick = () => {
+    navigate('/lookup');
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
@@ -102,6 +128,7 @@ const HistoryNotarizationProfile = () => {
         <Button
           startIcon={<FindInPageIcon />}
           disableElevation
+          onClick={handleClick}
           sx={{
             display: 'flex',
             p: '6px 12px',
@@ -132,7 +159,7 @@ const HistoryNotarizationProfile = () => {
           display: 'flex',
           flexDirection: 'column',
           p: '12px 24px',
-          gap: '10px'
+          gap: '10px',
         }}
       >
         <Box
@@ -141,7 +168,7 @@ const HistoryNotarizationProfile = () => {
             alignItems: 'center',
             borderRadius: 1,
             height: '100%',
-            gap: '50px'
+            gap: '50px',
           }}
         >
           <Box
@@ -152,37 +179,53 @@ const HistoryNotarizationProfile = () => {
               borderBottom: '1px solid #C0C0C0',
             }}
           >
-            <StatusFilterButton 
+            <StatusFilterButton
               statusFilter={StatusTypes.All}
-              handleFilterByStatus={() => {setStatusFilter(StatusTypes.All); setStatusClicked(StatusTypes.All)}}
+              handleFilterByStatus={() => {
+                setStatusFilter(StatusTypes.All);
+                setStatusClicked(StatusTypes.All);
+              }}
               clickedButton={statusClicked}
-              >
+            ></StatusFilterButton>
 
-            </StatusFilterButton>
-              
             <StatusFilterButton
               statusFilter={StatusTypes.Waiting}
-              handleFilterByStatus={() => {setStatusFilter(StatusTypes.Waiting); setStatusClicked(StatusTypes.Waiting)}}
+              handleFilterByStatus={() => {
+                setStatusFilter(StatusTypes.Waiting);
+                setStatusClicked(StatusTypes.Waiting);
+              }}
               clickedButton={statusClicked}
             />
             <StatusFilterButton
               statusFilter={StatusTypes.Processing}
-              handleFilterByStatus={() => {setStatusFilter(StatusTypes.Processing); setStatusClicked(StatusTypes.Processing)}}
+              handleFilterByStatus={() => {
+                setStatusFilter(StatusTypes.Processing);
+                setStatusClicked(StatusTypes.Processing);
+              }}
               clickedButton={statusClicked}
             />
             <StatusFilterButton
               statusFilter={StatusTypes.ReadyToSign}
-              handleFilterByStatus={() => {setStatusFilter(StatusTypes.ReadyToSign); setStatusClicked(StatusTypes.ReadyToSign)}}
+              handleFilterByStatus={() => {
+                setStatusFilter(StatusTypes.ReadyToSign);
+                setStatusClicked(StatusTypes.ReadyToSign);
+              }}
               clickedButton={statusClicked}
             />
             <StatusFilterButton
               statusFilter={StatusTypes.Completed}
-              handleFilterByStatus={() => {setStatusFilter(StatusTypes.Completed); setStatusClicked(StatusTypes.Completed)}}
+              handleFilterByStatus={() => {
+                setStatusFilter(StatusTypes.Completed);
+                setStatusClicked(StatusTypes.Completed);
+              }}
               clickedButton={statusClicked}
             />
             <StatusFilterButton
               statusFilter={StatusTypes.Invalid}
-              handleFilterByStatus={() => {setStatusFilter(StatusTypes.Invalid); setStatusClicked(StatusTypes.Invalid)}}
+              handleFilterByStatus={() => {
+                setStatusFilter(StatusTypes.Invalid);
+                setStatusClicked(StatusTypes.Invalid);
+              }}
               clickedButton={statusClicked}
             />
           </Box>
@@ -197,7 +240,7 @@ const HistoryNotarizationProfile = () => {
             onChange={(e) => setSearchText(e.target.value)}
             sx={{
               borderRadius: 1,
-              width:'20%',
+              width: '20%',
               minWidth: '150px',
               '& .MuiInputBase-input': {
                 fontSize: 14,
@@ -212,17 +255,22 @@ const HistoryNotarizationProfile = () => {
             }}
           ></TextField>
         </Box>
-        <Box sx={{
-          border: (!loadingStatus ? '1px solid var(--black-50, #E0E0E0)' : 'none'),
-          borderRadius: '8px',
-          background: white[50],
-        }}>
+        <Box
+          sx={{
+            border: !loadingStatus ? '1px solid var(--black-50, #E0E0E0)' : 'none',
+            borderRadius: '8px',
+            background: white[50],
+          }}
+        >
           {loadingStatus ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center'}}>
-            <CircularProgress />
-          </Box>
+            <SkeletonHistoryDataTable headCells={headCells}></SkeletonHistoryDataTable>
           ) : (
-            <HistoryDataTable filterStatus={statusFilter} searchText={searchText} rows={rows} ></HistoryDataTable>
+            <HistoryDataTable
+              filterStatus={statusFilter}
+              searchText={searchText}
+              rows={rows}
+              headCells={headCells}
+            ></HistoryDataTable>
           )}
         </Box>
       </Box>

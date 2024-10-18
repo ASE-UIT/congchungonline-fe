@@ -13,7 +13,6 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import { visuallyHidden } from '@mui/utils';
-import CircularProgress from '@mui/material/CircularProgress';
 
 const StatusTypes = {
   All: 'Tất cả',
@@ -36,121 +35,94 @@ function descendingComparator(a, b, orderBy) {
 
 function SetStatusColor(params) {
   let color = '';
-  if (params === 'Chờ xử lý') color = '#324155';
-  else if (params === 'Đang xử lý') color = '#FFAA00';
-  else if (params === 'Sẵn sàng ký số') color = '#0095FF';
-  else if (params === 'Hoàn tất') color = '#43B75D';
-  else if (params === 'Không hợp lệ') color = '#EE443F';
-  return color;
-}
-
-function SetStatusBackgroundColor(params) {
-  let color = '';
-  if (params === 'Chờ xử lý') color = '#EBEDEF';
-  else if (params === 'Đang xử lý') color = '#FFF7E6';
-  else if (params === 'Sẵn sàng ký số') color = '#E6F4FF';
-  else if (params === 'Hoàn tất') color = '#ECF8EF';
-  else if (params === 'Không hợp lệ') color = '#FDECEC';
-  return color;
+  let backgroundColor = '';
+  if (params === 'Chờ xử lý') {
+    color = '#324155';
+    backgroundColor = '#EBEDEF';
+  } else if (params === 'Đang xử lý') {
+    color = '#FFAA00';
+    backgroundColor = '#FFF7E6';
+  } else if (params === 'Sẵn sàng ký số') {
+    color = '#0095FF';
+    backgroundColor = '#E6F4FF';
+  } else if (params === 'Hoàn tất') {
+    color = '#43B75D';
+    backgroundColor = '#ECF8EF';
+  } else if (params === 'Không hợp lệ') {
+    color = '#EE443F';
+    backgroundColor = '#FDECEC';
+  }
+  return { color, backgroundColor };
 }
 
 function getComparator(order, orderBy) {
   return order === 'desc' ? (a, b) => descendingComparator(a, b, orderBy) : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-const headCells = [
-  {
-    id: 'profile',
-    numeric: false,
-    disablePadding: true,
-    label: 'Số hồ sơ',
-  },
-  {
-    id: 'date',
-    numeric: false,
-    disablePadding: true,
-    label: 'Ngày công chứng',
-  },
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Người yêu cầu',
-  },
-  {
-    id: 'status',
-    numeric: false,
-    disablePadding: true,
-    label: 'Tình trạng',
-  },
-  {
-    id: 'service',
-    numeric: false,
-    disablePadding: true,
-    label: 'Loại dịch vụ',
-  },
-];
-
-function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
-
-  return (
-    <TableHead>
-      <TableRow sx={{
-        backgroundColor: '#F9FAFB'
-      }}>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
+const HistoryDataTable = ({ filterStatus, searchText, rows, headCells }) => {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('profile');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  function EnhancedTableHead(props) {
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const createSortHandler = (property) => (event) => {
+      onRequestSort(event, property);
+    };
+
+    return (
+      <TableHead>
+        <TableRow
+          sx={{
+            backgroundColor: '#F9FAFB',
+            borderRadius: '8px',
+          }}
+        >
+          <TableCell padding="checkbox" sx={{ borderRadius: '8px' }}>
+            <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+            />
+          </TableCell>
+          {headCells.map((headCell) => (
+            <TableCell
+              key={headCell.id}
+              align={'left'}
+              padding={headCell.disablePadding ? 'none' : 'normal'}
+              sortDirection={orderBy === headCell.id ? order : false}
+              sx={{ borderRadius: '8px', width: '20%' }}
+            >
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    );
+  }
+
+  EnhancedTableHead.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    orderBy: PropTypes.string.isRequired,
+    rowCount: PropTypes.number.isRequired,
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -179,7 +151,7 @@ const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    } 
+    }
     setSelected(newSelected);
   };
 
@@ -217,7 +189,7 @@ const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%'}}>
+      <Paper sx={{ width: '100%' }}>
         <TableContainer>
           <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle" size={'medium'}>
             <EnhancedTableHead
@@ -228,12 +200,14 @@ const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            <TableBody sx={{
-              backgroundColor: '#FFF'
-            }}>
+            <TableBody
+              sx={{
+                backgroundColor: '#FFF',
+              }}
+            >
               {visibleRows.map((row, index) => {
                 const isItemSelected = selected.includes(row.id);
-                const labelId = `enhanced-table-checkbox-${index}`;                                  
+                const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
                   <TableRow
@@ -255,7 +229,7 @@ const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
                         }}
                       />
                     </TableCell>
-                    <TableCell component="th" id={labelId} scope="row" padding="none">
+                    <TableCell component="th" id={labelId} scope="row" padding="none" width={'20%'}>
                       {row.profile}
                     </TableCell>
                     <TableCell align="left" width={'20%'}>
@@ -267,8 +241,8 @@ const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
                     <TableCell align="left" width={'20%'}>
                       <Typography
                         sx={{
-                          color: SetStatusColor(row.status),
-                          backgroundColor: SetStatusBackgroundColor(row.status),
+                          color: SetStatusColor(row.status).color,
+                          backgroundColor: SetStatusColor(row.status).backgroundColor,
                           padding: '4px 16px',
                           borderRadius: '30px',
                           fontSize: '15px',
@@ -290,7 +264,7 @@ const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
                     height: 33 * emptyRows,
                   }}
                 >
-                  <TableCell colSpan={6} />
+                  <TableCell colSpan={headCells.length + 1} />
                 </TableRow>
               )}
             </TableBody>
@@ -306,7 +280,8 @@ const HistoryDataTable = ({ filterStatus, searchText, rows,}) => {
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage={'Số dòng mỗi trang'}
           sx={{
-            backgroundColor: '#FFF'
+            backgroundColor: '#FFF',
+            borderRadius: '8px',
           }}
         />
       </Paper>
