@@ -1,7 +1,7 @@
 import { ArrowBack, ArrowDropDown, Password } from '@mui/icons-material';
 import { Box, Button, IconButton, Modal, Typography, MenuItem } from '@mui/material';
 import React, { useState, useEffect, useMemo } from 'react';
-import { black } from '../../config/theme/themePrimitives';
+import { black,primary } from '../../config/theme/themePrimitives';
 import LabeledTextField from './LabeledTextField';
 import { toast } from 'react-toastify';
 import UserService from '../../services/user.service';
@@ -60,7 +60,6 @@ const EditUserProfileModal = ({ open, handleClose, onSave }) => {
       ...prev,
       [field]: value,
     }));
-    console.log(formData);
   };
 
   const isFormDataValid = ({ name, identification, email, phone, city, district, ward, street }) => {
@@ -162,9 +161,10 @@ const EditUserProfileModal = ({ open, handleClose, onSave }) => {
             sx={{
               backgroundColor: black[50],
               color: black[900],
+              border: `1px solid transparent`,
               '&:hover': {
-                backgroundColor: black[900],
-                color: 'white',
+                border: `1px solid ${primary[500]}`,
+                color: primary[500],
               },
               textTransform: 'none',
             }}

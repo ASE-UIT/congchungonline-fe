@@ -1,23 +1,9 @@
-import React, { useState } from 'react';
-import { Box, Typography, Button, Divider } from '@mui/material';
+import React from 'react';
+import { Box, Typography, Button, Divider, Skeleton } from '@mui/material';
 import { EditSharp } from '@mui/icons-material';
 import { black, gray, primary, white } from '../../config/theme/themePrimitives';
-import InfoField from './InfoField';
-import EditUserProfileModal from '../../components/modals/EditUserProfileModal';
 
-const PersonalInformation = ({ user, onSave }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleSave = (newData) => {
-    onSave({
-      ...user,
-      ...newData,
-    });
-  };
+const PersonalInformationSkeleton = () => {
   return (
     <Box
       sx={{
@@ -47,27 +33,29 @@ const PersonalInformation = ({ user, onSave }) => {
               },
             }}
             size="small"
-            onClick={() => setOpen(true)}
+            disabled
           >
-            <Typography variant="button" textTransform="none">
-              Chỉnh sửa
-            </Typography>
+            <Skeleton variant="text" width={60} />
           </Button>
         </Box>
       </Box>
-      <EditUserProfileModal open={open} handleClose={handleClose} onSave={onSave} />
+
       <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} flexWrap="wrap" gap={2}>
         <Box flex={1} minWidth="250px">
-          <InfoField label="Họ và tên" value={user.name} />
+          <Skeleton variant="text" height={30} />
+          <Skeleton variant="text" height={20} />
         </Box>
         <Box flex={1} minWidth="250px">
-          <InfoField label="Email" value={user.email} />
+          <Skeleton variant="text" height={30} />
+          <Skeleton variant="text" height={20} />
         </Box>
         <Box flex={1} minWidth="250px">
-          <InfoField label="Số điện thoại" value={user.phone} />
+          <Skeleton variant="text" height={30} />
+          <Skeleton variant="text" height={20} />
         </Box>
         <Box flex={1} minWidth="250px">
-          <InfoField label="CMND/CCCD/Hộ chiếu" value={user.identification} />
+          <Skeleton variant="text" height={30} />
+          <Skeleton variant="text" height={20} />
         </Box>
       </Box>
 
@@ -77,22 +65,25 @@ const PersonalInformation = ({ user, onSave }) => {
         <Typography variant="caption" fontWeight="bold" flex={1} sx={{ textTransform: 'uppercase' }}>
           Địa chỉ liên hệ
         </Typography>
-        {/* Address Fields */}
         <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={2} my={2}>
           <Box flex={1} minWidth="250px">
-            <InfoField label="Tỉnh/Thành phố" value={user.city} />
+            <Skeleton variant="text" height={30} />
+            <Skeleton variant="text" height={20} />
           </Box>
           <Box flex={1} minWidth="250px">
-            <InfoField label="Quận/Huyện" value={user.district} />
+            <Skeleton variant="text" height={30} />
+            <Skeleton variant="text" height={20} />
           </Box>
           <Box flex={1} minWidth="250px">
-            <InfoField label="Xã/Phường" value={user.ward} />
+            <Skeleton variant="text" height={30} />
+            <Skeleton variant="text" height={20} />
           </Box>
         </Box>
-        <InfoField label="Số nhà, đường/phố" value={user.street} />
+        <Skeleton variant="text" height={30} />
+        <Skeleton variant="text" height={20} />
       </Box>
     </Box>
   );
 };
 
-export default PersonalInformation;
+export default PersonalInformationSkeleton;
