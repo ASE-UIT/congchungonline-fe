@@ -1,48 +1,25 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import Cookies from 'js-cookie';
-import axiosConfig from './axiosConfig';
+import axiosConfig from '../utils/axiosConfig';
 
 const AUTH_ENDPOINT = `${API_BASE_URL}/auth`;
 
 const login = async (email, password) => {
-  try {
-    const response = await axios.post(`${AUTH_ENDPOINT}/login`, {
-      email,
-      password,
-    });
+  const response = await axiosConfig.post(`${AUTH_ENDPOINT}/login`, {
+    email,
+    password,
+  });
 
-    if (response && response.data && response.data.tokens) {
-      const { access, refresh } = response.data.tokens;
+  localStorage.setItem('userInfo', JSON.stringify(response.data.user));
 
-      Cookies.set('accessToken', access.token, { expires: 7, secure: true, sameSite: 'Strict' });
-
-      Cookies.set('refreshToken', refresh.token, { expires: 7, secure: true, sameSite: 'Strict' });
-
-      Cookies.set('user', JSON.stringify(response.data.user), { expires: 7, secure: true, sameSite: 'Strict' });
-
-      return response.data;
-    } else {
-      throw new Error('Tokens not found in response');
-    }
-  } catch (error) {
-    if (error.response) {
-      throw error.response.data.message || 'Login failed';
-    }
-    throw new Error('An error occurred while logging in.');
-  }
+  return response.data;
 };
 
-const logout = async () => {
+const logout = async (refreshToken) => {
   try {
-    const refreshToken = Cookies.get('refreshToken');
-    if (!refreshToken) throw new Error('No refresh token found');
+    await axiosConfig.post(`${AUTH_ENDPOINT}/logout`, { refreshToken });
 
-    await axios.post(`${AUTH_ENDPOINT}/logout`, { refreshToken });
-
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-    Cookies.remove('user');
+    localStorage.removeItem('userInfo');
   } catch (error) {
     if (error.response) {
       throw error.response.data.message || 'Logout failed';
@@ -52,23 +29,10 @@ const logout = async () => {
   }
 };
 
-const refreshAccessToken = async () => {
-  const refreshToken = Cookies.get('refreshToken');
-  if (!refreshToken) throw new Error('No refresh token found');
-
-  try {
-    const response = await axiosConfig.post(`${AUTH_ENDPOINT}/refresh-tokens`, {
-      refreshToken,
-    });
-
-    const { access } = response.data.tokens;
-
-    return { userToken: access.token };
-  } catch (error) {
-    Cookies.remove('refreshToken');
-
-    throw error.response ? error.response.data.message || 'Token refresh failed' : 'Network Error';
-  }
+const refreshAccessToken = async (refreshToken) => {
+  return await axiosConfig.post(`${AUTH_ENDPOINT}/refresh-tokens`, {
+    refreshToken,
+  });
 };
 
 const register = async (name, email, password) => {
