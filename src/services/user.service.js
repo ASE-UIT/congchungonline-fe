@@ -1,4 +1,4 @@
-import axiosConfig from './axiosConfig';
+import axiosConfig from '../utils/axiosConfig';
 import { API_BASE_URL } from './config';
 const USER_ENDPOINT = `${API_BASE_URL}/users`;
 const USER_EMAIL_ENDPOINT = `${API_BASE_URL}/users/search-user-by-email/`;
@@ -27,11 +27,11 @@ const getUserByEmail = async (email) => {
       throw new Error('Network Error');
     }
   }
-}
+};
 
 const updateUser = async (id, updateBody) => {
   try {
-    const response = await axiosConfig.patch(`${USER_ENDPOINT}/${id}`, updateBody);  
+    const response = await axiosConfig.patch(`${USER_ENDPOINT}/${id}`, updateBody);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -40,7 +40,7 @@ const updateUser = async (id, updateBody) => {
       throw new Error('Network Error');
     }
   }
-}
+};
 
 const UserService = {
   getUserById,
