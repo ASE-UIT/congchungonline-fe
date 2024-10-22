@@ -2,7 +2,7 @@ import React from 'react';
 import { white, gray, black, primary } from '../../config/theme/themePrimitives';
 import { Close } from '@mui/icons-material';
 import AvatarWithCloseButton from '../static/AvatarWithCloseButton';
-import { Box, Button, IconButton, Modal, Typography } from '@mui/material';
+import { Box, Button, circularProgressClasses, IconButton, Modal, Typography } from '@mui/material';
 import SessionService from '../../services/session.service';
 import { toast } from 'react-toastify';
 
@@ -24,11 +24,12 @@ const NotarizationSessionDetailsModal = ({ open, onClose, session }) => {
         try {
             const response = await SessionService.deleteUserOutOfSession(session.id, email);
             if (response.status === 200) {
-                toast.success('Xóa thành công người dùng khỏi phiên công chứng');
+                toast.success('Xóa người dùng thành công');
+            } else if (response.code === 403) {
+                toast.error('Bạn không phải là người tạo phiên công chứng');
             }
         } catch (error) {
-            toast.error('Xóa người dùng khỏi phiên công chứng thất bại');
-            console.error(error);
+            toast.error('Xóa người dùng khỏi thất bại');
         }
     };
 
@@ -182,7 +183,7 @@ const NotarizationSessionDetailsModal = ({ open, onClose, session }) => {
                     ))}
                 </Box>
 
-                {/* Actions */}
+                {/* Actions
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
                     <Button
                         variant="outlined"
@@ -210,7 +211,7 @@ const NotarizationSessionDetailsModal = ({ open, onClose, session }) => {
                     >
                         Hủy phiên công chứng
                     </Button>
-                </Box>
+                </Box> */}
             </Box>
         </Modal>
     );

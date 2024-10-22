@@ -1,14 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Card, CardContent, IconButton, Divider, Typography, Avatar, Menu, MenuItem } from '@mui/material';
-import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
+import { Box, Card, CardContent, IconButton, Divider, Typography, Avatar, Menu, MenuItem, CardActionArea } from '@mui/material';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import { black, dark, red, white, yellow } from '../../config/theme/themePrimitives';
+import { black, dark, green, red, white, yellow } from '../../config/theme/themePrimitives';
 import AvatarIcon from '../static/AvatarIcon';
 import NotarizationSessionDetailsModal from './NotarizationSessionDetailsModal';
 
 const SessionCard = React.memo(({ session }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [timeRemaining, setTimeRemaining] = useState('');
   const [remainingTimeColor, setRemainingTimeColor] = useState({
     color: black[500],
@@ -40,15 +37,16 @@ const SessionCard = React.memo(({ session }) => {
         }
 
         if (daysRemaining >= 5) {
-          setRemainingTimeColor({ color: black[500], backgroundColor: black[50] });
+          setRemainingTimeColor({ color: green[500], backgroundColor: green[50] });
         } else if (daysRemaining >= 2) {
           setRemainingTimeColor({ color: yellow[500], backgroundColor: yellow[50] });
         } else {
           setRemainingTimeColor({ color: red[500], backgroundColor: red[50] });
         }
 
-        setTimeRemaining(timeStrings.join(' '));
+        setTimeRemaining('Còn ' + timeStrings.join(' '));
       } else {
+        setRemainingTimeColor({ color: black[500], backgroundColor: black[50] });
         setTimeRemaining('Đã kết thúc');
       }
     };
@@ -56,29 +54,12 @@ const SessionCard = React.memo(({ session }) => {
     calculateTimeRemaining();
   }, [session.endDate]);
 
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleViewDetails = () => {
-    handleMenuClose();
-    setOpenModal(true);
-  };
-
-  const handleCancelSession = () => {
-    handleMenuClose();
-  };
-
   const handleCloseModal = () => {
     setOpenModal(false);
   }
 
   return (
-    <Box
+    <Card
       sx={{
         flexBasis: {
           xs: '100%',
@@ -91,7 +72,7 @@ const SessionCard = React.memo(({ session }) => {
       }}
     >
       <NotarizationSessionDetailsModal open={openModal} onClose={handleCloseModal} session={session} />
-      <Card
+      <CardActionArea
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
@@ -102,94 +83,68 @@ const SessionCard = React.memo(({ session }) => {
           borderRadius: 1,
           border: `1px solid ${black[50]}`,
           flexDirection: 'column',
+          alignItems: 'flex-start',
         }}
+        onClick={() => setOpenModal(true)}
       >
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Avatar src="https://via.placeholder.com/40x40" sx={{ width: 40, height: 40, borderRadius: 1 }} />
-          <IconButton onClick={handleMenuOpen}>
-            <MoreHorizRoundedIcon sx={{ fontSize: 24, color: black[300] }} />
-          </IconButton>
+        <Box width={'100%'}>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Avatar src="https://via.placeholder.com/40x40" sx={{ width: 40, height: 40, borderRadius: 1 }} />
+          </Box>
 
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleMenuClose}
-            PaperProps={{
-              style: {
-                boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-                borderRadius: 8,
-              },
-            }}
-          >
-            <MenuItem sx={{ fontSize: 12 }} onClick={handleViewDetails}>
-              Xem chi tiết
-            </MenuItem>
-            <MenuItem sx={{ fontSize: 12 }} onClick={handleCancelSession}>
-              Huỷ phiên
-            </MenuItem>
-          </Menu>
-        </Box>
+          <CardContent sx={{ px: 0, fontWeight: 500 }}>
+            <Typography sx={{ fontSize: 14, fontWeight: 500, color: black[900] }}>{session.sessionName}</Typography>
+            <Typography sx={{ fontSize: 12, fontWeight: 500, color: black[300] }}>tạo bởi {session.creator.name}</Typography>
+          </CardContent>
 
-        <CardContent sx={{ px: 0, fontWeight: 500 }}>
-          <Typography sx={{ fontSize: 14, fontWeight: 500, color: black[900] }}>{session.sessionName}</Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 500, color: black[300] }}>tạo bởi {session.creator.name}</Typography>
-        </CardContent>
+          <Divider />
 
-        <Divider />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+            <Typography sx={{ flex: 1, fontSize: 12, fontWeight: 500 }}>Lĩnh vực:</Typography>
+            <Box sx={{ px: 1, py: 0.5, backgroundColor: dark[50], borderRadius: 1, alignItems: 'center', display: 'flex' }} >
+              <Typography sx={{ fontSize: 12, fontWeight: 500, color: dark[500] }}>{session.notaryField.name}</Typography>
+            </Box>
+          </Box>
 
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-          <Typography sx={{ flex: 1, fontSize: 10, fontWeight: 500 }}>Lĩnh vực:</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+            <Typography sx={{ flex: 1, fontSize: 12, fontWeight: 500 }}>Dịch vụ:</Typography>
+            <Box sx={{ px: 1, py: 0.5, backgroundColor: dark[50], borderRadius: 1, display: 'flex', alignItems: 'center' }}>
+              <Typography sx={{ fontSize: 12, fontWeight: 500, color: dark[500] }}>
+                {session.notaryService.name}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box display="flex" alignItems="center" mt={2}>
+            <AvatarIcon email={session.creator.email || 'Undefined'} />
+            {session.users.map((user, index) => (
+              <AvatarIcon key={index} email={user.email} />
+            ))}
+          </Box>
+
           <Box
             sx={{
+              alignSelf: 'flex-start',
+              backgroundColor: remainingTimeColor.backgroundColor,
+              color: remainingTimeColor.color,
+              gap: 1,
               px: 1,
               py: 0.5,
-              backgroundColor: dark[50],
               borderRadius: 1,
               display: 'flex',
               alignItems: 'center',
+              mt: 2,
+              width: 'fit-content',
             }}
           >
-            <Typography sx={{ fontSize: 10, fontWeight: 500, color: dark[500] }}>{session.notaryField.name}</Typography>
-          </Box>
-        </Box>
-
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-          <Typography sx={{ flex: 1, fontSize: 10, fontWeight: 500 }}>Dịch vụ:</Typography>
-          <Box sx={{ px: 1, py: 0.5, backgroundColor: dark[50], borderRadius: 1, display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ fontSize: 10, fontWeight: 500, color: dark[500] }}>
-              {session.notaryService.name}
+            <ScheduleIcon sx={{ width: 12, height: 12 }} />
+            <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+              {timeRemaining}
             </Typography>
           </Box>
         </Box>
-
-        <Box display="flex" alignItems="center" mt={2}>
-          <AvatarIcon email={session.creator.email || 'Undefined'} />
-          {session.users.map((user, index) => (
-            <AvatarIcon key={index} email={user.email} />
-          ))}
-        </Box>
-
-        <Box
-          sx={{
-            alignSelf: 'flex-start',
-            backgroundColor: remainingTimeColor.backgroundColor,
-            color: remainingTimeColor.color,
-            gap: 1,
-            px: 1,
-            py: 0.5,
-            borderRadius: 1,
-            display: 'flex',
-            alignItems: 'center',
-            mt: 2,
-          }}
-        >
-          <ScheduleIcon sx={{ width: 12, height: 12 }} />
-          <Typography sx={{ fontSize: 10, fontWeight: 500 }}>
-            Còn {timeRemaining}
-          </Typography>
-        </Box>
-      </Card>
-    </Box>
+      </CardActionArea>
+    </Card>
   );
 });
 

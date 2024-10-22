@@ -29,12 +29,8 @@ const getAllSessions = async () => {
 
 const deleteUserOutOfSession = async (sessionId, email) => {
     try {
-        const response = await axiosConfig.delete(`${SESSION_ENDPOINT}/deleteUser/${sessionId}`, {
-            data: {
-                email: email
-            }
-        });
-        return response.data;
+        const response = await axiosConfig.patch(`${SESSION_ENDPOINT}/deleteUser/${sessionId}`, { email });
+        return response;
     } catch (error) {
         if (error.response) {
             return error.response.data;
