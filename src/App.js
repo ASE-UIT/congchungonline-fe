@@ -37,6 +37,8 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       if (token && refreshToken) {
+        Cookies.set('accessToken', token);
+        Cookies.set('refreshToken', refreshToken);
         try {
           const user = await UserService.getUserById(TokenService.decodeToken(token).sub);
           localStorage.setItem('userInfo', JSON.stringify(user));
