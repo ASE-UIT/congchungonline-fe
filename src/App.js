@@ -1,6 +1,6 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import { Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import getDesignTokens from './config/theme/themePrimitives';
 import Header from './components/Header';
@@ -10,45 +10,48 @@ import { Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import PrivateRoute from './routes/PrivateRoute';
-import routes from './routes/routes';
 import UserService from './services/user.service';
 import TokenService from './services/token.service';
 import { userGoogleLogin } from './stores/actions/authAction';
+import AuthService from './services/auth.service';
 import Cookies from 'js-cookie';
 
+const Home = lazy(() => import('./pages/home/Home'));
+const Services = lazy(() => import('./pages/services/Services'));
+const SignIn = lazy(() => import('./pages/signin/SignIn'));
+const SignUp = lazy(() => import('./pages/signup/SignUp'));
+const UserProfile = lazy(() => import('./pages/profile/UserProfile'));
+const CreateNotarizationProfile = lazy(() => import('./pages/services/CreateNotarizationProfile'));
+const LookupNotarizationProfile = lazy(() => import('./pages/services/LookupNotarizationProfile'));
+const HistoryNotarizationProfile = lazy(() => import('./pages/services/HistoryNotarizationProfile'));
+const CreateNotarizationSession = lazy(() => import('./pages/services/CreateNotarizationSession'));
+const UserGuide = lazy(() => import('./pages/static/UserGuide'));
+const NotFound = lazy(() => import('./pages/notfound/NotFound'));
+
 function App() {
+  const dispatch = useDispatch();
   const theme = createTheme(getDesignTokens());
   const { isAuthenticated } = useSelector((state) => state.auth);
-
   const { token, refreshToken } = TokenService.getAccessTokenFromURL(window.location.search);
-
-  const dispatch = useDispatch();
-
-  const getUser = async () => {
-    const user = await UserService.getUserById(TokenService.decodeToken(token).sub);
-    console.log('User:', user);
-    return user;
-  };
 
   useEffect(() => {
     const fetchUser = async () => {
       if (token && refreshToken) {
-        if (TokenService.isTokenExpired(refreshToken)) {
-          console.log('Refresh token expired');
-          return;
+        Cookies.set('accessToken', token);
+        Cookies.set('refreshToken', refreshToken);
+        try {
+          const user = await UserService.getUserById(TokenService.decodeToken(token).sub);
+          localStorage.setItem('userInfo', JSON.stringify(user));
+          dispatch(
+            userGoogleLogin({
+              userData: user,
+              userToken: token,
+            }),
+          );
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (error) {
+          console.error('Failed to fetch user:', error);
         }
-
-        Cookies.set('accessToken', token, { expires: 7, secure: true, sameSite: 'Strict' });
-        Cookies.set('refreshToken', refreshToken, { expires: 7, secure: true, sameSite: 'Strict' });
-        const user = await getUser();
-        Cookies.set('user', JSON.stringify(user), { expires: 7 });
-        dispatch(
-          userGoogleLogin({
-            userData: user,
-            userToken: token,
-          }),
-        );
-        window.history.replaceState({}, document.title, window.location.pathname);
       }
     };
 
@@ -63,14 +66,21 @@ function App() {
           <Box flex={1}>
             {!isAuthenticated && <Header />}
             <Routes>
-              {routes.map(({ path, element: Element, authRequired }) => (
-                <Route
-                  exact
-                  key={path}
-                  path={path}
-                  element={authRequired ? <PrivateRoute element={<Element />} /> : <Element />}
-                />
-              ))}
+              {/* Define routes directly here */}
+              <Route path="/" element={<Home />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/profile" element={<PrivateRoute element={<UserProfile />} />} />
+              <Route path="/notarization" element={<PrivateRoute element={<CreateNotarizationProfile />} />} />
+              <Route path="/lookup" element={<LookupNotarizationProfile />} />
+              <Route path="/history" element={<PrivateRoute element={<HistoryNotarizationProfile />} />} />
+              <Route
+                path="/create-notarization-session"
+                element={<PrivateRoute element={<CreateNotarizationSession />} />}
+              />
+              <Route path="/user-guide" element={<UserGuide />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
             {!isAuthenticated && <Footer />}
           </Box>
