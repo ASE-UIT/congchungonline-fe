@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
-import axiosConfig from './axiosConfig';
+import axiosConfig from '../utils/axiosConfig';
 
 const NOTARIZATION_ENDPOINT = `${API_BASE_URL}/notarization`;
 const NOTARIZATION_FIELD_ENDPOINT = `${API_BASE_URL}/notarization-fields`;
@@ -13,7 +13,7 @@ const getStatusById = async (documentId) => {
   } catch (error) {
     const status = error.response?.status;
     const message = error.response?.data?.message;
-    throw { status, message };
+    return { status, message };
   }
 };
 
@@ -24,7 +24,7 @@ const getAllNotarizationField = async () => {
   } catch (error) {
     const status = error.response?.status;
     const message = error.response?.data?.message;
-    throw { status, message };
+    return { status, message };
   }
 };
 
@@ -37,7 +37,7 @@ const getNotarizationServiceByFieldId = async (fieldId) => {
   } catch (error) {
     const status = error.response?.status;
     const message = error.response?.data?.message;
-    throw { status, message };
+    return { status, message };
   }
 };
 
@@ -48,7 +48,7 @@ const getAllNotarizationService = async () => {
   } catch (error) {
     const status = error.response?.status;
     const message = error.response?.data?.message;
-    throw { status, message };
+    return { status, message };
   }
 };
 
@@ -71,7 +71,7 @@ const uploadNotarizationDocument = async (document) => {
   } catch (error) {
     const status = error.response?.status;
     const message = error.response?.data?.message;
-    throw { status, message };
+    return { status, message };
   }
 };
 
