@@ -8,9 +8,9 @@ const axiosConfig = axios.create({
   baseURL: API_BASE_URL,
 });
 
-axiosConfig.defaults.timeout = 1000 * 60 * 10;
+// axiosConfig.defaults.timeout = 1000 * 60 * 10;
 
-axiosConfig.defaults.withCredentials = true;
+// axiosConfig.defaults.withCredentials = true;
 
 axiosConfig.interceptors.request.use(
   (config) => {
