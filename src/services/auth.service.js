@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { API_BASE_URL } from './config';
 import axiosConfig from '../utils/axiosConfig';
+import Cookies from 'js-cookie';
 
 const AUTH_ENDPOINT = `${API_BASE_URL}/auth`;
 
@@ -11,6 +12,8 @@ const login = async (email, password) => {
   });
 
   localStorage.setItem('userInfo', JSON.stringify(response.data.user));
+  Cookies.set('accessToken', response.data.tokens.access.token);
+  Cookies.set('refreshToken', response.data.tokens.refresh.token);
 
   return response.data;
 };
@@ -20,6 +23,8 @@ const logout = async (refreshToken) => {
     await axiosConfig.post(`${AUTH_ENDPOINT}/logout`, { refreshToken });
 
     localStorage.removeItem('userInfo');
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
   } catch (error) {
     if (error.response) {
       throw error.response.data.message || 'Logout failed';
