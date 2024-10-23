@@ -36,12 +36,6 @@ export const sidebarItems = [
     icon: <AddCircleOutline />,
   },
   {
-    type: 'lookup',
-    title: 'Tra cứu',
-    href: '/lookup',
-    icon: <Search />,
-  },
-  {
     type: 'history',
     title: 'Lịch sử',
     href: '/history',
