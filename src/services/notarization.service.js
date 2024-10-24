@@ -52,6 +52,17 @@ const getAllNotarizationService = async () => {
   }
 };
 
+const getHistory = async () => {
+  try {
+    const response = await axiosConfig.get(`${NOTARIZATION_ENDPOINT}/history`);
+    return response.data;
+  } catch (error) {
+    const status = error.response?.status;
+    const message = error.response?.data?.message;
+    return { status, message };
+  }
+};
+
 const uploadNotarizationDocument = async (document) => {
   try {
     console.log('document', document);
@@ -68,6 +79,7 @@ const NotarizationService = {
   getStatusById,
   getAllNotarizationField,
   getAllNotarizationService,
+  getHistory,
   getNotarizationServiceByFieldId,
   uploadNotarizationDocument,
 };
