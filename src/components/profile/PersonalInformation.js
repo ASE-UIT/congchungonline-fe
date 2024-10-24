@@ -1,23 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Divider } from '@mui/material';
 import { EditSharp } from '@mui/icons-material';
 import { black, gray, primary, white } from '../../config/theme/themePrimitives';
 import InfoField from './InfoField';
 import EditUserProfileModal from '../../components/modals/EditUserProfileModal';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../../stores/slices/userSlice';
 
-const PersonalInformation = ({ user, onSave }) => {
+const PersonalInformation = ({}) => {
   const [open, setOpen] = useState(false);
+  const { userInfo } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  const [formData, setFormData] = useState({
+    role: '',
+    identification: '',
+    phone: '',
+    city: '',
+    district: '',
+    ward: '',
+    street: '',
+    isEmailVerified: false,
+    name: '',
+    email: '',
+    id: '',
+  });
+
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        role: user?.role || '',
+        isEmailVerified: user?.isEmailVerified || false,
+        name: user?.name || '',
+        email: user?.email || '',
+        phone: user?.phone || '',
+        identification: user?.identification || '',
+        city: user?.city || '',
+        district: user?.district || '',
+        ward: user?.ward || '',
+        street: user?.street || '',
+      });
+    }
+  }, [user]);
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleSave = (newData) => {
-    onSave({
-      ...user,
-      ...newData,
-    });
-  };
   return (
     <Box
       sx={{
@@ -55,19 +85,19 @@ const PersonalInformation = ({ user, onSave }) => {
           </Button>
         </Box>
       </Box>
-      <EditUserProfileModal open={open} handleClose={handleClose} onSave={onSave} />
+      <EditUserProfileModal open={open} handleClose={handleClose} />
       <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} flexWrap="wrap" gap={2}>
         <Box flex={1} minWidth="250px">
-          <InfoField label="Họ và tên" value={user.name} />
+          <InfoField label="Họ và tên" value={formData.name} />
         </Box>
         <Box flex={1} minWidth="250px">
-          <InfoField label="Email" value={user.email} />
+          <InfoField label="Email" value={formData.email} />
         </Box>
         <Box flex={1} minWidth="250px">
-          <InfoField label="Số điện thoại" value={user.phone} />
+          <InfoField label="Số điện thoại" value={formData.phone} />
         </Box>
         <Box flex={1} minWidth="250px">
-          <InfoField label="CMND/CCCD/Hộ chiếu" value={user.identification} />
+          <InfoField label="CMND/CCCD/Hộ chiếu" value={formData.identification} />
         </Box>
       </Box>
 
@@ -80,16 +110,16 @@ const PersonalInformation = ({ user, onSave }) => {
         {/* Address Fields */}
         <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} gap={2} my={2}>
           <Box flex={1} minWidth="250px">
-            <InfoField label="Tỉnh/Thành phố" value={user.city} />
+            <InfoField label="Tỉnh/Thành phố" value={formData.city} />
           </Box>
           <Box flex={1} minWidth="250px">
-            <InfoField label="Quận/Huyện" value={user.district} />
+            <InfoField label="Quận/Huyện" value={formData.district} />
           </Box>
           <Box flex={1} minWidth="250px">
-            <InfoField label="Xã/Phường" value={user.ward} />
+            <InfoField label="Xã/Phường" value={formData.ward} />
           </Box>
         </Box>
-        <InfoField label="Số nhà, đường/phố" value={user.street} />
+        <InfoField label="Số nhà, đường/phố" value={formData.street} />
       </Box>
     </Box>
   );

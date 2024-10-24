@@ -1,20 +1,24 @@
 import { ArrowBack, ArrowDropDown, Password } from '@mui/icons-material';
 import { Box, Button, IconButton, Modal, Typography, MenuItem } from '@mui/material';
 import React, { useState, useEffect, useMemo } from 'react';
-import { black,primary } from '../../config/theme/themePrimitives';
+import { black, primary } from '../../config/theme/themePrimitives';
 import LabeledTextField from './LabeledTextField';
 import { toast } from 'react-toastify';
 import UserService from '../../services/user.service';
 import { useDispatch, useSelector } from 'react-redux';
+import { updateUser, fetchUserData } from '../../stores/actions/userAction';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import ProvinceSelector from '../profile/ProvinceSelector';
+import { setUser } from '../../stores/slices/userSlice';
 import { getProvinces, getDistrictsByProvinceCode, getWardsByDistrictCode } from 'vn-provinces';
 
-const EditUserProfileModal = ({ open, handleClose, onSave }) => {
-
-  {/* User Info Loading  */ }
-
+const EditUserProfileModal = ({ open, handleClose }) => {
+  {
+    /* User Info Loading  */
+  }
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const { userInfo } = useSelector((state) => state.auth);
   const [loadingStatus, setLoadingStatus] = useState(false);
 
@@ -31,30 +35,28 @@ const EditUserProfileModal = ({ open, handleClose, onSave }) => {
     email: '',
     id: '',
   });
-  async function getUserData() {
-    try {
-      setLoadingStatus(true);
-      const response = await UserService.getUserById(userInfo.id);
-      setFormData({
-        role: userInfo.role || '',
-        isEmailVerified: userInfo.isEmailVerified || false,
-        name: response.name || '',
-        email: response.email || '',
-        // city: userInfo?.city || '',
-      });
-
-      setLoadingStatus(false);
-    } catch (error) {}
-  }
 
   useEffect(() => {
-    if (open) setFormData(userInfo);
-    getUserData()
-  }, [open, userInfo]);
+    if (open) {
+      setFormData({
+        role: user?.role || '',
+        isEmailVerified: user?.isEmailVerified || false,
+        name: user?.name || '',
+        email: user?.email || '',
+        phone: user?.phone || '',
+        identification: user?.identification || '',
+        city: user?.city || '',
+        district: user?.district || '',
+        ward: user?.ward || '',
+        street: user?.street || '',
+      });
+    }
+  }, [open]);
 
+  {
+    /* Handle Saving Codes */
+  }
 
-  {/* Handle Saving Codes */ }
-  
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -86,43 +88,33 @@ const EditUserProfileModal = ({ open, handleClose, onSave }) => {
   };
 
   const handleSaveChanges = async () => {
-    if (!isFormDataValid(formData) ) { 
-      
-      
+    if (!isFormDataValid(formData)) {
     } else {
-      try {
-        const updateBody = {
-          // Change these comment into code once the back end code for these field is added
-          // Because of the current back end code and database only provide 3 fields (and only 2 of them can be updated by user)
-          // I comment these line of code and only left out 2 updatable field
+      const updateBody = {
+        // Change these comment into code once the back end code for these field is added
+        // Because of the current back end code and database only provide 3 fields (and only 2 of them can be updated by user)
+        // I comment these line of code and only left out 2 updatable field
 
-          // role: formData.role,
-          // isEmailVerified: formData.isEmailVerified,
-          // phone: formData.phone,
-          // city: formData.city,
-          // district: formData.district,
-          // ward: formData.ward,
-          // street: formData.street,
-          name: formData.name,
-          email: formData.email,
-        };
-        console.log(updateBody);
-        const response = await UserService.updateUser(userInfo.id, updateBody);
-        console.log('response', response);
-
-        if (response) {
-          onSave(updateBody);
-          handleClose();
-          toast.success('Cập nhật thông tin thành công!');
-        }
-      } catch (error) {
-        console.log(error);
-        if (error === 404) {
-          toast.error('Không tìm thấy dữ liệu');
-        } else {
-          toast.error('Có lỗi xảy ra, vui lòng thử lại sau');
-        }
-      }
+        // role: formData.role,
+        // isEmailVerified: formData.isEmailVerified,
+        // phone: formData.phone,
+        // city: formData.city,
+        // district: formData.district,
+        // ward: formData.ward,
+        // street: formData.street,
+        name: formData.name,
+        email: formData.email,
+      };
+      console.log(user.id);
+      console.log(updateBody);
+      dispatch(updateUser({ id: user.id, updatedUserInfo: updateBody }))
+        .unwrap()
+        .then(() => {
+          toast.success('Cập nhật thông tin thành công');
+        })
+        .catch(() => {
+          toast.error('Cập nhật thông tin thất bại');
+        });
     }
   };
 

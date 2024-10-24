@@ -8,37 +8,20 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import UserInfo from '../../stores/slices/authSlice';
 import UserService from '../../services/user.service';
-import { setUser, startLoading, stopLoading, setError } from '../../stores/slices/userSlice';
+import { updateUser, fetchUserData } from '../../stores/actions/userAction';
 import PersonalInformationSkeleton from '../../components/profile/SkeletonPersonalInfo';
+import { setUser } from '../../stores/slices/userSlice';
 
 const UserProfile = () => {
   const [loadingStatus, setLoadingStatus] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-
-  const fetchUserData = async (dispatch) => {
-    dispatch(startLoading());
-    try {
-      const response = await UserService.getUserById(userInfo.id);
-      dispatch(setUser(response));
-    } catch (error) {
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(stopLoading());
-    }
-  };
+  const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!user.id) {
-      fetchUserData(dispatch);
-    }
-    console.log(user);
-  }, [dispatch, user.id, userInfo.id]);
-
-  const handleSave = (newData) => {
-    dispatch(setUser(newData));
-  };
+    setLoadingStatus(true);
+    setLoadingStatus(false);
+  }, []);
 
   return (
     <Box display="flex" p={4}>
@@ -56,7 +39,7 @@ const UserProfile = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 2.5 }}>
           <Avatar src="/avatar.png" sx={{ width: 96, height: 96, borderRadius: '50%' }} />
           <Box flex={1} display="flex" flexDirection="column" gap={1}>
-            <Typography variant="h5">{user.name || 'Stranger'}</Typography>
+            <Typography variant="h5">{user?.name || 'Stranger'}</Typography>
             <Typography variant="caption" color="textSecondary">
               Khuyến nghị kích thước ít nhất 800x800 px. Chỉ cho phép định dạng JPG hoặc PNG.
             </Typography>
@@ -68,11 +51,7 @@ const UserProfile = () => {
 
         {/* Personal Information Section */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2.5 }}>
-          {loadingStatus ? (
-            <PersonalInformationSkeleton></PersonalInformationSkeleton>
-          ) : (
-            <PersonalInformation user={user} onSave={handleSave} />
-          )}
+          {loadingStatus ? <PersonalInformationSkeleton></PersonalInformationSkeleton> : <PersonalInformation />}
         </Box>
       </Box>
     </Box>

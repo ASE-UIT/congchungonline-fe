@@ -27,11 +27,24 @@ const searchUserByEmail = async (email) => {
       throw new Error('Network Error');
     }
   }
-}
+};
+const updateUserById = async (id, updateBody) => {
+  try {
+    const response = await axiosConfig.patch(`${USER_ENDPOINT}/${id}`, updateBody);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.status;
+    } else {
+      throw new Error('Network Error');
+    }
+  }
+};
 
 const UserService = {
   getUserById,
   searchUserByEmail,
+  updateUserById,
 };
 
 export default UserService;

@@ -23,18 +23,8 @@ const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.auth);
-  const [user, setUser] = useState({
-    name: '',
-  });
+  const { user } = useSelector((state) => state.user);
 
-  async function getUserData() {
-    try {
-      const response = await UserService.getUserById(userInfo.id);
-      setUser({
-        name: response.name || '',
-      });
-    } catch (error) {}
-  }
 
   const handleLogout = async () => {
     try {
@@ -63,8 +53,7 @@ const Sidebar = () => {
     if (currentMenu) {
       setSelectedMenu(currentMenu.type);
     }
-    getUserData();
-  }, [location, user]);
+  }, [location, userInfo]);
 
   const drawerWidth = openSideBar ? '18rem' : '5rem';
   const drawerTransition = '0.2s ease';
