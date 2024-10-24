@@ -16,9 +16,9 @@ const getUserById = async (id) => {
   }
 };
 
-const getUserByEmail = async (email) => {
+const searchUserByEmail = async (email) => {
   try {
-    const response = await axiosConfig.get(`${USER_EMAIL_ENDPOINT}/${email}`);
+    const response = await axiosConfig.get(`${USER_ENDPOINT}/search-user-by-email/${email}`);
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -27,25 +27,11 @@ const getUserByEmail = async (email) => {
       throw new Error('Network Error');
     }
   }
-};
-
-const updateUser = async (id, updateBody) => {
-  try {
-    const response = await axiosConfig.patch(`${USER_ENDPOINT}/${id}`, updateBody);
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      throw error.response.status;
-    } else {
-      throw new Error('Network Error');
-    }
-  }
-};
+}
 
 const UserService = {
   getUserById,
-  getUserByEmail,
-  updateUser,
+  searchUserByEmail,
 };
 
 export default UserService;

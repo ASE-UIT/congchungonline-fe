@@ -9,8 +9,6 @@ import YesNoModal from './modals/YesNoModal';
 import { sidebarItems } from '../utils/fakeData';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import SidebarItem from './static/SidebarItem';
-import UserService
-  from '../services/user.service';
 const MENUS = {
   LOGOUT: 'logout',
   PROFILE: 'profile',

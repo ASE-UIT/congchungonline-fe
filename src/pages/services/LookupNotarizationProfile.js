@@ -36,26 +36,29 @@ const LookupNotarizationProfile = () => {
       setDisplayText(inputValue);
       setStatus({ notFound: false, searching: true, found: false });
       setSearchLoading(true);
-      try {
-        const response = await NotarizationService.getStatusById(inputValue);
-        console.log('response', response);
-        setSearchLoading(false);
-        if (response) {
-          setDisplayText(response.documentId);
-          setStatus({ notFound: false, searching: false, found: true });
-          setNotarizationData(response);
+
+      setTimeout(async () => {
+        try {
+          const response = await NotarizationService.getStatusById(inputValue);
+          console.log('response', response);
+          setSearchLoading(false);
+          if (response) {
+            setDisplayText(response.documentId);
+            setStatus({ notFound: false, searching: false, found: true });
+            setNotarizationData(response);
+          }
+        } catch (error) {
+          setSearchLoading(false);
+          console.log(error);
+          if (error === 404) {
+            setDisplayText(inputValue);
+            setStatus({ notFound: true, searching: false, found: false });
+          } else {
+            setDisplayText(inputValue);
+            setStatus({ notFound: true, searching: false, found: false });
+          }
         }
-      } catch (error) {
-        setSearchLoading(false);
-        console.log(error);
-        if (error === 404) {
-          setDisplayText(inputValue);
-          setStatus({ notFound: true, searching: false, found: false });
-        } else {
-          setDisplayText(inputValue);
-          setStatus({ notFound: true, searching: false, found: false });
-        }
-      }
+      }, 1000);
     }
   };
 
@@ -90,7 +93,7 @@ const LookupNotarizationProfile = () => {
           py: 6,
         }}
       >
-        <Box height="fit-content" width="fit-content" sx={{ px: 20 }}>
+        <Box height="fit-content" width="fit-content">
           <Typography
             variant="h2"
             textAlign="center"
@@ -115,6 +118,7 @@ const LookupNotarizationProfile = () => {
             width: '40%',
             mt: 4,
             gap: 2,
+            justifyContent: 'center',
           }}
         >
           <TextField
