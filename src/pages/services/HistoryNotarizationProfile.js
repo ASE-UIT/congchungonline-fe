@@ -81,11 +81,13 @@ const HistoryNotarizationProfile = () => {
           const notaryDate = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
           let status;
 
-          if (statusResponse.status == 'pending') status = 'Chờ xử lý';
-          if (statusResponse.status == 'processing') status = 'Đang xử lý';
-          if (statusResponse.status =='digitalSignature') status = 'Sẵn sàng ký số';
-          if (statusResponse.status == 'completed') status = 'Hoàn tất';
-          if (statusResponse.status == 'verification') status = 'Không hợp lệ';
+          console.log(statusResponse.status);
+
+          if (statusResponse.status === 'pending') status = 'Chờ xử lý';
+          if (statusResponse.status === 'processing') status = 'Đang xử lý';
+          if (statusResponse.status === 'digitalSignature') status = 'Sẵn sàng ký số';
+          if (statusResponse.status === 'completed') status = 'Hoàn tất';
+          if (statusResponse.status === 'reject') status = 'Không hợp lệ';
           return createData(index + 1, item.id, notaryDate, userResponse.name, status, item.notarizationService.name);
         }),
       );
