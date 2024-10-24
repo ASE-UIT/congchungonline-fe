@@ -59,7 +59,7 @@ const getHistory = async () => {
   } catch (error) {
     const status = error.response?.status;
     const message = error.response?.data?.message;
-    throw { status, message };
+    return { status, message };
   }
 };
 

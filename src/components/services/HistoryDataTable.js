@@ -16,11 +16,12 @@ import { visuallyHidden } from '@mui/utils';
 
 const StatusTypes = {
   All: 'Tất cả',
-  Waiting: 'Chờ xử lý',
+  Pending: 'Chờ xử lý',
   Processing: 'Đang xử lý',
-  ReadyToSign: 'Sẵn sàng ký số',
+  Verification: 'Đang xác minh',
+  DigitalSignature: 'Sẵn sàng ký số',
   Completed: 'Hoàn tất',
-  Invalid: 'Không hợp lệ',
+  Rejected: 'Không hợp lệ',
 };
 
 function descendingComparator(a, b, orderBy) {
@@ -42,6 +43,9 @@ function SetStatusColor(params) {
   } else if (params === 'Đang xử lý') {
     color = '#FFAA00';
     backgroundColor = '#FFF7E6';
+  } else if (params === 'Đang xác minh') {
+    color = '#7007C1';
+    backgroundColor = '#F9F0FF';
   } else if (params === 'Sẵn sàng ký số') {
     color = '#0095FF';
     backgroundColor = '#E6F4FF';
@@ -183,6 +187,7 @@ const HistoryDataTable = ({ filterStatus, searchText, rows, headCells }) => {
           row.service.toLowerCase().includes(searchText.toLowerCase()),
       );
     }
+    setSelected([]);
 
     return filteredRows.sort(getComparator(order, orderBy)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   }, [filterStatus, searchText, order, orderBy, page, rowsPerPage]);

@@ -11,7 +11,6 @@ import UserService from '../../services/user.service';
 import { toast } from 'react-toastify';
 import SkeletonHistoryDataTable from '../../components/services/SkeletonHistoryDataTable';
 import { useNavigate } from 'react-router-dom';
-import { create } from '@mui/material/styles/createTransitions';
 
 const headCells = [
   {
@@ -55,11 +54,12 @@ let rows = [];
 const HistoryNotarizationProfile = () => {
   const StatusTypes = {
     All: 'Tất cả',
-    Waiting: 'Chờ xử lý',
+    Pending: 'Chờ xử lý',
     Processing: 'Đang xử lý',
-    ReadyToSign: 'Sẵn sàng ký số',
+    Verification: 'Đang xác minh',
+    DigitalSignature: 'Sẵn sàng ký số',
     Completed: 'Hoàn tất',
-    Invalid: 'Không hợp lệ',
+    Rejected: 'Không hợp lệ',
   };
 
   const [statusFilter, setStatusFilter] = useState(StatusTypes.All);
@@ -83,7 +83,7 @@ const HistoryNotarizationProfile = () => {
 
           if (statusResponse.status == 'pending') status = 'Chờ xử lý';
           if (statusResponse.status == 'processing') status = 'Đang xử lý';
-          if (statusResponse.status == 'digitalSignature') status = 'Sẵn sàng ký số';
+          if (statusResponse.status =='digitalSignature') status = 'Sẵn sàng ký số';
           if (statusResponse.status == 'completed') status = 'Hoàn tất';
           if (statusResponse.status == 'verification') status = 'Không hợp lệ';
           return createData(index + 1, item.id, notaryDate, userResponse.name, status, item.notarizationService.name);
@@ -189,10 +189,10 @@ const HistoryNotarizationProfile = () => {
             ></StatusFilterButton>
 
             <StatusFilterButton
-              statusFilter={StatusTypes.Waiting}
+              statusFilter={StatusTypes.Pending}
               handleFilterByStatus={() => {
-                setStatusFilter(StatusTypes.Waiting);
-                setStatusClicked(StatusTypes.Waiting);
+                setStatusFilter(StatusTypes.Pending);
+                setStatusClicked(StatusTypes.Pending);
               }}
               clickedButton={statusClicked}
             />
@@ -205,10 +205,18 @@ const HistoryNotarizationProfile = () => {
               clickedButton={statusClicked}
             />
             <StatusFilterButton
-              statusFilter={StatusTypes.ReadyToSign}
+              statusFilter={StatusTypes.Verification}
               handleFilterByStatus={() => {
-                setStatusFilter(StatusTypes.ReadyToSign);
-                setStatusClicked(StatusTypes.ReadyToSign);
+                setStatusFilter(StatusTypes.Verification);
+                setStatusClicked(StatusTypes.Verification);
+              }}
+              clickedButton={statusClicked}
+            />
+            <StatusFilterButton
+              statusFilter={StatusTypes.DigitalSignature}
+              handleFilterByStatus={() => {
+                setStatusFilter(StatusTypes.DigitalSignature);
+                setStatusClicked(StatusTypes.DigitalSignature);
               }}
               clickedButton={statusClicked}
             />
@@ -221,10 +229,10 @@ const HistoryNotarizationProfile = () => {
               clickedButton={statusClicked}
             />
             <StatusFilterButton
-              statusFilter={StatusTypes.Invalid}
+              statusFilter={StatusTypes.Rejected}
               handleFilterByStatus={() => {
-                setStatusFilter(StatusTypes.Invalid);
-                setStatusClicked(StatusTypes.Invalid);
+                setStatusFilter(StatusTypes.Rejected);
+                setStatusClicked(StatusTypes.Rejected);
               }}
               clickedButton={statusClicked}
             />
